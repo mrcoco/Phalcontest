@@ -20,6 +20,6 @@ return new \Phalcon\Config(array(
         'libraryDir'     => APP_PATH . '/app/library/',
         'cacheDir'       => APP_PATH . '/app/cache/',
         'messagesDir'    => APP_PATH . '/app/messages/',
-        'baseUri'        => '/testphalcon/',
+        'baseUri'        => '/Phalcontest/',
     )
 ));

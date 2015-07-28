@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-
+<meta charset="UTF-8">
 {% block head %}
 {{assets.outputCss('headercss')}}
 {{assets.outputJs('headerjs')}}
@@ -13,6 +12,5 @@
 <br><br>
   <a href="{{ url('setlang')~'/en'}}">English</a>|<a href="{{url('setlang')~'/es'}}">Spanish</a>
      {% endblock %}
-
-    </body>
+</body>
 </html>

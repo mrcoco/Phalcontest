@@ -149,6 +149,8 @@ $di['router'] = function() {
 
     //Read the annotations from UserController if the uri starts with /user
     $router->addResource('User', '/user');
+    //Read the annotations from UserController if the uri starts with /user
+     $router->addResource('Apartment', '/apartment');
 
 
     return $router;
