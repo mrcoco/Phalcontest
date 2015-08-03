@@ -80,6 +80,16 @@ class ApartmentController extends ControllerBase
     }
 
     /**
+    * @Route("/gettower/{companyid}", methods={"POST"}, name="apartmentnew")
+   */
+    public function gettowerction($companyid)
+    {
+
+
+      $apartment = Tower::findBycompanyid($id);
+      $this->view->form = $form;
+    }
+    /**
      * Edits a apartment
      *
      * @param string $id
