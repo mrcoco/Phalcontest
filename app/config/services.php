@@ -149,8 +149,10 @@ $di['router'] = function() {
 
     //Read the annotations from UserController if the uri starts with /user
     $router->addResource('User', '/user');
-    //Read the annotations from UserController if the uri starts with /user
-     $router->addResource('Apartment', '/apartment');
+    //Read the annotations from ApartmentController if the uri starts with /apartment
+    $router->addResource('Apartment', '/apartment');
+     //Read the annotations from TowerController if the uri starts with /tower
+    $router->addResource('Tower', '/tower');
 
 
     return $router;

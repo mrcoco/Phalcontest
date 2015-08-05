@@ -56,7 +56,7 @@
         <tr>
             <td>{{ apartment.company }}</td>
             <td>{{ apartment.tower}}</td>
-            <td>{{ apartment.apartmentname}}</td>
+            <td>{{ apartment.name}}</td>
             <td>{{link_to('apartment/edit/'~apartment.id,image("img/edit32.png"))}}</td>
 
             <td>{{ link_to("apartment/delete/"~apartment.id,image("img/delete32.png")) }}</td>
@@ -69,14 +69,14 @@
         <tr>
             <td colspan="2" align="left">
               <ul class="pagination">
-                <li>{{ link_to("apartment/search", "First") }}</li>
-                <li>{{ link_to("apartment/search?page="~page.before, "Previous") }}</li>
+                <li>{{ link_to("apartment/list", "First") }}</li>
+                <li>{{ link_to("apartment/list?page="~page.before, "Previous") }}</li>
 
                  {% for i in 1..page.total_pages %}
-                 <li>{{ link_to("apartment/search?page="~i, i) }}</li>
+                 <li>{{ link_to("apartment/list?page="~i, i) }}</li>
                 {% endfor %}
-                <li>{{ link_to("apartment/search?page="~page.next, "Next") }}</li>
-                <li>{{ link_to("apartment/search?page="~page.last, "Last") }}</li>
+                <li>{{ link_to("apartment/list?page="~page.next, "Next") }}</li>
+                <li>{{ link_to("apartment/list?page="~page.last, "Last") }}</li>
              </ul>
             </td>
         </tr>
