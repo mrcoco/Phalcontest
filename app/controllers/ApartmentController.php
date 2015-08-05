@@ -1,11 +1,12 @@
 <?php
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Mvc\Model\Query as Query;
+use Phalcon\Mvc\Model\Query;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\Select;
+
 
 /**
  * @RoutePrefix("/apartment")
@@ -22,9 +23,9 @@ class ApartmentController extends ControllerBase
     }
 
     /**
-     * Searches for apartment
-     */
-    public function searchAction()
+    * @Route("/list", methods={"GET","POST"}, name="apartmentlist")
+   */
+    public function apartmentlistAction()
     {
 
         $numberPage = 1;
@@ -41,15 +42,9 @@ class ApartmentController extends ControllerBase
         }
         $parameters["order"] = "id";
 
-        $apartment = Apartment::find($parameters);
-        if (count($apartment) == 0) {
-            $this->flash->notice("The search did not find any apartment");
-
-            return $this->dispatcher->forward(array(
-                "controller" => "apartment",
-                "action" => "index"
-            ));
-        }
+        $query = $this->modelsManager->createQuery("Select * from apartmentlist");
+        $apartment = $query->execute();
+        //$apartment = Apartment::find();
 
         $paginator = new Paginator(array(
             "data" => $apartment,
@@ -58,6 +53,73 @@ class ApartmentController extends ControllerBase
         ));
 
         $this->view->page = $paginator->getPaginate();
+
+    }
+
+    public function proceduretest($param1,$param2)
+    {
+      $robot = Robot::towersp($param1,$param2);
+      return $robot;
+    }
+
+    /**
+    * @Route("/search", methods={"POST","GET"}, name="apartmentsearch")
+   */
+    public function searchAction()
+    {
+
+        $numberPage = 1;
+        if ($this->request->isPost()) {
+            $query = Criteria::fromInput($this->di, "Apartment", $_POST);
+            $this->persistent->parameters = $query->getParams();
+        } else {
+            $numberPage = $this->request->getQuery("page", "int");
+        }
+
+        $parameters = $this->persistent->parameters;
+        if (!is_array($parameters)) {
+            $parameters = array();
+        }
+        //$parameters["order"] = "id";
+
+        $company =$this->request->getPost("company");
+        $tower =$this->request->getPost("tower");
+        $name =$this->request->getPost("name");
+        //$query = $this->modelsManager->createQuery("Select c.name as company,
+        // t.number as tower , a.id as id,a.name  as name from Apartment  a
+         //INNER JOIN  Company c on c.id =a.companyid
+         //INNER JOIN Tower t on t.id =a.towerid
+        // HAVING c.name = :company: AND  t.number = :tower:"
+         //);
+        $apartment = $this->modelsManager->createBuilder()
+                    ->columns(array('c.name as company','t.number as tower' ,'a.id as id','a.name as apartmentname'))
+                    ->from(array('a' => 'Apartment'))
+                    ->join('Company', 'c.id = a.companyid', 'c')
+                    ->join('Tower', 't.id = a.towerid', 't')
+                    ->where('c.name LIKE :company:', array('company' => '%' . $company . '%'))
+                    ->andWhere('t.number LIKE :tower:', array('tower' => '%' . $tower . '%'))
+                    ->andWhere('a.name LIKE :name:', array('name' => '%' . $name . '%'))
+                    ->getQuery()
+                    ->execute();
+              //$query->execute(array("company"=>$company ,"tower"=>$tower));
+        //$apartment = Apartment::find($parameters);
+        /*if (count($apartment) == 0) {
+            $this->flash->notice("The search did not find any apartment");
+
+            return $this->dispatcher->forward(array(
+                "controller" => "apartment",
+                "action" => "search"
+            ));
+        }
+*/
+        $paginator = new Paginator(array(
+            "data" => $apartment,
+            "limit"=> 1,
+            "page" => $numberPage
+        ));
+
+        $this->view->page = $paginator->getPaginate();
+      $this->view->pick("apartment/search");
     }
 
     /**
@@ -76,23 +138,36 @@ class ApartmentController extends ControllerBase
               'emptyText' =>  'Select a company',
               'using'     => array('id', 'name')
           )));
+          $form->add(new Select('towerid', array('0' =>  'Select a tower')));
+
+      $robot = $this->proceduretest('1','Torre 1');
+
+      //$this->view->robot = $robot;
       $this->view->form = $form;
+
+
     }
 
     /**
-    * @Route("/gettower/{companyid}", methods={"POST"}, name="apartmentnew")
+    * @Route("/gettower/{companyid}", methods={"POST"}, name="gettower")
    */
-    public function gettowerction($companyid)
+    public function gettowerAction($companyid)
     {
 
+      $tower = Tower::findBycompanyid($companyid)->toArray();
 
-      $apartment = Tower::findBycompanyid($id);
-      $this->view->form = $form;
+      echo '<select id="towerid" name ="towerid">';
+      echo '<option value ="0" >Select a Tower</option>';
+      foreach ($tower as $toweritem)
+      {
+        echo '<option value ="'.$toweritem["id"].'" >'.$toweritem["number"].'</option>';
+      }
+      echo '</select>';
     }
     /**
      * Edits a apartment
-     *
-     * @param string $id
+       * @param string $id
+      * @Route("/edit/{id}", methods={"GET"}, name="apartmentedit")
      */
     public function editAction($id)
     {
@@ -121,6 +196,7 @@ class ApartmentController extends ControllerBase
 
     /**
      * Creates a new apartment
+     * @Route("/create", methods={"POST"}, name="createapartment")
      */
     public function createAction()
     {
@@ -133,8 +209,6 @@ class ApartmentController extends ControllerBase
         }
 
         $apartment = new Apartment();
-
-        $apartment->setId($this->request->getPost("id"));
         $apartment->setCompanyid($this->request->getPost("companyid"));
         $apartment->setTowerid($this->request->getPost("towerid"));
         $apartment->setName($this->request->getPost("name"));

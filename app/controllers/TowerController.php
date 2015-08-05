@@ -1,14 +1,20 @@
 <?php
- 
-use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model as Paginator;
 
+use Phalcon\Mvc\Model\Criteria;
+use Phalcon\Mvc\Model\Query;
+use Phalcon\Paginator\Adapter\Model as Paginator;
+use Phalcon\Forms\Form;
+use Phalcon\Forms\Element\Text;
+use Phalcon\Forms\Element\Select;
+use TowerForm  as TowerForm;
+
+/**
+ * @RoutePrefix("/tower")
+ */
 class TowerController extends ControllerBase
 {
 
-    /**
-     * Index action
-     */
+
     public function indexAction()
     {
         $this->persistent->parameters = null;
@@ -54,11 +60,11 @@ class TowerController extends ControllerBase
     }
 
     /**
-     * Displays the creation form
-     */
+    * @Route("/new", methods={"GET","POST"}, name="towernew")
+   */
     public function newAction()
     {
-
+         $this->view->form = new TowerForm();
     }
 
     /**
@@ -86,7 +92,7 @@ class TowerController extends ControllerBase
             $this->tag->setDefault("id", $tower->getId());
             $this->tag->setDefault("companyid", $tower->getCompanyid());
             $this->tag->setDefault("number", $tower->getNumber());
-            
+
         }
     }
 
@@ -108,7 +114,7 @@ class TowerController extends ControllerBase
         $tower->setId($this->request->getPost("id"));
         $tower->setCompanyid($this->request->getPost("companyid"));
         $tower->setNumber($this->request->getPost("number"));
-        
+
 
         if (!$tower->save()) {
             foreach ($tower->getMessages() as $message) {
@@ -159,7 +165,7 @@ class TowerController extends ControllerBase
         $tower->setId($this->request->getPost("id"));
         $tower->setCompanyid($this->request->getPost("companyid"));
         $tower->setNumber($this->request->getPost("number"));
-        
+
 
         if (!$tower->save()) {
 
