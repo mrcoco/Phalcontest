@@ -153,6 +153,8 @@ $di['router'] = function() {
     $router->addResource('Apartment', '/apartment');
      //Read the annotations from TowerController if the uri starts with /tower
     $router->addResource('Tower', '/tower');
+    //Read the annotations from LoginController if the uri starts with /login
+   $router->addResource('Login', '/login');
 
 
     return $router;
