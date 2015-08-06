@@ -6,7 +6,7 @@ use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\Select;
-
+use ApartmentForm as ApartmentForm;
 
 /**
  * @RoutePrefix("/apartment")
@@ -62,6 +62,13 @@ class ApartmentController extends ControllerBase
       return $robot;
     }
 
+    public function loadjs()
+    {
+      $this->assets
+         ->collection('ajaxjs')
+          ->addJs('js/apartment_js/dependentcombo.js');
+
+    }
     /**
     * @Route("/search", methods={"POST","GET"}, name="apartmentsearch")
    */
@@ -127,7 +134,11 @@ class ApartmentController extends ControllerBase
    */
     public function newAction()
     {
-      $form = new Form();
+      $this->loadjs();
+
+      //EJEMPLO CREAR FORMA DESDE EL CONTROLADOR
+      //--------------------------------------------------
+      /**$form = new Form();
 
       $form->add(new Text("name"));
       $form->add(new Select('companyid', Company::find(array(
@@ -139,15 +150,24 @@ class ApartmentController extends ControllerBase
               'using'     => array('id', 'name')
           )));
           $form->add(new Select('towerid', array('0' =>  'Select a tower')));
+       */
+       //---------------------------------------------------------------------
+       //EJEMPLO DE LLAMADO A STORE PROCEDURE
+       //--------------------------------------------------
+       /*$robot = $this->proceduretest('1','Torre 1');
+       $this->view->robot = $robot;
+      */
+      //-----------------------------------------------------
 
-      $robot = $this->proceduretest('1','Torre 1');
+      //EJEMPLO ENVIO DE FORMA A LA VISTA DESDE CLASE
+      //----------------------------------------------------
 
-      //$this->view->robot = $robot;
-      $this->view->form = $form;
-
+      $this->view->password=$this->security->hash('password');
+      $this->view->form =  new ApartmentForm();
+      //----------------------------------------------------
 
     }
-
+     // FUNCION QUE RECIBE DEL LLAMADO DE AJAX
     /**
     * @Route("/gettower/{companyid}", methods={"POST"}, name="gettower")
    */
