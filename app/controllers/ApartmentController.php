@@ -42,7 +42,7 @@ class ApartmentController extends ControllerBase
         }
         $parameters["order"] = "id";
 
-        $query = $this->modelsManager->createQuery("Select * from apartmentlist");
+        $query = $this->modelsManager->createQuery("Select * from Apartmentlist");
         $apartment = $query->execute();
         //$apartment = Apartment::find();
 

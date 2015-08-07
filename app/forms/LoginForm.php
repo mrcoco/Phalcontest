@@ -56,13 +56,13 @@ class LoginForm extends Form
 		$csrf = new Hidden('csrf');
 
 		//añadimos la validación para prevenir csrf
-	 /*$csrf->addValidator(
+	 $csrf->addValidator(
 			new Identical(array(
 				'value' => $this->security->getSessionToken(),
 				'message' => '¡La validación CSRF ha fallado!'
 			))
 		);
-*/
+
 		//hacemos que se pueda llamar a nuestro campo csrf
 		$this->add($csrf);
 
