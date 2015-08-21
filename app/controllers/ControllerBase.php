@@ -7,16 +7,50 @@ class ControllerBase extends Controller
 {
 public function initialize()
 {
-  $this->assets
-      ->collection('headercss')
-      ->addCss('bootstrap/dist/css/bootstrap.min.css');
 
 
-  // and some local javascript resources
+  //Masterpage Assets
+
+  // Login Assests
   $this->assets
-     ->collection('headerjs')
-      ->addJs('js/jquery/jquery-2.1.4.min.js')
-      ->addJs('bootstrap/dist/js/bootstrap.min.js');
+        ->collection('mastercss')
+        ->addCss('metro/build/css/metro.min.css')
+        ->addCss('metro/build/css/metro-responsive.min.css')
+        ->addCss('metro/build/css/metro-icons.min.css')
+        ->addCss('css/masterpage/masterpage.css')
+        ->addCss('css/masterpage/search.css');
+
+
+
+  $this->assets
+    ->collection('masterjs')
+   ->addJs('js/jquery/jquery-2.1.4.min.js')
+   ->addJs('metro/build/js/metro.min.js');
+
+
+  // Login Assests
+  $this->assets
+        ->collection('logincss')
+        ->addCss('metro/build/css/metro.min.css')
+        ->addCss('metro/build/css/metro-responsive.min.css')
+        ->addCss('css/login/login.css');
+
+
+
+  $this->assets
+    ->collection('loginjs')
+   ->addJs('js/jquery/jquery-2.1.4.min.js')
+   ->addJs('metro/build/js/metro.min.js')
+   ->addJs('js/jqueryvalidate/jquery.validate.js')
+   ->addJs('js/login/validatelogin.js');
+$this->view->globalobj =$this;
+}
+public function checkuser($userid)
+{
+  if ($userid =="")
+  {
+    $this->response->redirect('login');
+  }
 
 }
 

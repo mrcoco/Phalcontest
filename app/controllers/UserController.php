@@ -3,6 +3,7 @@
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Validation;
+use UserForm as UserForm;
 /**
  * @RoutePrefix("/user")
  */
@@ -105,10 +106,10 @@ class UserController extends ControllerBase
       $this->assets
          ->collection('validatejs')
           ->addJs('js/jqueryvalidate/jquery.validate.js')
-          ->addJs('js/jqueryvalidate/localization/messages_es.js')
+          ->addJs('js/jqueryvalidate/additional-methods.min.js')
           ->addJs('js/validateuser/validateuser.js');
 
-      //$this->Set_language("user/new");
+    $this->view->form =  new UserForm();
 
     }
 

@@ -1,54 +1,52 @@
 {% extends "layouts/masterpage.volt" %}
 
 {% block content %}
-<h1>{{'USERS'}}</h1>
-{{ form("user/search", "method":"post", "autocomplete" : "off") }}
+<div align="left"><h3>{{'Usuarios'}}</h3></div>
+	<hr class="thin"/>
+<div class="grid">
+  {{ form("user/search", "method":"post", "autocomplete" : "off") }}
+ <div class="row cells2">
+ <div class="cell colspan3">
+     <label class="search" for="username">Username</label>
+  <div class="input-control full-size">
+      {{ text_field("username", "size" : 30) }}
+  </div>
+</div>
+<div class="cell colspan3">
+  <label class="search" for="email">Email</label>
+  <div class="input-control full-size">
+  {{ text_field("email", "size" : 30) }}
+</div>
+</div>
 
-<table>
-    <tr>
-        <td align="right">
-            <label for="username">Username</label>
-        </td>
-        <td align="left">
-            {{ text_field("username", "size" : 30) }}
-        </td>
-    </tr>
-    <tr>
-        <td align="right">
-            <label for="email">Email</label>
-        </td>
-        <td align="left">
-            {{ text_field("email", "size" : 30) }}
-        </td>
-    </tr>
-
-    <tr>
-        <td></td>
-        <td>{{ submit_button("Search") }}</td>
-    </tr>
-</table>
-
+</div>
+<div class="row cells1">
+  <div class="cell colspan3">
+  <div align ="left">{{ submit_button("Search") }}</div>
+</div>
+</div>
 </form>
-
-<table  width="50%" align="center" class="table">
+</div>
+<table  width="100%" align="center" class="table">
     <thead>
       <tr>
         <td>{{ link_to("user/new", image("img/new.png")) }} {{' '}}{{ 'Page '~ page.current ~"of "~page.total_pages }}</td>
       </tr>
         <tr>
-            <th>Username</th>
-            <th>Email</th>
+            <th class="sortable-column">Username</th>
+            <th class="sortable-column">Email</th>
+            <th></th>
+            <th></th>
          </tr>
     </thead>
     <tbody>
     {% if page.items is defined %}
     {% for user in page.items %}
         <tr>
-            <td>{{ user.getUsername() }}</td>
-            <td>{{ user.getEmail() }}</td>
-            <td>{{link_to('user/edit/'~user.getId(),image("img/edit32.png"))}}</td>
-
-            <td>{{ link_to("user/delete/"~user.getId(),image("img/delete32.png")) }}</td>
+            <td width ="25%">{{user.getUsername() }}</td>
+            <td width ="25%">{{ user.getEmail()}}</td>
+            <td width ="5%">{{link_to('apartment/edit/'~user.getId(),image("img/edit32.png"))}}</td>
+            <td width ="5%">{{ link_to("apartment/delete/"~user.getId(),image("img/delete32.png")) }}</td>
         </tr>
 
     {% endfor %}
@@ -57,16 +55,16 @@
     <tbody>
         <tr>
             <td colspan="2" align="left">
-              <ul class="pagination">
-                <li>{{ link_to("user/list", "First") }}</li>
-                <li>{{ link_to("user/list?page="~page.before, "Previous") }}</li>
+              <div  class="pagination">
+                <span class="item">{{ link_to("user/list", "First") }}</span>
+                <span class="item">{{ link_to("user/list?page="~page.before, "Previous") }}</span>
 
                  {% for i in 1..page.total_pages %}
-                 <li>{{ link_to("user/list?page="~i, i) }}</li>
+                 <span class="item">{{ link_to("user/list?page="~i, i) }}</span>
                 {% endfor %}
-                <li>{{ link_to("user/list?page="~page.next, "Next") }}</li>
-                <li>{{ link_to("user/list?page="~page.last, "Last") }}</li>
-             </ul>
+                <span class="item">{{ link_to("user/list?page="~page.next, "Next") }}</span>
+                <span class="item">{{ link_to("user/list?page="~page.last, "Last") }}</span>
+             </div>
             </td>
         </tr>
     </tbody>

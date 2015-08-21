@@ -3,3 +3,5 @@
 /app/cache/
 /public/webtools.*
 /.git/
+/public/webtools.config.php
+/public/webtools.php

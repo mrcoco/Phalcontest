@@ -129,13 +129,6 @@ $di['router'] = function() {
         ]
       );
 
-      $router->add(
-      "/rutasola",
-      array(
-          "controller" => "User",
-          "action"     => "testuser",
-      )
-  );
   $router->add(
   "/setlang/{lang}",
   array(
@@ -144,17 +137,29 @@ $di['router'] = function() {
   )
 );
 
+$router->add(
+"/home",
+array(
+    "controller" => "Index",
+    "action"     => "index"
+)
+);
 
 
 
-    //Read the annotations from UserController if the uri starts with /user
     $router->addResource('User', '/user');
-    //Read the annotations from ApartmentController if the uri starts with /apartment
+
     $router->addResource('Apartment', '/apartment');
-     //Read the annotations from TowerController if the uri starts with /tower
+
     $router->addResource('Tower', '/tower');
-    //Read the annotations from LoginController if the uri starts with /login
+
    $router->addResource('Login', '/login');
+
+   $router->addResource('Country', '/country');
+
+   $router->addResource('State', '/state');
+
+   $router->addResource('City', '/city');
 
 
     return $router;

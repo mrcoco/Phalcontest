@@ -2,7 +2,7 @@ $(function() {
 
     // Setup form validation on the #register-form element
     $("#appform").validate({
-          
+
         // Specify the validation rules
         rules: {
             username:{
@@ -10,6 +10,11 @@ $(function() {
 
             },
             email:{
+                required:true,
+                email:true
+
+            },
+            password:{
                 required:true
 
             }
@@ -18,11 +23,16 @@ $(function() {
         // Specify the validation error messages
         messages: {
             username:{
-                required:"You must enter a username"
+                required:"Debe ingresar un Username"
 
             },
              email:{
-                required:"You must enter an email",
+                required:"Debe ingresar un Email",
+                email:"Debe ingresar un Email válido"
+
+            },
+            password:{
+                required:"Debe ingresar un Password"
 
             }
 

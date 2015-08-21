@@ -1,25 +1,43 @@
-<div class="well row">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+{% block head %}
+{{assets.outputCss('logincss')}}
+{{assets.outputJs('loginjs')}}
+ {% endblock %}
 
-	{{ content() }}
-    {{ form('class': 'form-login') }}
+</head>
+<body class ="bg-darkTeal">
+<div class="login-form padding20 block-shadow">
 
-        <div class="span6 offset4">
-            <h2>Formulario de login</h2>
-        </div>
-        <div class="span6 offset4">
-			{{ form.label('username') }}
+    {{ form('class': 'form-login',"id":"appform") }}
+		<h3 class="text-light">{{image("img/locker.png") }} System Admin</h3>
+				<hr class="thin"/>
+				<br>
+			  <div class="error">{{ content() }}</div>
+
+				<br><br>
+        <div class="input-control text full-size" data-role ="input">
+			      {{ form.label('username') }}
             {{ form.render('username') }}
         </div>
-        <div class="span6 offset4">
+        <label id="errorusername"></label>
+				<br>
+				<br>
+				<br>
+        <div class="input-control password full-size" data-role ="input">
             {{ form.label('password') }}
             {{ form.render('password') }}
+						<br><br>
         </div>
-        <div class="span6 offset4">
+					<label id="errorpassword"></label>
+          <br><br>
             {{ form.render('Login') }}
-            {{ form.render('csrf', ['value': security.getToken()]) }}
 
-		</div>
-		{{ form.render('csrf', ['value': security.getToken()]) }}
-     {{ form.messages('csrf') }}
+		{{ form.render('randomsting', ['value': security.getSessionToken()]) }}
+
     </form>
 </div>
+</body>
+</html>

@@ -15,9 +15,7 @@ class LoginForm extends Form
 	public function initialize()
 	{
 		//añadimos el campo username
-		$username = new Text('username', array(
-			'placeholder' => 'username'
-		));
+		$username = new Text('username');
 
 		//añadimos la validación para un campo de tipo username y como campo requerido
 		$username->addValidators(array(
@@ -28,15 +26,13 @@ class LoginForm extends Form
 		));
 
 		//label para el username
-		$username->setLabel('username');
+		$username->setLabel('Username');
 
 		//hacemos que se pueda llamar a nuestro campo username
 		$this->add($username);
 
 		//añadimos el campo password
-		$password = new Password('password', array(
-			'placeholder' => 'Password'
-		));
+		$password = new Password('password');
 
 		//añadimos la validación como campo requerido al password
 		$password->addValidator(
@@ -53,22 +49,22 @@ class LoginForm extends Form
 
 		//prevención de ataques csrf, genera un campo de este tipo
 		//<input value="dcf7192995748a80780b9cc99a530b58" name="csrf" id="csrf" type="hidden" />
-		$csrf = new Hidden('csrf');
+		$randomsting = new Hidden('randomsting');
 
 		//añadimos la validación para prevenir csrf
-	 $csrf->addValidator(
+	 /*$csrf->addValidator(
 			new Identical(array(
 				'value' => $this->security->getSessionToken(),
-				'message' => '¡La validación CSRF ha fallado!'
+				'message' => '¡La validación CSRF ha fallado! '.$this->security->getSessionToken()
 			))
 		);
-
+		*/
 		//hacemos que se pueda llamar a nuestro campo csrf
-		$this->add($csrf);
+		$this->add($randomsting);
 
 		//añadimos un botón de tipo submit
 		$submit = $this->add(new Submit('Login', array(
-			'class' => 'btn btn-success'
+			'class' => 'button primary'
 		)));
 	}
 }

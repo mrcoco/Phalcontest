@@ -1,8 +1,13 @@
 <?php
+use Phalcon\Mvc\Model\Criteria;
+use Phalcon\Mvc\Model\Query;
+use Phalcon\Paginator\Adapter\Model as Paginator;
 use LoginForm as FormLogin;
+
 /**
  * @RoutePrefix("/login")
  */
+
 class LoginController extends ControllerBase
 {
 
@@ -19,6 +24,12 @@ class LoginController extends ControllerBase
 if ($this->request->isPost())
 {
 
+	 $token = $this->request->getPost("randomsting");
+
+	 if (trim($token) ==trim($this->security->getSessionToken()))
+	 {
+		 //paso validacion CSRF
+
   //si el formulario no pasa la validación que le hemos impuesto
   if ($form->isValid($this->request->getPost()) == false)
   {
@@ -27,7 +38,7 @@ if ($this->request->isPost())
     {
       $this->flash->error($message);
     }
-    
+
   }
   else
   {
@@ -45,23 +56,47 @@ if ($this->request->isPost())
               //creamos la sesión del usuario con su email
               $this->session->set("userid", $user->id);
               $this->session->set("username", $user->username);
-              return $this->response->redirect('apartment/list');
+              return $this->response->redirect('home');
             }
             else
             {
-              //esto es horrible, nunca le déis esta información a un usuario, es para el tuto
-              $this->flash->error("No hay ningún usuario con ese password en la base de datos");
+
+              $this->flash->error("Invalid Username or Password");
             }
         }
         else
         {
-          //esto es horrible, nunca le déis esta información a un usuario, es para el tuto
-          $this->flash->error("El usuario no ha sido encontrado en la base de datos");
+
+          $this->flash->error("Invalid Username or Password");
         }
   }
 }
+else {
+$this->flash->error("Se ha encontrado un problema en la autenticación");
+}
+
+}
+
 
 $this->view->form = new FormLogin();
 }
+/**
+* @Route("/logout", methods={"GET","POST"}, name="logout")
+*/
+public function LogoutAction()
+    {
+        $this->session->remove('userid');
+			 $this->session->remove('username');
+
+				return $this->response->redirect('login');
+    }
+
+		/**
+	  * @Route("/test", methods={"GET","POST"}, name="test")
+	 */
+	public function testAction()
+	{
+		echo 'entro test';
+	}
 
 }

@@ -121,7 +121,7 @@ class ApartmentController extends ControllerBase
 */
         $paginator = new Paginator(array(
             "data" => $apartment,
-            "limit"=> 1,
+            "limit"=> 10,
             "page" => $numberPage
         ));
 
