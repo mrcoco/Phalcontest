@@ -5,8 +5,8 @@ $(function() {
 
       errorPlacement: function(error, element) {
         //Custom position: first name
-        if (element.attr("name") == "city" ) {
-            $("#cityerror").html(error);
+        if (element.attr("name") == "township" ) {
+            $("#townshiperror").html(error);
         }
 
         // Default position: if no match is met (other fields)
@@ -14,33 +14,26 @@ $(function() {
     },
         // Specify the validation rules
         rules: {
-            countryid:{
+            cityid:{
                 required:true
 
             },
-            stateid:{
+            township:{
                 required:true
-            },
-            city:{
-                required:true
-
             }
 
         },
         // Specify the validation error messages
         messages: {
-            countryid:{
+            cityid:{
                 required:""
 
             },
-             stateid:{
-                required:"",
-
-            },
-            city:{
-                required:"Debe ingresar una ciudad"
+             township:{
+                required:"Debe ingresar un sector",
 
             }
+
 
         },
 

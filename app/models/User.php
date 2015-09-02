@@ -132,7 +132,7 @@ class User extends \Phalcon\Mvc\Model
           new PresenceOf(
               array(
                   'field'    => 'username',
-                  'message'  => 'The username is required'
+                  'message'  => 'The username is required2'
               )
           )
       );
@@ -140,7 +140,7 @@ class User extends \Phalcon\Mvc\Model
           new PresenceOf(
               array(
                   'field'    => 'password',
-                  'message'  => 'The password is required'
+                  'message'  => 'The password is required2'
               )
           )
       );
@@ -149,7 +149,7 @@ class User extends \Phalcon\Mvc\Model
             new Email(
                 array(
                     'field'    => 'email',
-                    'message'=>'The email must be valid'
+                    'message'=>'The email must be valid2'
                 )
             )
         );

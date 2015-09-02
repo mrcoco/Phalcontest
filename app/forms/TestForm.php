@@ -11,7 +11,7 @@ use Phalcon\Validation\Validator\Identical;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Query;
 
-class CityForm extends Form
+class TestForm extends Form
 {
   public function initialize($entity =null , $options=null)
 	{
@@ -42,11 +42,6 @@ class CityForm extends Form
     $this->add($state);
   }
 
-
-
-  $city = new Text('city');
-  $city->setLabel('Ciudad');
-  $this->add($city);
   //añadimos un botón de tipo submit
 $submit = $this->add(new Submit('Guardar', array(
   'class' => 'btn btn-success'

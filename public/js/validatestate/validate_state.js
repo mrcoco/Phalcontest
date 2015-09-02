@@ -5,8 +5,8 @@ $(function() {
 
       errorPlacement: function(error, element) {
         //Custom position: first name
-        if (element.attr("name") == "city" ) {
-            $("#cityerror").html(error);
+        if (element.attr("name") == "state" ) {
+            $("#stateerror").html(error);
         }
 
         // Default position: if no match is met (other fields)
@@ -18,12 +18,8 @@ $(function() {
                 required:true
 
             },
-            stateid:{
+            state:{
                 required:true
-            },
-            city:{
-                required:true
-
             }
 
         },
@@ -33,14 +29,11 @@ $(function() {
                 required:""
 
             },
-             stateid:{
-                required:"",
-
-            },
-            city:{
-                required:"Debe ingresar una ciudad"
+             state:{
+                required:"Debe ingresar un estado",
 
             }
+
 
         },
 

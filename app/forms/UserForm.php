@@ -29,7 +29,7 @@ class UserForm extends Form
   $email->setLabel('Email');
   $email->addValidators(array(
       new PresenceOf(array(
-        'message' => 'Debe ingresar un Email'
+        'message' => 'Debe ingresar un Email3'
       ))));
   $this->add($email);
 

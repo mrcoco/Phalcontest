@@ -1,4 +1,7 @@
 <?php
+use Phalcon\Mvc\Model\Validator;
+use Phalcon\Mvc\Model\Validator\Email as Email;
+use Phalcon\Mvc\Model\Validator\PresenceOf;
 
 class State extends \Phalcon\Mvc\Model
 {
@@ -146,5 +149,60 @@ class State extends \Phalcon\Mvc\Model
             'countryid' => 'countryid'
         );
     }
+    /**
+     * Validations and business logic
+     *
+     * @return boolean
+     */
+    public function validation()
+    {
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'countryid'
+
+              )
+          )
+      );
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'state'
+
+              )
+          )
+      );
+
+
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+
+        return true;
+    }
+    public function getMessages()
+   {
+       $messages = array();
+       $txtmessage ="";
+       foreach (parent::getMessages() as $message) {
+           switch ($message->getType()) {
+               case 'PresenceOf':
+                   switch ($message->getField()) {
+                    case 'countryid':
+                     $txtmessage = 'Debe seleccionar un país';
+                    break;
+                    case 'state':
+                     $txtmessage = 'Debe ingresar un estado';
+                    break;
+                   }
+                    $messages[] =$txtmessage;
+                   break;
+           }
+       }
+
+       return $messages;
+   }
+
+
 
 }

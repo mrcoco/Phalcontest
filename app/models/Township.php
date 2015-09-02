@@ -1,4 +1,8 @@
 <?php
+use Phalcon\Mvc\Model\Validator;
+use Phalcon\Mvc\Model\Validator\Email as Email;
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 
 class Township extends \Phalcon\Mvc\Model
 {
@@ -146,5 +150,80 @@ class Township extends \Phalcon\Mvc\Model
             'cityid' => 'cityid'
         );
     }
+    /**
+     * Validations and business logic
+     *
+     * @return boolean
+     */
+    public function validation()
+    {
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'cityid'
+
+              )
+          )
+      );
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'township'
+
+              )
+          )
+      );
+      $this->validate(new Uniqueness(array(
+         'field' => array('cityid', 'township')
+
+
+     )));
+
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+
+        return true;
+    }
+    public function getMessages()
+   {
+       $messages = array();
+       $txtmessage ="";
+       foreach (parent::getMessages() as $message) {
+
+           switch ($message->getType()) {
+               case 'PresenceOf':
+                   switch ($message->getField()) {
+                    case 'cityid':
+                     $txtmessage = 'Debe seleccionar una ciudad';
+                    break;
+                    case 'township':
+                     $txtmessage = 'Debe ingresar un sector';
+                    break;
+                   }
+                    $messages[] =$txtmessage;
+                   break;
+              case 'Unique':
+
+              if (is_array($message->getField()))
+              {
+                $field =implode("-", $message->getField());
+              }
+              else {
+                $field =$message->getField();
+              }
+
+              switch ($field) {
+               case 'cityid-township':
+                  $txtmessage ='Ya Existe un sector con ese nombre para la ciudad seleccionada';
+             break;
+           }
+           $messages[] =$txtmessage;
+          break;
+       }
+
+       return $messages;
+   }
+ }
 
 }

@@ -4,6 +4,7 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Validation;
 use CityForm as CityForm;
+
 /**
  * @RoutePrefix("/city")
  */
@@ -76,19 +77,28 @@ class CityController extends ControllerBase
 
         $numberPage = 1;
         if ($this->request->isPost()) {
-            $query = Criteria::fromInput($this->di, "City", $_POST);
-            $this->persistent->parameters = $query->getParams();
+
         } else {
             $numberPage = $this->request->getQuery("page", "int");
         }
 
-        $parameters = $this->persistent->parameters;
-        if (!is_array($parameters)) {
-            $parameters = array();
-        }
-        $parameters["order"] = "id";
 
-        $city = City::find($parameters);
+        $country =$this->request->getPost("country");
+        $state =$this->request->getPost("state");
+        $city_search =$this->request->getPost("city");
+
+        $city = $this->modelsManager->createBuilder()
+                    ->columns(array('c2.id as id','c.country as country','s.state as state' ,'c2.city as city'))
+                    ->from(array('c2' => 'City'))
+                    ->join('Country', 'c.id = c2.countryid', 'c')
+                    ->join('State', 's.id = c2.stateid', 's')
+                    ->where('c.country LIKE :country:', array('country' => '%' . $country . '%'))
+                    ->andWhere('s.state LIKE :state:', array('state' => '%' . $state . '%'))
+                    ->andWhere('c2.city LIKE :city:', array('city' => '%' . $city_search . '%'))
+                    ->getQuery()
+                    ->execute();
+
+        //$city = City::find($parameters);
         if (count($city) == 0) {
             $this->flash->notice("The search did not find any city");
 
@@ -104,23 +114,32 @@ class CityController extends ControllerBase
             "page" => $numberPage
         ));
 
-        $this->view->page = $paginator->getPaginate();
+      $this->view->page = $paginator->getPaginate();
+      $this->view->pick("city/citylist");
     }
+
+
 
     /**
     * @Route("/new", methods={"GET"}, name="citynew")
    */
-    public function newAction()
+    public function newAction($entity =null)
     {
          $this->get_assets();
+         if (isset($entity))
+         {
+             $this->view->form = new CityForm($entity,array());
+         }
+         else {
+            $this->view->form = new CityForm();
+         }
 
-         $this->view->form = new CityForm();
     }
 
 
     public function get_assets()
     {
-      //echo ;
+    
       $this->assets
          ->collection('validatejs')
           ->addJs('js/jqueryvalidate/jquery.validate.js')
@@ -143,18 +162,47 @@ class CityController extends ControllerBase
 
                 return $this->dispatcher->forward(array(
                     "controller" => "city",
-                    "action" => "index"
+                    "action" => "list"
                 ));
             }
+            $this->get_assets();
+            $this->view->form = new CityForm($city);
+            $this->view->id =$city->getId();
 
-            $this->view->id = $city->id;
-
-            $this->tag->setDefault("id", $city->getId());
             $this->tag->setDefault("city", $city->getCity());
             $this->tag->setDefault("countryid", $city->getCountryid());
             $this->tag->setDefault("stateid", $city->getStateid());
 
+
+
         }
+    }
+
+    public function get_stateid_post($countryid,$stateidparam)
+    {
+
+      $state= $this->modelsManager->createBuilder()
+                  ->columns(array('s.id','s.state'))
+                  ->from(array('s' => 'State'))
+                  ->where('s.countryid  = :countryid:',array('countryid'=>'='.$countryid))
+                  ->andWhere('s.id LIKE :stateid:', array('stateid' => '=' . $stateidparam))
+                  ->getQuery()
+                  ->execute();
+      //$state= State::findBycountryid($countryid)->toArray();
+
+      $stateid ='<select id="stateid" name ="stateid">';
+      $stateid .='<option value ="0" >Seleccione un Estado</option>';
+      $selected ="";
+      foreach ( $state as  $stateitem)
+      {
+        if ($stateidparam ==$stateitem["id"])
+        {
+          $selected ='selected="selected"';
+        }
+         $stateid.=$optionvalue='<option value ="'. $stateitem["id"].'" '.$selected.'>'. $stateitem["state"].'</option>';
+      }
+      $stateid.='</select>';
+      return $stateid;
     }
 
     /**
@@ -171,36 +219,33 @@ class CityController extends ControllerBase
         }
 
         $city = new City();
-
         $city->setCity($this->request->getPost("city"));
         $city->setCountryid($this->request->getPost("countryid"));
         $city->setStateid($this->request->getPost("stateid"));
 
 
+
         if (!$city->save()) {
             foreach ($city->getMessages() as $message) {
+
                 $this->flash->error($message);
             }
 
+            $this->view->form = new CityForm($city, array());
+
             return $this->dispatcher->forward(array(
-                "controller" => "city",
-                "action" => "new"
-            ));
+              "controller" => "city",
+                "action" => "new",
+                "params"=>array("entity"=>$city)
+          ));
         }
-
-        $this->flash->success("city was created successfully");
-
-        return $this->dispatcher->forward(array(
-            "controller" => "city",
-            "action" => "index"
-        ));
-
+            $this->response->redirect(array('for' => "citylist"));
     }
 
     /**
-    * @Route("/save", methods={"POST"}, name="citysave")
+    * @Route("/save/{id}", methods={"POST"}, name="citysave")
    */
-    public function saveAction()
+    public function saveAction($id)
     {
 
         if (!$this->request->isPost()) {
@@ -209,8 +254,6 @@ class CityController extends ControllerBase
                 "action" => "index"
             ));
         }
-
-        $id = $this->request->getPost("id");
 
         $city = City::findFirstByid($id);
         if (!$city) {
@@ -240,17 +283,43 @@ class CityController extends ControllerBase
             ));
         }
 
-        $this->flash->success("city was updated successfully");
-
-        return $this->dispatcher->forward(array(
-            "controller" => "city",
-            "action" => "index"
-        ));
+         $this->response->redirect(array('for' => "citylist"));
 
     }
 
     /**
-    * @Route("/delete/{id}", methods={"POST"}, name="citydelete")
+    * @Route("/show/{id}", methods={"GET"}, name="cityshow")
+   */
+   public function showAction($id)
+   {
+     $this->get_assets();
+     if (!$this->request->isPost()) {
+
+         $city = City::findFirstByid($id);
+         if (!$city) {
+             $this->flash->error("city was not found");
+
+             return $this->dispatcher->forward(array(
+                 "controller" => "city",
+                 "action" => "list"
+             ));
+         }
+         $this->get_assets();
+         $this->view->form = new CityForm($city);
+         $this->view->id =$city->getId();
+
+         $this->tag->setDefault("city", $city->getCity());
+         $this->tag->setDefault("countryid", $city->getCountryid());
+         $this->tag->setDefault("stateid", $city->getStateid());
+
+
+
+     }
+
+   }
+
+    /**
+    * @Route("/delete/{id}", methods={"GET"}, name="citydelete")
    */
     public function deleteAction($id)
     {
@@ -261,7 +330,7 @@ class CityController extends ControllerBase
 
             return $this->dispatcher->forward(array(
                 "controller" => "city",
-                "action" => "index"
+                "action" => "list"
             ));
         }
 
@@ -277,12 +346,9 @@ class CityController extends ControllerBase
             ));
         }
 
-        $this->flash->success("city was deleted successfully");
 
-        return $this->dispatcher->forward(array(
-            "controller" => "city",
-            "action" => "index"
-        ));
+
+       $this->response->redirect(array('for' => "citylist"));
     }
 
 }

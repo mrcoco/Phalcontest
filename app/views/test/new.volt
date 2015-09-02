@@ -1,15 +1,19 @@
 {% extends "layouts/masterpage.volt" %}
 {% block head %}
 {{super()}}
-{{assets.outputJs('validatejs')}}
+
+{{assets.outputJs('angularjs')}}
+
 {% endblock %}
 {% block content %}
 {{super()}}
-<div align="left" class="grid">
-{{ form("city/create", "method":"post","id":"appform") }}
+<div align="left" class="grid" ng-app="myapp" ng-controller="mycontroller">
+<label>{{"{{test}}"}}<label>
+
+{{ form("test/new", "method":"post","id":"appform") }}
 <div class="row cells12">
 <div class="cell colspan12">
-  <h4 align="left">Nueva Ciudad</h4>
+  <h4 align="left">TEST DEPENDENT SELECTS</h4>
   <br><hr class="control-label col-sm-12">
 </div>
 </div>
@@ -19,7 +23,7 @@
    <div class="cell colspan3">
       <div class="input-control select full-size">
         {{ form.label('countryid') }}
-         {{ form.render('countryid') }}
+         {{ form.render('countryid',["ng-model":"countryid","ng-change":"getstates(countryid)"]) }}
       </div>
    </div>
 </div>
@@ -27,16 +31,12 @@
    <div class="cell colspan3">
       <div class="input-control select full-size">
         {{ form.label('stateid') }}
-         {{ form.render('stateid') }}
-      </div>
-   </div>
-</div>
-<div class="row cells1">
-   <div class="cell colspan3">
-      <div class="input-control full-size">
-       {{ form.label('city',['class': 'labelform']) }}
-       {{ form.render('city') }}
-       <label id="cityerror" name ="cityerror" class="labelform"></label>
+
+        <select>
+          <option >Seleccione un Estado</option>
+          <option  ng-repeat="state in states" value="{{'{{state.id}}'}}">{{"{{state.state}}"}}</option>
+
+        </select>
       </div>
    </div>
 </div>
@@ -52,4 +52,18 @@
 </div>
 </form>
 </div>
+<script>
+var app = angular.module('myapp', []);
+app.controller('mycontroller', function($scope,$http) {
+//$scope.first ="Andres";
+$scope.test="FUNCIONO ANGULAR";
+$scope.getstates =function(countryid)
+{
+$http.post('get_state/'+countryid).then(function(response){
+  $scope.states = response.data;
+  });
+};
+
+});
+</script>
 {% endblock %}

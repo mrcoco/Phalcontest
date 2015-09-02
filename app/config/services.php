@@ -147,19 +147,15 @@ array(
 
 
 
-    $router->addResource('User', '/user');
-
-    $router->addResource('Apartment', '/apartment');
-
-    $router->addResource('Tower', '/tower');
-
+   $router->addResource('User', '/user');
+   $router->addResource('Apartment', '/apartment');
+   $router->addResource('Tower', '/tower');
    $router->addResource('Login', '/login');
-
    $router->addResource('Country', '/country');
-
    $router->addResource('State', '/state');
-
    $router->addResource('City', '/city');
+   $router->addResource('Township', '/township');
+   $router->addResource('Test', '/test');
 
 
     return $router;

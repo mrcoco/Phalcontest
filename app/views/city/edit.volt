@@ -1,47 +1,55 @@
-{{ content() }}
-{{ form("city/save", "method":"post") }}
-
-<table width="100%">
-    <tr>
-        <td align="left">{{ link_to("city", "Go Back") }}</td>
-        <td align="right">{{ submit_button("Save") }}</td>
-    </tr>
-</table>
-
-<div align="center">
-    <h1>Edit city</h1>
+{% extends "layouts/masterpage.volt" %}
+{% block head %}
+{{super()}}
+{{assets.outputJs('validatejs')}}
+{% endblock %}
+{% block content %}
+{{super()}}
+<div align="left" class="grid">
+{{ form("city/save/"~id, "method":"post","id":"appform") }}
+<div class="row cells12">
+<div class="cell colspan12">
+  <h4 align="left">Editar Ciudad</h4>
+  <br><hr class="control-label col-sm-12">
 </div>
-
-<table>
-    <tr>
-        <td align="right">
-            <label for="city">City</label>
-        </td>
-        <td align="left">
-            {{ text_field("city", "size" : 30) }}
-        </td>
-    </tr>
-    <tr>
-        <td align="right">
-            <label for="countryid">Countryid</label>
-        </td>
-        <td align="left">
-            {{ text_field("countryid", "type" : "numeric") }}
-        </td>
-    </tr>
-    <tr>
-        <td align="right">
-            <label for="stateid">Stateid</label>
-        </td>
-        <td align="left">
-            {{ text_field("stateid", "type" : "numeric") }}
-        </td>
-    </tr>
-
-    <tr>
-        <td>{{ hidden_field("id") }}</td>
-        <td>{{ submit_button("Save") }}</td>
-    </tr>
-</table>
-
+</div>
+<br><div class="error" align="left">{{ content() }}</div><br>
+<div class="grid">
+<div class="row cells1">
+   <div class="cell colspan3">
+      <div class="input-control select full-size">
+        {{ form.label('countryid') }}
+         {{ form.render('countryid') }}
+      </div>
+   </div>
+</div>
+<div class="row cells1">
+   <div class="cell colspan3">
+      <div class="input-control select full-size">
+        {{ form.label('stateid') }}
+         {{ form.render('stateid') }}
+      </div>
+   </div>
+</div>
+<div class="row cells1">
+   <div class="cell colspan3">
+      <div class="input-control full-size">
+       {{ form.label('city',['class': 'labelform']) }}
+       {{ form.render('city') }}
+       <label id="cityerror" name ="cityerror" class="labelform"></label>
+      </div>
+   </div>
+</div>
+<br>
+<div class="row cells2">
+  <div class="cell colspan0">
+   {{ form.render('Guardar') }}
+ </div>
+ <div class="cell colspan0">
+   {{ link_to("city/list","Cancelar","class":"button") }}
+</div>
+</div>
+</div>
 </form>
+</div>
+{% endblock %}

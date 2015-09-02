@@ -49,7 +49,7 @@
     <div class="page-content">
         <div class="flex-grid no-responsive-future" style="height: 100%;">
             <div class="row" style="height: 100%">
-                <div class="cell size-x200" id="cell-sidebar" style="background-color: #71b1d1; height: 100%">
+                <div class="cell size-x200" id="cell-sidebar" style="background-color: #71b1d1; height: 100%; width:30%">
                     <ul class="sidebar">
 
                         <li><a href="#">
@@ -78,7 +78,7 @@
 
                     </ul>
                 </div>
-                <div class="cell auto-size padding20 bg-white" id="cell-content">
+                <div class="cell auto-size padding20 bg-white" id="cell-content" >
                   {% block content %}
 
                    {% endblock %}

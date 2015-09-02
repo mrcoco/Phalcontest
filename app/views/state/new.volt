@@ -1,41 +1,47 @@
-
-{{ form("state/create", "method":"post") }}
-
-<table width="100%">
-    <tr>
-        <td align="left">{{ link_to("state", "Go Back") }}</td>
-        <td align="right">{{ submit_button("Save") }}</td>
-    </tr>
-</table>
-
-{{ content() }}
-
-<div align="center">
-    <h1>Create state</h1>
+{% extends "layouts/masterpage.volt" %}
+{% block head %}
+{{super()}}
+{{assets.outputJs('validatejs')}}
+{% endblock %}
+{% block content %}
+{{super()}}
+<div align="left" class="grid">
+{{ form("state/create", "method":"post","id":"appform") }}
+<div class="row cells12">
+<div class="cell colspan12">
+  <h4 align="left">Nuevo Estado</h4>
+  <br><hr class="control-label col-sm-12">
 </div>
-
-<table>
-    <tr>
-        <td align="right">
-            <label for="state">State</label>
-        </td>
-        <td align="left">
-            {{ text_field("state", "size" : 30) }}
-        </td>
-    </tr>
-    <tr>
-        <td align="right">
-            <label for="countryid">Countryid</label>
-        </td>
-        <td align="left">
-            {{ text_field("countryid", "type" : "numeric") }}
-        </td>
-    </tr>
-
-    <tr>
-        <td></td>
-        <td>{{ submit_button("Save") }}</td>
-    </tr>
-</table>
-
+</div>
+<br><div class="error" align="left">{{ content() }}</div><br>
+<div class="grid">
+<div class="row cells1">
+   <div class="cell colspan3">
+      <div class="input-control select full-size">
+         {{ form.label('countryid') }}
+         {{ form.render('countryid') }}
+      </div>
+   </div>
+</div>
+<div class="row cells1">
+   <div class="cell colspan3">
+      <div class="input-control select full-size">
+        {{ form.label('state') }}
+         {{ form.render('state') }}
+      </div>
+      <label id ="stateerror" name ="stateerror"></label>
+   </div>
+</div>
+<br>
+<div class="row cells2">
+  <div class="cell colspan0">
+   {{ form.render('Guardar') }}
+ </div>
+ <div class="cell colspan0">
+   {{ link_to("state/list","Cancelar","class":"button") }}
+</div>
+</div>
+</div>
 </form>
+</div>
+{% endblock %}

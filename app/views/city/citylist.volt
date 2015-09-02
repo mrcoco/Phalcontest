@@ -1,19 +1,9 @@
 {% extends "layouts/masterpage.volt" %}
 
 {% block content %}
-<script>
-        function showDialog(id){
-            var dialog = $("#"+id).data('dialog');
-            if (!dialog.element.data('opened')) {
-                dialog.open();
-            } else {
-                dialog.close();
-            }
-        }
-    </script>
-<div align="left"><h3>{{'CIUDADES'}}</h3></div>
+<div align="left"><h4>{{'Ciudades'}}</h4></div>
 	<hr class="thin"/>
-<div class="grid">
+<div align="left" class="grid">
   {{ form("city/search", "method":"post", "autocomplete" : "off") }}
  <div class="row cells2">
 	 <div class="cell colspan3">
@@ -65,8 +55,7 @@
             <td width ="25%">{{ city.state}}</td>
 						<td width ="25%">{{ city.city}}</td>
             <td width ="5%">{{link_to('city/edit/'~city.id,image("img/edit32.png"))}}</td>
-
-            <td width ="5%"><a href="">{{image("img/delete32.png","onclick":"showDialog('dialog1')") }}</a></td>
+            <td width ="5%">{{link_to('city/show/'~city.id,image("img/delete32.png"))}}</td>
         </tr>
 
     {% endfor %}
@@ -91,10 +80,4 @@
 
 </table>
 
-<div style="width: auto; height: auto; display: none; left: 663.5px; top: 213.5px;" data-role="dialog" id="dialog1" class="info padding20 dialog" data-close-button="true" data-overlay="true">
-            <h1>Simple dialog</h1>
-            <p>
-                This dialog with default overlay
-            </p>
-        <span class="dialog-close-button"></span></div>
 {% endblock %}
