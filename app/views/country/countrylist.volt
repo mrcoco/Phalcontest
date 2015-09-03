@@ -1,31 +1,24 @@
 {% extends "layouts/masterpage.volt" %}
 
 {% block content %}
-<div align="left"><h4>{{'Ciudades'}}</h4></div>
+<div align="left"><h4>{{title}}</h4></div>
 	<hr class="thin"/>
 <div align="left" class="grid">
-  {{ form("city/search", "method":"post", "autocomplete" : "off") }}
- <div class="row cells2">
-	 <div class="cell colspan3">
-	     <label class="search" for="username">País</label>
-	  <div class="input-control full-size">
-	      {{ text_field("country", "size" : 30) }}
-	  </div>
-	</div>
- <div class="cell colspan3">
-     <label class="search" for="username">Estado</label>
-  <div class="input-control full-size">
-      {{ text_field("state", "size" : 30) }}
+  {{ form(searchroute, "method":"post", "autocomplete" : "off") }}
+  <div class="row cells2">
+		<div class="cell colspan3">
+				<label class="search" for="country">Código</label>
+		 <div class="input-control full-size">
+				 {{ text_field("code", "size" : 30) }}
+		 </div>
+	 </div>
+   <div class="cell colspan3">
+       <label class="search" for="country">Pais</label>
+    <div class="input-control full-size">
+        {{ text_field("country", "size" : 30) }}
+    </div>
   </div>
-</div>
-<div class="cell colspan3">
-  <label class="search" for="tower">Ciudad</label>
-  <div class="input-control full-size">
-  {{ text_field("city", "size" : 30) }}
-</div>
-</div>
-
-</div>
+	</div>
 <div class="row cells1">
   <div class="cell colspan3">
   <div align ="left">{{ submit_button("Buscar") }}</div>
@@ -41,23 +34,19 @@
 <table  width="100%" align="center"  class="table striped hovered  border bordered">
     <thead>
 
-			<tr>
-					<th class="sortable-column">País</th>
-					<th class="sortable-column">Estado</th>
-					<th class="sortable-column">Ciudad</th>
-					<th></th>
-					<th></th>
-			 </tr>
+        <tr>
+					  <th class="sortable-column">Código</th>
+            <th class="sortable-column">País</th>
+         </tr>
     </thead>
     <tbody>
     {% if page.items is defined %}
     {% for entity in page.items %}
         <tr>
-					<td width ="25%">{{ entity.country }}</td>
-					<td width ="25%">{{ entity.state}}</td>
-					<td width ="25%">{{ entity.city}}</td>
-					<td width ="5%">{{link_to('city/edit/'~entity.id,image("img/edit32.png"))}}</td>
-					<td width ="5%">{{link_to('city/show/'~entity.id,image("img/delete32.png"))}}</td>
+            <td width ="25%">{{ entity.code }}</td>
+            <td width ="25%">{{ entity.country}}</td>
+            <td width ="5%">{{link_to(editroute~entity.id,image("img/edit32.png"))}}</td>
+            <td width ="5%">{{link_to(showroute~entity.id,image("img/delete32.png"))}}</td>
         </tr>
 
     {% endfor %}
@@ -74,7 +63,9 @@
 	<span class="item">{{ link_to(listroute~"?page="~page.next, "Next") }}</span>
 	<span class="item">{{ link_to(listroute~"?page="~page.last, "Last") }}</span>
 </div>
+
 {% else %}
 <div align="left">{{noitems}}</div>
 {% endif %}
+
 {% endblock %}

@@ -6,10 +6,10 @@
 {% block content %}
 {{super()}}
 <div align="left" class="grid">
-{{ form("city/save/"~id, "method":"post","id":"appform") }}
+{{ form(routeform, "method":"post","id":"appform") }}
 <div class="row cells12">
 <div class="cell colspan12">
-  <h4 align="left">Editar Ciudad</h4>
+  <h4 align="left">{{title}}</h4>
   <br><hr class="control-label col-sm-12">
 </div>
 </div>
@@ -46,7 +46,7 @@
    {{ form.render('Guardar') }}
  </div>
  <div class="cell colspan0">
-   {{ link_to("city/list","Cancelar","class":"button") }}
+   {{ link_to(routelist,"Cancelar","class":"button") }}
 </div>
 </div>
 </div>

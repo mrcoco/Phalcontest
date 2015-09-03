@@ -137,15 +137,6 @@ $di['router'] = function() {
   )
 );
 
-$router->add(
-"/home",
-array(
-    "controller" => "Index",
-    "action"     => "index"
-)
-);
-
-
 
    $router->addResource('User', '/user');
    $router->addResource('Apartment', '/apartment');
@@ -155,7 +146,10 @@ array(
    $router->addResource('State', '/state');
    $router->addResource('City', '/city');
    $router->addResource('Township', '/township');
+   $router->addResource('Neighborhood', '/neighborhood');
+   $router->addResource('Index', '/index');
    $router->addResource('Test', '/test');
+   $router->addResource('Address', '/address');
 
 
     return $router;

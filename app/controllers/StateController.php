@@ -11,270 +11,172 @@ use StateForm as StateForm;
 class StateController extends ControllerBase
 {
 
+    private function listsearch($param,$entityname,$parameters)
+    {
 
-  /**
-  * @Route("/list", methods={"GET","POST"}, name="statelist")
- */
-  public function listAction()
+        if ($param =='list')
+        {
+
+        $entity =$this->set_list_query($entityname,$parameters);
+        }
+        else {
+
+         $params_query =$this->set_search_grid_post_values();
+         $entity = $this->set_search_query($params_query);
+        }
+
+      $this->set_grid_values($entity,'state/new','state/edit/','state/show/','state/search'
+      ,'state/list','state/statelist',1,10,"No se encontraron Estados","Estados");
+
+    }
+
+    private function set_search_grid_post_values()
+    {
+      $params_query['countryid'] =$this->request->getPost("countryid");
+      $params_query['state'] =$this->request->getPost("state");
+      return $params_query;
+
+    }
+
+    private function set_list_query($entityname,$parameters)
+    {
+      $entity = $this->modelsManager->createBuilder()
+                   ->columns(array('s.id as id','s.state as state','c.country as country'))
+                   ->from(array('s' => 'State'))
+                   ->join('Country', 'c.id = s.countryid', 'c')
+                   ->getQuery()
+                   ->execute();
+      return $entity;
+    }
+    private function set_search_query($params_query)
+    {
+      $entity = $this->modelsManager->createBuilder()
+                   ->columns(array('s.id as id','s.state as state','c.country as country'))
+                   ->from(array('s' => 'State'))
+                   ->join('Country', 'c.id = s.countryid', 'c')
+                   ->Where('s.state LIKE :state:', array('state' => '%' . $params_query['state']. '%'))
+                   ->AndWhere('c.country LIKE :country:', array('country' => '%' . $params_query['country']. '%'))
+                   ->getQuery()
+                   ->execute();
+        return $entity;
+    }
+
+
+   private function set_tags($mode,$entity_object)
+
+   {
+     $this->tag->setDefault("countryid", $entity_object->getCountryid());
+     $this->tag->setDefault("state", $entity_object->getstate());
+
+  }
+  private function set_post_values($entity)
   {
-
-      $numberPage = 1;
-      if ($this->request->isPost()) {
-
-      } else {
-          $numberPage = $this->request->getQuery("page", "int");
-      }
-
-
-
-      $state = $this->modelsManager->createBuilder()
-                  ->columns(array('s.id as id','c.country as country','s.state as state'))
-                  ->from(array('s' => 'State'))
-                  ->join('Country', 'c.id = s.countryid', 'c')
-                  ->getQuery()
-                  ->execute();
-
-
-      $paginator = new Paginator(array(
-          "data" => $state,
-          "limit"=> 10,
-          "page" => $numberPage
-      ));
-
-      $this->view->page = $paginator->getPaginate();
-    $this->view->pick("state/statelist");
+  $entity->setState($this->request->getPost("state"));
+  $entity->setCountryid($this->request->getPost("countryid"));
   }
 
 
-  /**
-  * @Route("/search", methods={"POST"}, name="statesearch")
- */
-    public function searchAction()
-    {
-
-        $numberPage = 1;
-        if ($this->request->isPost()) {
-
-        } else {
-            $numberPage = $this->request->getQuery("page", "int");
-        }
-
-        $country =$this->request->getPost("country");
-        $stateparam =$this->request->getPost("state");
-
-        $state = $this->modelsManager->createBuilder()
-                    ->columns(array('s.id as id','c.country as country','s.state as state'))
-                    ->from(array('s' => 'State'))
-                    ->join('Country', 'c.id = s.countryid', 'c')
-                  ->andWhere('s.state LIKE :state:', array('state' => '%' . $stateparam. '%'))
-                  ->andWhere('c.country LIKE :country:', array('country' => '%' . $country. '%'))
-                    ->getQuery()
-                    ->execute();
-        if (count($state) == 0) {
-            $this->flash->notice("The search did not find any state");
-
-            return $this->dispatcher->forward(array(
-                "controller" => "state",
-                "action" => "list"
-            ));
-        }
-
-        $paginator = new Paginator(array(
-            "data" => $state,
-            "limit"=> 10,
-            "page" => $numberPage
-        ));
-
-        $this->view->page = $paginator->getPaginate();
-        $this->view->pick("state/statelist");
-    }
-    public function get_assets()
-    {
-
-      $this->assets
-         ->collection('validatejs')
-          ->addJs('js/jqueryvalidate/jquery.validate.js')
-          ->addJs('js/jqueryvalidate/additional-methods.min.js')
-          ->addJs('js/validatestate/validate_state.js');
-    }
     /**
-    * @Route("/new", methods={"GET"}, name="statenew")
+    * @Route("/list", methods={"GET","POST"}, name="countrylist")
    */
-    public function newAction()
+    public function listAction()
     {
-      $this->get_assets();
-      $this->view->form = new StateForm();
+
+      $this->listsearch('list','State',array(
+        'order' => 'state,country ASC'
+    ));
 
     }
+
 
     /**
-    * @Route("/edit/{id}", methods={"GET"}, name="stateedit")
+    * @Route("/search", methods={"POST"}, name="Countrysearch")
    */
-    public function editAction($id)
-    {
+      public function searchAction()
+      {
+       $this->listsearch('search','',array(
+         'order' => 'state,country ASC'
+     ));
+      }
 
-        if (!$this->request->isPost()) {
+      public function get_assets()
+      {
 
-            $state = State::findFirstByid($id);
-            if (!$state) {
-                $this->flash->error("state was not found");
+        $this->assets
+           ->collection('validatejs')
+            ->addJs('js/jqueryvalidate/jquery.validate.js')
+            ->addJs('js/jqueryvalidate/additional-methods.min.js')
+            ->addJs('js/validatestate/validate_state.js');
 
-                return $this->dispatcher->forward(array(
-                    "controller" => "state",
-                    "action" => "index"
-                ));
-            }
-
-            $this->get_assets();
-            $this->view->form = new StateForm();
-            $this->view->id = $state->id;
-
-            $this->tag->setDefault("id", $state->getId());
-            $this->tag->setDefault("state", $state->getState());
-            $this->tag->setDefault("countryid", $state->getCountryid());
-
-        }
-    }
-
-    /**
-    * @Route("/create", methods={"POST"}, name="statecreate")
-   */
-    public function createAction()
-    {
-
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "state",
-                "action" => "index"
-            ));
-        }
-
-        $state = new State();
-
-        $state->setState($this->request->getPost("state"));
-        $state->setCountryid($this->request->getPost("countryid"));
+      }
 
 
-        if (!$state->save()) {
-            foreach ($state->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+      /**
+      * @Route("/new", methods={"GET"}, name="Countryenew")
+     */
+      public function newAction($entity=null)
+      {
+        $this->get_assets();
+        $this->set_form_routes('state/create','state/list','Nuevo Estado','state/addedit','new',$entity,'StateForm');
 
-            return $this->dispatcher->forward(array(
-                "controller" => "state",
-                "action" => "new"
-            ));
-        }
-
-        $this->response->redirect(array('for' => "statelist"));
-    }
-
-    /**
-    * @Route("/save/{id}", methods={"POST"}, name="statesave")
-   */
-    public function saveAction($id)
-    {
-
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "state",
-                "action" => "index"
-            ));
-        }
-
-        //$id = $this->request->getPost("id");
-
-        $state = State::findFirstByid($id);
-        if (!$state) {
-            $this->flash->error("state does not exist " . $id);
-
-            return $this->dispatcher->forward(array(
-                "controller" => "state",
-                "action" => "index"
-            ));
-        }
-
-        $state->setState($this->request->getPost("state"));
-        $state->setCountryid($this->request->getPost("countryid"));
+      }
 
 
-        if (!$state->save()) {
+      /**
+      * @Route("/edit/{id}", methods={"GET"}, name="Countryedit")
+     */
+      public function editAction($id)
+      {
+              $entity =$this->set_entity($id,'State','No se encontro una entidad llamada State','State','statelist','edit');
+              $this->get_assets();
+              $this->set_tags('edit',$entity);
+              $this->view->id = $entity->id;
+              $this->set_form_routes('state/save/'.$id,'state/list','Editar Estado','state/addedit','edit',$entity,'StateForm');
+      }
 
-            foreach ($state->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+      /**
+      * @Route("/create", methods={"POST"}, name="Countrycreate")
+     */
+      public function createAction()
+      {
+          $entity = $this->set_entity('','State','No se encontro una entidad llamada Estado','State','statelist','create');
+          $this->set_post_values($entity);
+          $this->execute_entity_action($entity,'State','new',array($entity),'statelist','create');
+      }
 
-            return $this->dispatcher->forward(array(
-                "controller" => "state",
-                "action" => "edit",
-                "params" => array($state->id)
-            ));
-        }
+      /**
+      * @Route("/save/{id}", methods={"POST"}, name="Countrysave")
+     */
+      public function saveAction($id)
+      {
 
-        $this->response->redirect(array('for' => "statelist"));
+          $entity =$this->set_entity($id,'State','No se encontro una entidad llamada Estado','State','statelist','update');
+          $this->set_post_values($entity);
+          $this->execute_entity_action($entity,'State','edit',array($entity->id),'statelist','update');
 
-    }
+      }
 
-    /**
-    * @Route("/show/{id}", methods={"GET"}, name="stateshow")
-   */
-   public function showAction($id)
-   {
-     $this->get_assets();
-     if (!$this->request->isPost()) {
-
-         $state = State::findFirstByid($id);
-         if (!$state) {
-             $this->flash->error("state was not found");
-
-             return $this->dispatcher->forward(array(
-                 "controller" => "state",
-                 "action" => "list"
-             ));
-         }
-         $this->get_assets();
-         $this->view->form = new StateForm();
-         $this->view->id =$state->getId();
-
-         $this->tag->setDefault("countryid", $state->getCountryid());
-         $this->tag->setDefault("state", $state->getState());
-
+      /**
+      * @Route("/show/{id}", methods={"GET"}, name="Countryshow")
+     */
+     public function showAction($id)
+     {
+           $entity =$this->set_entity($id,'State','No se encontro una entidad llamada Estado','State','statelist','show_delete');
+           $this->get_assets();
+           $this->set_form_routes('state/delete/'.$id,'state/list'
+           ,'Esta seguro que desea eliminar este Estado?','state/show','delete',$entity,'StateForm');
+           $this->set_tags('delete',$entity,'Y');
 
 
      }
 
-   }
+      /**
+      * @Route("/delete/{id}", methods={"POST"}, name="Countrydelete")
+     */
+      public function deleteAction($id)
+      {
 
-
-    /**
-    * @Route("/delete/{id}", methods={"GET"}, name="deletelist")
-   */
-    public function deleteAction($id)
-    {
-
-        $state = State::findFirstByid($id);
-        if (!$state) {
-            $this->flash->error("state was not found");
-
-            return $this->dispatcher->forward(array(
-                "controller" => "state",
-                "action" => "index"
-            ));
-        }
-
-        if (!$state->delete()) {
-
-            foreach ($state->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            return $this->dispatcher->forward(array(
-                "controller" => "state",
-                "action" => "search"
-            ));
-        }
-
-          $this->response->redirect(array('for' => "statelist"));
-    }
-
+        $entity =$this->set_entity($id,'State','No se encontro una entidad llamada Estado','State','statelist','delete');
+        $this->execute_entity_action($entity,'State','show',array(),'statelist','delete');
+      }
 }

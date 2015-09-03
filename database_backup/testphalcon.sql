@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-08-2015 a las 04:14:23
+-- Tiempo de generación: 03-09-2015 a las 23:15:11
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -132,14 +132,15 @@ CREATE TABLE IF NOT EXISTS `city` (
   PRIMARY KEY (`id`),
   KEY `fk_city_country1_idx` (`countryid`),
   KEY `fk_city_state1_idx` (`stateid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Volcado de datos para la tabla `city`
 --
 
 INSERT INTO `city` (`id`, `stateid`, `countryid`, `city`) VALUES
-(1, 1, 173, 'Panamá');
+(1, 1, 173, 'Panamá'),
+(2, 16, 49, 'Bogotá');
 
 -- --------------------------------------------------------
 
@@ -186,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `country` (
   `code` varchar(4) DEFAULT NULL,
   `country` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=251 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=252 ;
 
 --
 -- Volcado de datos para la tabla `country`
@@ -458,8 +459,28 @@ CREATE TABLE IF NOT EXISTS `neighborhood` (
   PRIMARY KEY (`id`),
   KEY `fk_neighborhood_township1_idx` (`townshipid`),
   KEY `fk_neighborhood_city1_idx` (`cityid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
+--
+-- Volcado de datos para la tabla `neighborhood`
+--
+
+INSERT INTO `neighborhood` (`id`, `cityid`, `townshipid`, `neighborhood`) VALUES
+(1, 1, 1, 'Chanis');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `neighborhoodview`
+--
+CREATE TABLE IF NOT EXISTS `neighborhoodview` (
+`id` int(11)
+,`city` varchar(100)
+,`country` varchar(100)
+,`state` varchar(100)
+,`township` varchar(100)
+,`neighborhood` varchar(100)
+);
 -- --------------------------------------------------------
 
 --
@@ -485,7 +506,7 @@ CREATE TABLE IF NOT EXISTS `state` (
   `state` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_state_country1_idx` (`countryid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
 -- Volcado de datos para la tabla `state`
@@ -506,7 +527,8 @@ INSERT INTO `state` (`id`, `countryid`, `state`) VALUES
 (12, 173, 'Comarca Emberá-Wounaan'),
 (13, 173, 'Comarca Ngäbe-Buglé'),
 (14, 173, 'Comarca Madungandi'),
-(15, 173, 'Comarca Wargandí');
+(15, 173, 'Comarca Wargandí'),
+(16, 49, 'Cundinamarca');
 
 -- --------------------------------------------------------
 
@@ -558,8 +580,36 @@ CREATE TABLE IF NOT EXISTS `township` (
   `township` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_township_city1_idx` (`cityid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
+--
+-- Volcado de datos para la tabla `township`
+--
+
+INSERT INTO `township` (`id`, `cityid`, `township`) VALUES
+(1, 1, 'Juan Diaz'),
+(4, 2, 'Norte'),
+(5, 1, 'San Francisco2'),
+(6, 1, 'Juan Diaz'),
+(7, 1, 'Tocumen'),
+(8, 2, 'Usaquen2'),
+(9, 1, 'sasasa'),
+(15, 1, 'testr'),
+(17, 2, 'test');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `townshipview`
+--
+CREATE TABLE IF NOT EXISTS `townshipview` (
+`id` int(11)
+,`cityid` int(11)
+,`city` varchar(100)
+,`country` varchar(100)
+,`state` varchar(100)
+,`township` varchar(100)
+);
 -- --------------------------------------------------------
 
 --
@@ -616,6 +666,24 @@ CREATE TABLE IF NOT EXISTS `user_role` (
 DROP TABLE IF EXISTS `apartmentlist`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `apartmentlist` AS select `a`.`id` AS `id`,`a`.`name` AS `name`,`c`.`name` AS `company`,`t`.`number` AS `tower` from ((`apartment` `a` join `tower` `t` on((`a`.`towerid` = `t`.`id`))) join `company` `c` on((`a`.`companyid` = `c`.`id`)));
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `neighborhoodview`
+--
+DROP TABLE IF EXISTS `neighborhoodview`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `neighborhoodview` AS select `n`.`id` AS `id`,`c`.`city` AS `city`,`c2`.`country` AS `country`,`s`.`state` AS `state`,`t`.`township` AS `township`,`n`.`neighborhood` AS `neighborhood` from ((((`neighborhood` `n` join `city` `c` on((`c`.`id` = `n`.`cityid`))) join `country` `c2` on((`c2`.`id` = `c`.`countryid`))) join `state` `s` on((`s`.`id` = `c`.`stateid`))) join `township` `t` on((`t`.`id` = `n`.`townshipid`)));
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `townshipview`
+--
+DROP TABLE IF EXISTS `townshipview`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `townshipview` AS select `t`.`id` AS `id`,`t`.`cityid` AS `cityid`,`c`.`city` AS `city`,`c2`.`country` AS `country`,`s`.`state` AS `state`,`t`.`township` AS `township` from (((`township` `t` join `city` `c` on((`c`.`id` = `t`.`cityid`))) join `country` `c2` on((`c2`.`id` = `c`.`countryid`))) join `state` `s` on((`s`.`id` = `c`.`stateid`)));
 
 --
 -- Restricciones para tablas volcadas

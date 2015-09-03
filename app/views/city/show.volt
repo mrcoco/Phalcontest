@@ -6,7 +6,7 @@
 {% block content %}
 {{super()}}
 <div align="left" class="grid">
-{{ form("city/delete", "method":"post","id":"appform") }}
+{{ form(routeform, "method":"post","id":"appform") }}
 <div class="row cells12">
 <div class="cell colspan12">
   <h4 align="left">Esta seguro que desea eliminar esta ciudad?</h4>
@@ -43,10 +43,10 @@
 <br>
 <div class="row cells2">
   <div class="cell colspan0">
-    {{ link_to("city/delete/"~id,"Eliminar","class":"button") }}
+    <button class="button">{{'Eliminar'}}</button>
  </div>
  <div class="cell colspan0">
-   {{ link_to("city/list","Cancelar","class":"button") }}
+   {{ link_to(routelist,"Cancelar","class":"button") }}
 </div>
 </div>
 </form>

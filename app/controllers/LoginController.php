@@ -56,7 +56,7 @@ if ($this->request->isPost())
               //creamos la sesión del usuario con su email
               $this->session->set("userid", $user->id);
               $this->session->set("username", $user->username);
-              return $this->response->redirect('home');
+              return $this->response->redirect('index/home');
             }
             else
             {

@@ -83,7 +83,7 @@ protected function getTranslation()
     $this->view->currenturl = $this->url->get($urlpath);
   }
 // CRUD FUNCTIONS ---------------------------------------------------------------------------------------------------------------------
-  public function set_grid_values($entity,$new_route,$edit_route,$show_route,$search_route,$view_name,$numberPage,$pagelimit,$noitems_message)
+  public function set_grid_values($entity,$new_route,$edit_route,$show_route,$search_route,$list_route,$view_name,$numberPage,$pagelimit,$noitems_message,$title)
   {
     if ($this->request->isPost()) {
 
@@ -104,11 +104,13 @@ protected function getTranslation()
          "limit"=> $pagelimit,
          "page" => $numberPage
      ));
+    $this->view->title = $title;
     $this->view->noitems = $no_items;
     $this->view->newroute =$new_route;
     $this->view->editroute =$edit_route;
     $this->view->showroute =$show_route;
     $this->view->searchroute =$search_route;
+    $this->view->listroute =$list_route;
     $this->view->page = $paginator->getPaginate();
     $this->view->pick($view_name);
   }

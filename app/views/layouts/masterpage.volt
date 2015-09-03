@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="app-bar fixed-top darcula" data-role="appbar">
-        <a class="app-bar-element branding">{{image("img/restaurantlogo.png") }}Restaurant Maker</a>
+        {{link_to("index/home",'Restaurant Maker',"style":"font-weight:bold;","class":"app-bar-element branding")}}
         <span class="app-bar-divider"></span>
         <ul class="app-bar-menu">
             <li>

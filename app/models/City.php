@@ -2,6 +2,7 @@
 use Phalcon\Mvc\Model\Validator;
 use Phalcon\Mvc\Model\Validator\Email as Email;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 
 
 class City extends \Phalcon\Mvc\Model
@@ -213,6 +214,13 @@ class City extends \Phalcon\Mvc\Model
           )
       );
 
+      $this->validate(new Uniqueness(array(
+         'field' => array('countryid', 'stateid','city')
+
+
+     )));
+
+
         if ($this->validationHasFailed() == true) {
             return false;
         }
@@ -239,6 +247,23 @@ class City extends \Phalcon\Mvc\Model
                    }
                     $messages[] =$txtmessage;
                    break;
+              case 'Unique':
+
+                   if (is_array($message->getField()))
+                   {
+                     $field =implode("-", $message->getField());
+                   }
+                   else {
+                     $field =$message->getField();
+                   }
+
+                   switch ($field) {
+                    case 'countryid-stateid-city':
+                       $txtmessage ='Ya existe una ciudad con ese nombre para el país y estado seleccionados ';
+                  break;
+                }
+                $messages[] =$txtmessage;
+               break;
            }
        }
 

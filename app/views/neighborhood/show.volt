@@ -1,35 +1,42 @@
 {% extends "layouts/masterpage.volt" %}
 {% block head %}
 {{super()}}
-{{assets.outputJs('validatejs')}}
 {% endblock %}
 {% block content %}
 {{super()}}
 <div align="left" class="grid">
 <div class="row cells12">
 <div class="cell colspan12">
-  <h4 align="left">Esta seguro que desea eliminar este estado?</h4>
+  <h4 align="left">{{title}}</h4>
   <br><hr class="control-label col-sm-12">
 </div>
 </div>
 <br><div class="error" align="left">{{ content() }}</div><br>
 <div class="grid">
-{{ form(routeform , "method":"post","id":"appform") }}
+{{ form(routeform, "method":"post","id":"appform") }}
 <div class="row cells1">
    <div class="cell colspan3">
       <div class="input-control select full-size">
-        {{ form.label('countryid') }}
-         {{ form.render('countryid',["disabled":"disabled"]) }}
+         {{ form.label('cityid') }}
+         {{ form.render('cityid',["disabled":"disabled"]) }}
       </div>
    </div>
 </div>
 <div class="row cells1">
    <div class="cell colspan3">
       <div class="input-control select full-size">
-        {{ form.label('state') }}
-         {{ form.render('state',['readonly': 'true','disabled':'']) }}
+        {{ form.label('township') }}
+         {{ form.render('township',['readonly': 'true','disabled':'']) }}
       </div>
    </div>
+</div>
+<div class="row cells1">
+   <div class="cell colspan3">
+     <div class="input-control select full-size">
+       {{ form.label('neighborhood') }}
+        {{ form.render('neighborhood',['disabled':'']) }}
+  </div>
+</div>
 </div>
 <br>
 <div class="row cells2">

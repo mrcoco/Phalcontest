@@ -1,5 +1,8 @@
 <?php
-
+use Phalcon\Mvc\Model\Validator;
+use Phalcon\Mvc\Model\Validator\Email as Email;
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 class Country extends \Phalcon\Mvc\Model
 {
 
@@ -146,5 +149,90 @@ class Country extends \Phalcon\Mvc\Model
             'country' => 'country'
         );
     }
+    /**
+     * Validations and business logic
+     *
+     * @return boolean
+     */
+    public function validation()
+    {
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'code'
+
+              )
+          )
+      );
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'country'
+
+              )
+          )
+      );
+
+      $this->validate(new Uniqueness(array(
+         'field' => array('code', 'country')
+
+
+     )));
+     $this->validate(new Uniqueness(array(
+        'field' => 'code'
+
+
+    )));
+
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+
+        return true;
+    }
+    public function getMessages()
+   {
+       $messages = array();
+       $txtmessage ="";
+       foreach (parent::getMessages() as $message) {
+
+           switch ($message->getType()) {
+               case 'PresenceOf':
+                   switch ($message->getField()) {
+                    case 'code':
+                     $txtmessage = 'Debe Ingresar un código de País';
+                    break;
+                    case 'country':
+                     $txtmessage = 'Debe ingresar un País';
+                    break;
+
+                   }
+                    $messages[] =$txtmessage;
+                   break;
+              case 'Unique':
+
+              if (is_array($message->getField()))
+              {
+                $field =implode("-", $message->getField());
+              }
+              else {
+                $field =$message->getField();
+              }
+
+              switch ($field) {
+                case 'code':
+                   $txtmessage ='Ya Existe un país con ese código';
+                break;
+               case 'code-country':
+                  $txtmessage ='Ya Existe un país con el código y nombre ingresados';
+               break;
+           }
+           $messages[] =$txtmessage;
+          break;
+       }
+
+       return $messages;
+   }
+ }
 
 }

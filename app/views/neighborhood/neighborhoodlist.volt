@@ -32,6 +32,12 @@
       {{ text_field("township", "size" : 30) }}
   </div>
 </div>
+<div class="cell colspan3">
+		<label class="search" for="neighborhood">Barrio</label>
+ <div class="input-control full-size">
+		 {{ text_field("neighborhood", "size" : 30) }}
+ </div>
+</div>
 </div>
 
 <div class="row cells1">
@@ -54,6 +60,7 @@
             <th class="sortable-column">Estado</th>
             <th class="sortable-column">Ciudad</th>
             <th class="sortable-column">Sector</th>
+						<th class="sortable-column">Barrio</th>
          </tr>
     </thead>
     <tbody>
@@ -64,6 +71,7 @@
             <td width ="25%">{{ township.state}}</td>
 						<td width ="25%">{{ township.city }}</td>
             <td width ="25%">{{ township.township}}</td>
+						<td width ="25%">{{ township.neighborhood}}</td>
             <td width ="5%">{{link_to(editroute~township.id,image("img/edit32.png"))}}</td>
             <td width ="5%">{{link_to(showroute~township.id,image("img/delete32.png"))}}</td>
         </tr>
@@ -73,14 +81,14 @@
     </tbody>
 </table>
 <div  class="pagination">
-	<span class="item">{{ link_to("township/list", "First") }}</span>
-	<span class="item">{{ link_to("township/list?page="~page.before, "Previous") }}</span>
+	<span class="item">{{ link_to("neighborhood/list", "First") }}</span>
+	<span class="item">{{ link_to("neighborhood/list?page="~page.before, "Previous") }}</span>
 
 	 {% for i in 1..page.total_pages %}
-	 <span class="item">{{ link_to("township/list?page="~i, i) }}</span>
+	 <span class="item">{{ link_to("neighborhood/list?page="~i, i) }}</span>
 	{% endfor %}
-	<span class="item">{{ link_to("township/list?page="~page.next, "Next") }}</span>
-	<span class="item">{{ link_to("township/list?page="~page.last, "Last") }}</span>
+	<span class="item">{{ link_to("neighborhood/list?page="~page.next, "Next") }}</span>
+	<span class="item">{{ link_to("neighborhood/list?page="~page.last, "Last") }}</span>
 </div>
 
 {% else %}

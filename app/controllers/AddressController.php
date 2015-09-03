@@ -1,17 +1,19 @@
 <?php
- 
+
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
-
+/**
+ * @RoutePrefix("/address")
+ */
 class AddressController extends ControllerBase
 {
 
-    /**
-     * Index action
-     */
-    public function indexAction()
+  /**
+  * @Route("/menu", methods={"GET"}, name="menu")
+ */
+    public function menuAction()
     {
-        $this->persistent->parameters = null;
+        $this->view->pick("address/menu_address");
     }
 
     /**
@@ -91,7 +93,7 @@ class AddressController extends ControllerBase
             $this->tag->setDefault("stateid", $addres->getStateid());
             $this->tag->setDefault("description", $addres->getDescription());
             $this->tag->setDefault("address", $addres->getAddress());
-            
+
         }
     }
 
@@ -117,7 +119,7 @@ class AddressController extends ControllerBase
         $addres->setStateid($this->request->getPost("stateid"));
         $addres->setDescription($this->request->getPost("description"));
         $addres->setAddress($this->request->getPost("address"));
-        
+
 
         if (!$addres->save()) {
             foreach ($addres->getMessages() as $message) {
@@ -172,7 +174,7 @@ class AddressController extends ControllerBase
         $addres->setStateid($this->request->getPost("stateid"));
         $addres->setDescription($this->request->getPost("description"));
         $addres->setAddress($this->request->getPost("address"));
-        
+
 
         if (!$addres->save()) {
 

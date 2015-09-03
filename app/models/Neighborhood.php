@@ -1,5 +1,8 @@
 <?php
-
+use Phalcon\Mvc\Model\Validator;
+use Phalcon\Mvc\Model\Validator\Email as Email;
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 class Neighborhood extends \Phalcon\Mvc\Model
 {
 
@@ -176,5 +179,91 @@ class Neighborhood extends \Phalcon\Mvc\Model
             'cityid' => 'cityid'
         );
     }
+    /**
+     * Validations and business logic
+     *
+     * @return boolean
+     */
+    public function validation()
+    {
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'cityid'
+
+              )
+          )
+      );
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'townshipid'
+
+              )
+          )
+      );
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'neighborhood'
+
+              )
+          )
+      );
+      $this->validate(new Uniqueness(array(
+         'field' => array('townshipid', 'neighborhood')
+
+
+     )));
+
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+
+        return true;
+    }
+    public function getMessages()
+   {
+       $messages = array();
+       $txtmessage ="";
+       foreach (parent::getMessages() as $message) {
+
+           switch ($message->getType()) {
+               case 'PresenceOf':
+                   switch ($message->getField()) {
+                    case 'cityid':
+                     $txtmessage = 'Debe seleccionar una ciudad';
+                    break;
+                    case 'townshipid':
+                     $txtmessage = 'Debe ingresar un sector';
+                    break;
+                    case 'neighborhood':
+                     $txtmessage = 'Debe ingresar un barrio';
+                    break;
+                   }
+                    $messages[] =$txtmessage;
+                   break;
+              case 'Unique':
+
+              if (is_array($message->getField()))
+              {
+                $field =implode("-", $message->getField());
+              }
+              else {
+                $field =$message->getField();
+              }
+
+              switch ($field) {
+               case 'townshipid-neighborhood':
+                  $txtmessage ='Ya Existe un barrio con ese nombre para el sector seleccionado';
+             break;
+           }
+           $messages[] =$txtmessage;
+          break;
+       }
+
+       return $messages;
+   }
+ }
 
 }

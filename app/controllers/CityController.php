@@ -1,5 +1,6 @@
 <?php
 
+
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Validation;
@@ -8,9 +9,97 @@ use CityForm as CityForm;
 /**
  * @RoutePrefix("/city")
  */
-
 class CityController extends ControllerBase
 {
+
+  private function listsearch($param,$entityname,$parameters)
+  {
+
+      if ($param =='list')
+      {
+
+        $entity = $this->modelsManager->createBuilder()
+                    ->columns(array('c2.id as id','c.country as country','s.state as state' ,'c2.city as city'))
+                    ->from(array('c2' => 'City'))
+                    ->join('Country', 'c.id = c2.countryid', 'c')
+                    ->join('State', 's.id = c2.stateid', 's')
+                    ->getQuery()
+                    ->execute();
+      }
+      else {
+
+       $params_query =$this->set_search_grid_post_values();
+       $entity = $this->set_search_query($params_query);
+      }
+
+    $this->set_grid_values($entity,'city/new','city/edit/','city/show/','city/search',
+    'city/list','city/citylist',1,10,"No se encontraron Ciudades","Ciudades");
+
+  }
+
+  private function set_search_grid_post_values()
+  {
+    $params_query['country'] =$this->request->getPost("country");
+    $params_query['state'] =$this->request->getPost("state");
+    $params_query['city'] =$this->request->getPost("city");
+    return $params_query;
+
+  }
+
+  private function set_list_query($entityname,$parameters)
+  {
+    $entity =$entityname::find($parameters);
+    return $entity;
+  }
+  private function set_search_query($params_query)
+  {
+    $entity = $this->modelsManager->createBuilder()
+                ->columns(array('c2.id as id','c.country as country','s.state as state' ,'c2.city as city'))
+                ->from(array('c2' => 'City'))
+                ->join('Country', 'c.id = c2.countryid', 'c')
+                ->join('State', 's.id = c2.stateid', 's')
+                ->where('c.country LIKE :country:', array('country' => '%' . $params_query['country'] . '%'))
+                ->andWhere('s.state LIKE :state:', array('state' => '%' . $params_query['state'] . '%'))
+                ->andWhere('c2.city LIKE :city:', array('city' => '%' . $params_query['city'] . '%'))
+                ->getQuery()
+                ->execute();
+      return $entity;
+  }
+
+
+ private function set_tags($mode,$entity_object)
+
+ {
+   $this->tag->setDefault("city", $entity_object->getCity());
+   $this->tag->setDefault("countryid", $entity_object->getCountryid());
+   $this->tag->setDefault("stateid", $entity_object->getStateid());
+
+
+}
+private function set_post_values($entity)
+{
+  $entity->setCity($this->request->getPost("city"));
+  $entity->setCountryid($this->request->getPost("countryid"));
+  $entity->setStateid($this->request->getPost("stateid"));
+}
+
+// FUNCION QUE RECIBE DEL LLAMADO DE AJAX
+/**
+* @Route("/get_state/{countryid}", methods={"POST"}, name="get_state")
+*/
+public function get_stateAction($countryid)
+{
+
+ $state= State::findBycountryid($countryid)->toArray();
+
+ echo '<select id="stateid" name ="stateid">';
+ echo '<option value ="0" >Seleccione un Estado</option>';
+ foreach ( $state as  $stateitem)
+ {
+   echo '<option value ="'. $stateitem["id"].'" >'. $stateitem["state"].'</option>';
+ }
+ echo '</select>';
+}
 
   /**
   * @Route("/list", methods={"GET","POST"}, name="citylist")
@@ -18,337 +107,104 @@ class CityController extends ControllerBase
   public function listAction()
   {
 
-      $numberPage = 1;
-      if ($this->request->isPost()) {
-          $query = Criteria::fromInput($this->di, "City", $_POST);
-          $this->persistent->parameters = $query->getParams();
-      } else {
-          $numberPage = $this->request->getQuery("page", "int");
-      }
+    $this->listsearch('list','',array(
+      'order' => 'country,state,city ASC'
+  ));
 
-      $parameters = $this->persistent->parameters;
-      if (!is_array($parameters)) {
-          $parameters = array();
-      }
-      $parameters["order"] = "id";
-
-      $city = $this->modelsManager->createBuilder()
-                  ->columns(array('c2.id as id','c.country as country','s.state as state' ,'c2.city as city'))
-                  ->from(array('c2' => 'City'))
-                  ->join('Country', 'c.id = c2.countryid', 'c')
-                  ->join('State', 's.id = c2.stateid', 's')
-                  ->getQuery()
-                  ->execute();
-      //$apartment = Apartment::find();
-
-      $paginator = new Paginator(array(
-          "data" => $city,
-          "limit"=> 10,
-          "page" => $numberPage
-      ));
-
-      $this->view->page = $paginator->getPaginate();
-    $this->view->pick("city/citylist");
   }
 
-  // FUNCION QUE RECIBE DEL LLAMADO DE AJAX
- /**
- * @Route("/get_state/{countryid}", methods={"POST"}, name="get_state")
-*/
- public function get_stateAction($countryid)
- {
-
-   $state= State::findBycountryid($countryid)->toArray();
-
-   echo '<select id="stateid" name ="stateid">';
-   echo '<option value ="0" >Seleccione un Estado</option>';
-   foreach ( $state as  $stateitem)
-   {
-     echo '<option value ="'. $stateitem["id"].'" >'. $stateitem["state"].'</option>';
-   }
-   echo '</select>';
- }
 
   /**
-  * @Route("/search", methods={"GET","POST"}, name="citysearch")
+  * @Route("/search", methods={"POST"}, name="Countrysearch")
  */
     public function searchAction()
     {
-
-        $numberPage = 1;
-        if ($this->request->isPost()) {
-
-        } else {
-            $numberPage = $this->request->getQuery("page", "int");
-        }
-
-
-        $country =$this->request->getPost("country");
-        $state =$this->request->getPost("state");
-        $city_search =$this->request->getPost("city");
-
-        $city = $this->modelsManager->createBuilder()
-                    ->columns(array('c2.id as id','c.country as country','s.state as state' ,'c2.city as city'))
-                    ->from(array('c2' => 'City'))
-                    ->join('Country', 'c.id = c2.countryid', 'c')
-                    ->join('State', 's.id = c2.stateid', 's')
-                    ->where('c.country LIKE :country:', array('country' => '%' . $country . '%'))
-                    ->andWhere('s.state LIKE :state:', array('state' => '%' . $state . '%'))
-                    ->andWhere('c2.city LIKE :city:', array('city' => '%' . $city_search . '%'))
-                    ->getQuery()
-                    ->execute();
-
-        //$city = City::find($parameters);
-        if (count($city) == 0) {
-            $this->flash->notice("The search did not find any city");
-
-            return $this->dispatcher->forward(array(
-                "controller" => "city",
-                "action" => "index"
-            ));
-        }
-
-        $paginator = new Paginator(array(
-            "data" => $city,
-            "limit"=> 10,
-            "page" => $numberPage
-        ));
-
-      $this->view->page = $paginator->getPaginate();
-      $this->view->pick("city/citylist");
+     $this->listsearch('search','',array(
+       'order' => 'country,state,city ASC'
+   ));
     }
-
-
-
-    /**
-    * @Route("/new", methods={"GET"}, name="citynew")
-   */
-    public function newAction($entity =null)
-    {
-         $this->get_assets();
-         if (isset($entity))
-         {
-             $this->view->form = new CityForm($entity,array());
-         }
-         else {
-            $this->view->form = new CityForm();
-         }
-
-    }
-
 
     public function get_assets()
     {
-    
+
       $this->assets
          ->collection('validatejs')
           ->addJs('js/jqueryvalidate/jquery.validate.js')
           ->addJs('js/jqueryvalidate/additional-methods.min.js')
           ->addJs('js/validatecity/city_dependent_combobox.js')
           ->addJs('js/validatecity/validatecity.js');
+
     }
 
+
     /**
-    * @Route("/edit/{id}", methods={"GET"}, name="cityedit")
+    * @Route("/new", methods={"GET"}, name="Countryenew")
+   */
+    public function newAction($entity=null)
+    {
+      $this->get_assets();
+      $this->set_form_routes('city/create','city/list','Nueva Ciudad','city/addedit','new',$entity,'CityForm');
+
+    }
+
+
+    /**
+    * @Route("/edit/{id}", methods={"GET"}, name="Countryedit")
    */
     public function editAction($id)
     {
-
-        if (!$this->request->isPost()) {
-
-            $city = City::findFirstByid($id);
-            if (!$city) {
-                $this->flash->error("city was not found");
-
-                return $this->dispatcher->forward(array(
-                    "controller" => "city",
-                    "action" => "list"
-                ));
-            }
+            $entity =$this->set_entity($id,'City','No se encontro una entidad llamada City','City','citylist','edit');
             $this->get_assets();
-            $this->view->form = new CityForm($city);
-            $this->view->id =$city->getId();
-
-            $this->tag->setDefault("city", $city->getCity());
-            $this->tag->setDefault("countryid", $city->getCountryid());
-            $this->tag->setDefault("stateid", $city->getStateid());
-
-
-
-        }
-    }
-
-    public function get_stateid_post($countryid,$stateidparam)
-    {
-
-      $state= $this->modelsManager->createBuilder()
-                  ->columns(array('s.id','s.state'))
-                  ->from(array('s' => 'State'))
-                  ->where('s.countryid  = :countryid:',array('countryid'=>'='.$countryid))
-                  ->andWhere('s.id LIKE :stateid:', array('stateid' => '=' . $stateidparam))
-                  ->getQuery()
-                  ->execute();
-      //$state= State::findBycountryid($countryid)->toArray();
-
-      $stateid ='<select id="stateid" name ="stateid">';
-      $stateid .='<option value ="0" >Seleccione un Estado</option>';
-      $selected ="";
-      foreach ( $state as  $stateitem)
-      {
-        if ($stateidparam ==$stateitem["id"])
-        {
-          $selected ='selected="selected"';
-        }
-         $stateid.=$optionvalue='<option value ="'. $stateitem["id"].'" '.$selected.'>'. $stateitem["state"].'</option>';
-      }
-      $stateid.='</select>';
-      return $stateid;
+            $this->set_tags('edit',$entity);
+            $this->view->id = $entity->id;
+            $this->set_form_routes('city/save/'.$id,'city/list','Editar País','city/addedit','edit',$entity,'CityForm');
     }
 
     /**
-    * @Route("/create", methods={"POST"}, name="citycreate")
+    * @Route("/create", methods={"POST"}, name="Countrycreate")
    */
     public function createAction()
     {
-
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "city",
-                "action" => "index"
-            ));
-        }
-
-        $city = new City();
-        $city->setCity($this->request->getPost("city"));
-        $city->setCountryid($this->request->getPost("countryid"));
-        $city->setStateid($this->request->getPost("stateid"));
-
-
-
-        if (!$city->save()) {
-            foreach ($city->getMessages() as $message) {
-
-                $this->flash->error($message);
-            }
-
-            $this->view->form = new CityForm($city, array());
-
-            return $this->dispatcher->forward(array(
-              "controller" => "city",
-                "action" => "new",
-                "params"=>array("entity"=>$city)
-          ));
-        }
-            $this->response->redirect(array('for' => "citylist"));
+        $entity = $this->set_entity('','City','No se encontro una entidad llamada City','City','citylist','create');
+        $this->set_post_values($entity);
+        $this->execute_entity_action($entity,'City','new',array($entity),'citylist','create');
     }
 
     /**
-    * @Route("/save/{id}", methods={"POST"}, name="citysave")
+    * @Route("/save/{id}", methods={"POST"}, name="Countrysave")
    */
     public function saveAction($id)
     {
 
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "city",
-                "action" => "index"
-            ));
-        }
-
-        $city = City::findFirstByid($id);
-        if (!$city) {
-            $this->flash->error("city does not exist " . $id);
-
-            return $this->dispatcher->forward(array(
-                "controller" => "city",
-                "action" => "index"
-            ));
-        }
-
-        $city->setCity($this->request->getPost("city"));
-        $city->setCountryid($this->request->getPost("countryid"));
-        $city->setStateid($this->request->getPost("stateid"));
-
-
-        if (!$city->save()) {
-
-            foreach ($city->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            return $this->dispatcher->forward(array(
-                "controller" => "city",
-                "action" => "edit",
-                "params" => array($city->id)
-            ));
-        }
-
-         $this->response->redirect(array('for' => "citylist"));
+        $entity =$this->set_entity($id,'City','No se encontro una entidad llamada City','City','citylist','update');
+        $this->set_post_values($entity);
+        $this->execute_entity_action($entity,'City','edit',array($entity->id),'citylist','update');
 
     }
 
     /**
-    * @Route("/show/{id}", methods={"GET"}, name="cityshow")
+    * @Route("/show/{id}", methods={"GET"}, name="Countryshow")
    */
    public function showAction($id)
    {
-     $this->get_assets();
-     if (!$this->request->isPost()) {
-
-         $city = City::findFirstByid($id);
-         if (!$city) {
-             $this->flash->error("city was not found");
-
-             return $this->dispatcher->forward(array(
-                 "controller" => "city",
-                 "action" => "list"
-             ));
-         }
+         $entity =$this->set_entity($id,'City','No se encontro una entidad llamada City','City','citylist','show_delete');
          $this->get_assets();
-         $this->view->form = new CityForm($city);
-         $this->view->id =$city->getId();
-
-         $this->tag->setDefault("city", $city->getCity());
-         $this->tag->setDefault("countryid", $city->getCountryid());
-         $this->tag->setDefault("stateid", $city->getStateid());
+         $this->set_form_routes('city/delete/'.$id,'city/list'
+         ,'Esta seguro que desea eliminar esta Ciudad?','city/show','delete',$entity,'CityForm');
+         $this->set_tags('delete',$entity,'Y');
 
 
-
-     }
 
    }
 
     /**
-    * @Route("/delete/{id}", methods={"GET"}, name="citydelete")
+    * @Route("/delete/{id}", methods={"POST"}, name="citydelete")
    */
     public function deleteAction($id)
     {
 
-        $city = City::findFirstByid($id);
-        if (!$city) {
-            $this->flash->error("city was not found");
-
-            return $this->dispatcher->forward(array(
-                "controller" => "city",
-                "action" => "list"
-            ));
-        }
-
-        if (!$city->delete()) {
-
-            foreach ($city->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            return $this->dispatcher->forward(array(
-                "controller" => "city",
-                "action" => "search"
-            ));
-        }
-
-
-
-       $this->response->redirect(array('for' => "citylist"));
+      $entity =$this->set_entity($id,'City','No se encontro una entidad llamada City','City','citylist','delete');
+      $this->execute_entity_action($entity,'City','show',array(),'citylist','delete');
     }
 
 }

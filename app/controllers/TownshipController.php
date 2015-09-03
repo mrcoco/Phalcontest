@@ -26,7 +26,8 @@ class TownshipController extends ControllerBase
        $entity = $this->set_search_query($params_query);
       }
 
-    $this->set_grid_values($entity,'township/new','township/edit/','township/show/','township/search','township/townshiplist',1,10,"No se encontraron Sectores");
+    $this->set_grid_values($entity,'township/new','township/edit/','township/show/','township/search'
+    ,'township/townshiplist',1,10,"No se encontraron Sectores","Sectores");
 
   }
 
