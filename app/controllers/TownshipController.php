@@ -18,7 +18,14 @@ class TownshipController extends ControllerBase
       if ($param =='list')
       {
 
-      $entity =$this->set_list_query($entityname,$parameters);
+        $entity = $this->modelsManager->createBuilder()
+                     ->columns(array('t.id as id','c.city as city','c2.country as country','s.state as state','t.township as township'))
+                     ->from(array('t' => 'Township'))
+                     ->join('City', 'c.id =t.cityid', 'c')
+                     ->join('Country', 'c2.id =c.countryid', 'c2')
+                     ->join('State', 's.id =c.stateid', 's')
+                     ->getQuery()
+                     ->execute();
       }
       else {
 
@@ -27,7 +34,7 @@ class TownshipController extends ControllerBase
       }
 
     $this->set_grid_values($entity,'township/new','township/edit/','township/show/','township/search'
-    ,'township/townshiplist',1,10,"No se encontraron Sectores","Sectores");
+    ,'township/list','township/townshiplist',1,10,"No se encontraron Sectores","Sectores");
 
   }
 

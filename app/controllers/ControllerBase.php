@@ -83,10 +83,11 @@ protected function getTranslation()
     $this->view->currenturl = $this->url->get($urlpath);
   }
 // CRUD FUNCTIONS ---------------------------------------------------------------------------------------------------------------------
-  public function set_grid_values($entity,$new_route,$edit_route,$show_route,$search_route,$list_route,$view_name,$numberPage,$pagelimit,$noitems_message,$title)
+  public function set_grid_values($entity,$new_route,$edit_route,$show_route,$search_route
+  ,$list_route,$view_name,$numberPage,$pagelimit,$noitems_message,$title)
   {
     if ($this->request->isPost()) {
-
+      
     } else {
         $numberPage = $this->request->getQuery("page", "int");
     }

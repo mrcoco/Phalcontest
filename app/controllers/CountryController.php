@@ -15,19 +15,20 @@ class CountryController extends ControllerBase
   private function listsearch($param,$entityname,$parameters)
   {
 
+
       if ($param =='list')
       {
-
+      $routelist    = 'country/list';
       $entity =$this->set_list_query($entityname,$parameters);
       }
       else {
-
+       $routelist = 'country/search';
        $params_query =$this->set_search_grid_post_values();
        $entity = $this->set_search_query($params_query);
       }
 
     $this->set_grid_values($entity,'country/new','country/edit/','country/show/','country/search'
-    ,'country/list','country/countrylist',1,10,"No se encontraron Paises","Paises");
+    ,$routelist,'country/countrylist',1,10,"No se encontraron Paises","Paises");
 
   }
 
@@ -41,7 +42,12 @@ class CountryController extends ControllerBase
 
   private function set_list_query($entityname,$parameters)
   {
-    $entity =$entityname::find($parameters);
+    $entity =$this->modelsManager->createBuilder()
+                 ->columns(array('c.id as id','c.code as code','c.country as country'))
+                 ->from(array('c' => 'Country'))
+                 ->orderBy('c.country ,c.code ASC')
+                 ->getQuery()
+                 ->execute();
     return $entity;
   }
   private function set_search_query($params_query)
@@ -51,6 +57,7 @@ class CountryController extends ControllerBase
                  ->from(array('c' => 'Country'))
                  ->Where('c.code LIKE :code:', array('code' => '%' . $params_query['code']. '%'))
                  ->AndWhere('c.country LIKE :country:', array('country' => '%' . $params_query['country']. '%'))
+                 ->orderBy('c.country ,c.code ASC')
                  ->getQuery()
                  ->execute();
       return $entity;
@@ -85,10 +92,20 @@ $entity->setCountry($this->request->getPost("country"));
 
 
   /**
-  * @Route("/search", methods={"POST"}, name="Countrysearch")
+  * @Route("/search", methods={"GET","POST"}, name="Countrysearch")
  */
     public function searchAction()
     {
+      if ($this->request->isPost()) {
+          $query = Criteria::fromInput($this->di, "Country", $_POST);
+          $this->persistent->parameters = $query->getParams();
+      } else {
+          $numberPage = $this->request->getQuery("page", "int");
+      }
+      $parameters = $this->persistent->parameters;
+      if (!is_array($parameters)) {
+          $parameters = array();
+      }
      $this->listsearch('search','',array(
        'order' => 'c.code,c.country ASC'
    ));

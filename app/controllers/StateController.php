@@ -32,7 +32,7 @@ class StateController extends ControllerBase
 
     private function set_search_grid_post_values()
     {
-      $params_query['countryid'] =$this->request->getPost("countryid");
+      $params_query['country'] =$this->request->getPost("country");
       $params_query['state'] =$this->request->getPost("state");
       return $params_query;
 
@@ -44,6 +44,7 @@ class StateController extends ControllerBase
                    ->columns(array('s.id as id','s.state as state','c.country as country'))
                    ->from(array('s' => 'State'))
                    ->join('Country', 'c.id = s.countryid', 'c')
+                   ->orderBy('c.country,s.state')
                    ->getQuery()
                    ->execute();
       return $entity;
@@ -56,6 +57,7 @@ class StateController extends ControllerBase
                    ->join('Country', 'c.id = s.countryid', 'c')
                    ->Where('s.state LIKE :state:', array('state' => '%' . $params_query['state']. '%'))
                    ->AndWhere('c.country LIKE :country:', array('country' => '%' . $params_query['country']. '%'))
+                   ->orderBy('c.country,s.state')
                    ->getQuery()
                    ->execute();
         return $entity;
@@ -83,7 +85,7 @@ class StateController extends ControllerBase
     {
 
       $this->listsearch('list','State',array(
-        'order' => 'state,country ASC'
+        'order' => 'country,state ASC'
     ));
 
     }
@@ -95,7 +97,7 @@ class StateController extends ControllerBase
       public function searchAction()
       {
        $this->listsearch('search','',array(
-         'order' => 'state,country ASC'
+         'order' => 'country,state ASC'
      ));
       }
 
