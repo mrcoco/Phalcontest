@@ -47,6 +47,8 @@ class CountryController extends ControllerBase
         $countryparam =$searchparams['country'];
         $numberPage = $this->request->getQuery("page", "int");
 
+
+
     }
     $this->tag->setDefault("country", $searchparams['country'] );
     $this->tag->setDefault("code", $searchparams['code']);
@@ -58,26 +60,33 @@ class CountryController extends ControllerBase
 
   private function set_list_query($entityname,$parameters)
   {
+
+    $order=$this->set_grid_order();
+
     $entity =$this->modelsManager->createBuilder()
                  ->columns(array('c.id as id','c.code as code','c.country as country'))
                  ->from(array('c' => 'Country'))
-                 ->orderBy('c.country ,c.code ASC')
+                 ->orderBy($order)
                  ->getQuery()
                  ->execute();
     return $entity;
   }
   private function set_search_query($params_query)
   {
+
+   $order=$this->set_grid_order();
+
     $entity = $this->modelsManager->createBuilder()
                  ->columns(array('c.id as id','c.code as code','c.country as country'))
                  ->from(array('c' => 'Country'))
                  ->Where('c.code LIKE :code:', array('code' => '%' . $params_query['code']. '%'))
                  ->AndWhere('c.country LIKE :country:', array('country' => '%' . $params_query['country']. '%'))
-                 ->orderBy('c.country ,c.code ASC')
+                 ->orderBy($order)
                  ->getQuery()
                  ->execute();
       return $entity;
   }
+
 
 
  private function set_tags($mode,$entity_object)
@@ -100,8 +109,9 @@ $entity->setCountry($this->request->getPost("country"));
   public function listAction()
   {
 
+
     $this->listsearch('list','Country',array(
-      'order' => 'code,country ASC'
+      'order' => $order
   ));
 
   }
@@ -112,8 +122,10 @@ $entity->setCountry($this->request->getPost("country"));
  */
     public function searchAction()
     {
+
+
       $this->listsearch('search','',array(
-        'order' => 'code,country ASC'
+        'order' => $order
     ));
 
     }

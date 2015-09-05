@@ -1,23 +1,6 @@
 {% extends "layouts/masterpage.volt" %}
 
 {% block content %}
-<script>
-$(document).ready(function()
-{
- $("#thasc").click(function()
- {
-
-		 $("#thcode").removeClass();
-		 $("#thcode").addClass("sortable-column sort-asc");
-
-  });
-  $("#thdesc").click(function()
-  {
-    $("#thcode").removeClass();
- 		 $("#thcode").addClass("sortable-column sort-desc");
-   });
-});
-</script>
 <div align="left"><h4>{{title}}</h4></div>
 	<hr class="thin"/>
 <div align="left" class="grid">
@@ -47,35 +30,50 @@ $(document).ready(function()
 <br>
 <div align="left">{{ 'Página '~ page.current ~" de "~page.total_pages }}</div>
 <br>
+<br>
 {% if noitems ==""%}
-<table  width="100%" align="center"  class="table striped hovered sortable-markers-on-left border bordered ">
-    <thead>
-
+<table class="table striped hovered sortable-markers-on-left border bordered">
+     <thead>
         <tr>
-					  <th id="thcode" class="sortable-column sort-asc">
-              <ul class="horizontal-menu">
-      <li>{{ 'Codigo'}}</li>
+			     <th class="sortable-column" >
+           <ul class="horizontal-menu">
+             <li><span class="mif-arrow-{% if order =='asc'%}up{% else %}down{%endif%}"></span>{{' '}}{{ 'Codigo'}}</li>
+              <li>
+              <a href="#" class="dropdown-toggle" style="font-size: 0.8rem;"></a>
+               <ul class="d-menu" data-role="dropdown">
+              <li><a href="{{ '..'~ router.getRewriteUri() ~'?page='~page.current~'&order= code asc'}}" style="font-size: 0.8rem;"><span class="mif-arrow-up"></span>{{' '}}Ascendente</a></li>
+              <li><a href="{{ '..'~ router.getRewriteUri() ~'?page='~page.current~'&order= code desc'}}" style="font-size: 0.8rem;"><span class="mif-arrow-down"></span>{{' '}}Descendente</a></li>
+              </ul>
+              </li>
+           </ul>
+      </th>
+      <th class="sortable-column">
+      <ul class="horizontal-menu">
+      <li><span class="mif-arrow-{% if order =='asc'%}up{% else %}down{%endif%}"></span>{{' '}}{{ 'Pais'}}</li>
       <li>
           <a href="#" class="dropdown-toggle" style="font-size: 0.8rem;"></a>
           <ul class="d-menu" data-role="dropdown">
 
-              <li><a id ="thasc" href="#" style="font-size: 0.8rem;" >Ascendente</a></li>
-              <li><a id ="thdesc" href="#" style="font-size: 0.8rem;">Descendente</a></li>
+              <li>
+                <a href="{{ '..'~ router.getRewriteUri() ~'?page='~page.current~'&order= country asc'}}" style="font-size: 0.8rem;"><span class="mif-arrow-up">Ascendente</a>
+              </li>
+              <li><a href="{{ '..'~ router.getRewriteUri() ~'?page='~page.current~'&order= country desc'}}" style="font-size: 0.8rem;"><span class="mif-arrow-down"></span>Descendente</a>
+              </li>
           </ul>
       </li>
+      </ul>
+      </th>
+			 <th></th>
+      </tr>
+      </thead>
 
-  </ul>
-          </th>
-            <th class="" >{{ 'Pais' }}</th>
-						<th>{{'Acciones'}}</th>
-         </tr>
-    </thead>
+
     <tbody>
     {% if page.items is defined %}
     {% for entity in page.items %}
         <tr>
-            <td width ="25%">{{ entity.code }}</td>
-            <td width ="25%">{{ entity.country}}</td>
+            <td width ="45%">{{ entity.code }}</td>
+            <td width ="45%">{{ entity.country}}</td>
             <td width ="5%">{{link_to(editroute~entity.id,image("img/edit32.png"))}}</td>
             <td width ="5%">{{link_to(showroute~entity.id,image("img/delete32.png"))}}</td>
         </tr>
@@ -88,7 +86,12 @@ $(document).ready(function()
   {{ link_to(listroute, "Primera","class":"item") }}
 	{{ link_to(listroute~"?page="~page.before, "Anterior","class":"item") }}
   {% for i in 1..page.total_pages %}
-    {{ link_to(listroute~"?page="~i, i,"class":"item") }}
+     {% if page.current == i %}
+       {% set classitem ='current' %}
+       {% else %}
+        {% set classitem ='' %}
+      {% endif %}
+      {{ link_to(listroute~"?page="~i, i,"class":"item"~" "~classitem) }}
 	{% endfor %}
 	{{ link_to(listroute~"?page="~page.next, "Siguiente","class":"item") }}
 	{{ link_to(listroute~"?page="~page.last, "Ultima","class":"item") }}

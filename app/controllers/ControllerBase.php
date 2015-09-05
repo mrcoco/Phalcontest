@@ -116,6 +116,19 @@ protected function getTranslation()
     $this->view->pick($view_name);
   }
 
+  public function set_grid_order()
+  {
+    if($this->request->getQuery("order"))
+    {
+       $this->persistent->order =$this->request->getQuery("order");
+    }
+       $order =$this->persistent->order;
+       $ordertype = trim(substr($order,-4));
+       $this->view->order = $ordertype ;
+
+       return $order;
+  }
+
   public function set_entity($id,$entityname,$errormessage,$controller,$action,$mode)
   {
         if ($mode =='create')
