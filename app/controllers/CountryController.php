@@ -1,10 +1,9 @@
 <?php
-
-
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Validation;
 use CountryForm as CountryForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
 /**
  * @RoutePrefix("/country")
@@ -14,8 +13,6 @@ class CountryController extends ControllerBase
 
   private function listsearch($param,$entityname,$parameters)
   {
-
-
       if ($param =='list')
       {
       $routelist    = 'country/list';
@@ -34,9 +31,28 @@ class CountryController extends ControllerBase
 
   private function set_search_grid_post_values()
   {
-    $params_query['country'] =$this->request->getPost("country");
-    $params_query['code'] =$this->request->getPost("code");
-    return $params_query;
+    if ($this->request->isPost()) {
+
+
+        $searchparams =array();
+        $searchparams['code'] =$this->request->getPost("code");
+        $searchparams['country'] =$this->request->getPost("country");
+        $this->persistent->params =$searchparams;
+
+    } else {
+
+
+        $searchparams=$this->persistent->params;
+        $code =$searchparams['code'];
+        $countryparam =$searchparams['country'];
+        $numberPage = $this->request->getQuery("page", "int");
+
+    }
+    $this->tag->setDefault("country", $searchparams['country'] );
+    $this->tag->setDefault("code", $searchparams['code']);
+
+
+    return $searchparams;
 
   }
 
@@ -96,19 +112,10 @@ $entity->setCountry($this->request->getPost("country"));
  */
     public function searchAction()
     {
-      if ($this->request->isPost()) {
-          $query = Criteria::fromInput($this->di, "Country", $_POST);
-          $this->persistent->parameters = $query->getParams();
-      } else {
-          $numberPage = $this->request->getQuery("page", "int");
-      }
-      $parameters = $this->persistent->parameters;
-      if (!is_array($parameters)) {
-          $parameters = array();
-      }
-     $this->listsearch('search','',array(
-       'order' => 'c.code,c.country ASC'
-   ));
+      $this->listsearch('search','',array(
+        'order' => 'code,country ASC'
+    ));
+
     }
 
     public function get_assets()

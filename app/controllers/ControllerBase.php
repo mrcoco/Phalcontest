@@ -87,7 +87,7 @@ protected function getTranslation()
   ,$list_route,$view_name,$numberPage,$pagelimit,$noitems_message,$title)
   {
     if ($this->request->isPost()) {
-      
+
     } else {
         $numberPage = $this->request->getQuery("page", "int");
     }

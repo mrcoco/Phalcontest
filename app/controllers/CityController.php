@@ -17,14 +17,7 @@ class CityController extends ControllerBase
 
       if ($param =='list')
       {
-
-        $entity = $this->modelsManager->createBuilder()
-                    ->columns(array('c2.id as id','c.country as country','s.state as state' ,'c2.city as city'))
-                    ->from(array('c2' => 'City'))
-                    ->join('Country', 'c.id = c2.countryid', 'c')
-                    ->join('State', 's.id = c2.stateid', 's')
-                    ->getQuery()
-                    ->execute();
+      $entity =$this->set_list_query($entityname,$parameters);
       }
       else {
 
@@ -39,16 +32,49 @@ class CityController extends ControllerBase
 
   private function set_search_grid_post_values()
   {
-    $params_query['country'] =$this->request->getPost("country");
-    $params_query['state'] =$this->request->getPost("state");
-    $params_query['city'] =$this->request->getPost("city");
-    return $params_query;
+    if ($this->request->isPost()) {
+
+
+        $searchparams =array();
+        $searchparams['country'] =$this->request->getPost("country");
+        $searchparams['state'] =$this->request->getPost("state");
+        $searchparams['city'] =$this->request->getPost("city");
+        $this->persistent->params =$searchparams;
+
+    } else {
+
+
+        $searchparams=$this->persistent->params;
+        $country =$searchparams['country'];
+        $countryparam =$searchparams['state'];
+        $cityparam =$searchparams['city'];
+        $numberPage = $this->request->getQuery("page", "int");
+
+    }
+    $this->tag->setDefault("country", $searchparams['country'] );
+    $this->tag->setDefault("state", $searchparams['state']);
+    $this->tag->setDefault("city", $searchparams['city']);
+
+
+    return $searchparams;
+
+
+    //$params_query['country'] =$this->request->getPost("country");
+    //$params_query['state'] =$this->request->getPost("state");
+    //$params_query['city'] =$this->request->getPost("city");
+    //return $params_query;
 
   }
 
   private function set_list_query($entityname,$parameters)
   {
-    $entity =$entityname::find($parameters);
+    $entity = $this->modelsManager->createBuilder()
+                ->columns(array('c2.id as id','c.country as country','s.state as state' ,'c2.city as city'))
+                ->from(array('c2' => 'City'))
+                ->join('Country', 'c.id = c2.countryid', 'c')
+                ->join('State', 's.id = c2.stateid', 's')
+                ->getQuery()
+                ->execute();
     return $entity;
   }
   private function set_search_query($params_query)
