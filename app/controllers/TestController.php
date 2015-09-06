@@ -24,6 +24,12 @@ class TestController extends ControllerBase
 
   }
 
+  public function testclass()
+  {
+    $var='esta es una prueba';
+    return $var;
+  }
+
   /**
   * @Route("/new", methods={"GET"}, name="testnew")
  */
