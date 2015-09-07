@@ -10,56 +10,45 @@ use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
  */
 class CountryController extends ControllerBase
 {
-
-  private function listsearch($param,$entityname,$parameters,$routelist)
+  public function listsearch($param,$entityname,$parameters,$grid_values,$search_values)
   {
+    $order=$this->set_grid_order();
     switch ($param)
     {
-      case 'list':
-        $entity =$this->set_list_query($entityname,$parameters);
-      break;
-      case 'search':
-        $params_query =$this->set_search_grid_post_values();
-        $entity = $this->set_search_query($params_query);
-      break;
+     case 'list':
+     $entity =$this->set_list_query($order);
+     break;
+     case 'search':
+     $params_query =$this->set_search_grid_post_values($search_values);
+     $entity = $this->set_search_query($params_query,$order);
+     break;
     }
-
-    $this->set_grid_values($entity,'country/new','country/edit/','country/show/','country/search'
-    ,$routelist,'country/countrylist',1,10,"No se encontraron Paises","Paises");
+    $this->set_grid_values($entity,$grid_values);
+  }
+  private function set_grid_parameters($routelist)
+  {
+    $grid_values =
+    [
+     'new_route'=>'country/new'
+    ,'edit_route'=>'country/edit/'
+    ,'show_route'=>'country/show/'
+    ,'search_route'=>'country/search'
+    ,'route_list'=>$routelist
+    ,'view_name'=>'country/countrylist'
+    ,'numberPage'=>1
+    ,'pagelimit'=>10
+    ,'noitems_message'=>"No se encontraron Paises"
+    ,'title' =>"Paises"
+    ,'header_columns'=>array(
+      array('column_name' => 'code','title' => 'Code','class'=>'sortable-column'),
+      array('column_name'=>'country','title' => 'Country','class'=>'sortable-column')
+    )
+  ];
+    return $grid_values;
   }
 
-  private function set_search_grid_post_values()
+  private function set_list_query($order)
   {
-    if ($this->request->isPost()) {
-
-      $searchparams =array('code'=>$this->request->getPost("code"),'country'=>$this->request->getPost("country"));
-      $this->persistent->params =$searchparams;
-
-    }
-    else
-    {
-      $searchparams=$this->persistent->params;
-      $numberPage = $this->request->getQuery("page", "int");
-    }
-
-    $this->bind_search_values($searchparams);
-
-    return $searchparams;
-
-  }
-
-  private function bind_search_values($searchparams)
-  {
-    $this->tag->setDefault("country", $searchparams['country'] );
-    $this->tag->setDefault("code", $searchparams['code']);
-  }
-
-  private function set_list_query($entityname,$parameters)
-  {
-
-    $order=$this->set_grid_order();
-    $this->set_header_columns();
-
     $entity =$this->modelsManager->createBuilder()
              ->columns(array('c.id as id','c.code as code','c.country as country'))
              ->from(array('c' => 'Country'))
@@ -68,10 +57,9 @@ class CountryController extends ControllerBase
              ->execute();
     return $entity;
   }
-  private function set_search_query($params_query)
+
+  private function set_search_query($params_query,$order)
   {
-    $order=$this->set_grid_order();
-    $this->set_header_columns();
     $entity = $this->modelsManager->createBuilder()
              ->columns(array('c.id as id','c.code as code','c.country as country'))
              ->from(array('c' => 'Country'))
@@ -83,14 +71,6 @@ class CountryController extends ControllerBase
     return $entity;
   }
 
-  private function set_header_columns()
-  {
-    $header_columns = array(
-      array('column_name' => 'code','title' => 'Code','class'=>'sortable-column'),
-      array('column_name'=>'country','title' => 'Country','class'=>'sortable-column')
-    );
-    $this->view->headercolumns =$header_columns;
-  }
 
   private function set_tags($mode,$entity_object)
   {
@@ -109,15 +89,28 @@ class CountryController extends ControllerBase
   */
   public function listAction()
   {
-    $this->listsearch('list','Country',array('order' => $order),'country/list');
+
+    $this->listsearch(
+    'list'
+    ,'Country'
+    ,array('order' => $order)
+    ,$this->set_grid_parameters('country/list')
+    ,array());
   }
+
+
 
   /**
   * @Route("/search", methods={"GET","POST"}, name="Countrysearch")
   */
   public function searchAction()
   {
-    $this->listsearch('search','',array('order' => $order),'country/search');
+    $this->listsearch('search'
+    ,''
+    ,array('order' => $order)
+    ,$this->set_grid_parameters('country/search')
+    ,array(array('name'=>'code','value'=>$this->request->getPost("code"))
+    ,array('name'=>'country','value'=>$this->request->getPost("country"))));
   }
 
   public function get_assets()

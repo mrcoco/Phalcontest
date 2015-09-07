@@ -83,9 +83,49 @@ protected function getTranslation()
     $this->view->currenturl = $this->url->get($urlpath);
   }
 // CRUD FUNCTIONS ---------------------------------------------------------------------------------------------------------------------
-  public function set_grid_values($entity,$new_route,$edit_route,$show_route,$search_route
-  ,$list_route,$view_name,$numberPage,$pagelimit,$noitems_message,$title)
+
+
+public function get_search_params($search_values)
+{
+  $searchparams=array();
+  foreach ($search_values as $key => $val)
   {
+  $searchparams[$val['name']] =$val['value'];
+  }
+  return $searchparams;
+}
+
+public function set_search_grid_post_values($search_values)
+{
+  $searchparams=$this->get_search_params($search_values);
+  if ($this->request->isPost())
+  {
+    $this->persistent->params =$searchparams;
+    $this->persistent->searchvalues =$search_values;
+  }
+  else
+  {
+    $searchparams=$this->persistent->params;
+    $search_values =$this->persistent->searchvalues;
+    $numberPage = $this->request->getQuery("page", "int");
+  }
+
+  $this->bind_search_values($search_values);
+  return $searchparams;
+}
+
+public function bind_search_values($search_values)
+{
+  foreach ($search_values as $key => $val)
+  {
+    $this->tag->setDefault($val['name'],$val['value'] );
+  }
+}
+
+
+  public function set_grid_values($entity,$grid_values)
+  {
+    $numberPage=$grid_values['numberPage'];
     if ($this->request->isPost()) {
 
     } else {
@@ -94,7 +134,7 @@ protected function getTranslation()
 
     if (count($entity) == 0)
     {
-     $no_items =$noitems_message;
+     $no_items =$grid_values['noitems_message'];
 
     }
     else {
@@ -102,19 +142,22 @@ protected function getTranslation()
     }
     $paginator = new Paginator(array(
          "data" => $entity,
-         "limit"=> $pagelimit,
+         "limit"=> $grid_values['pagelimit'],
          "page" => $numberPage
      ));
-    $this->view->title = $title;
-    $this->view->noitems = $no_items;
-    $this->view->newroute =$new_route;
-    $this->view->editroute =$edit_route;
-    $this->view->showroute =$show_route;
-    $this->view->searchroute =$search_route;
-    $this->view->listroute =$list_route;
-    $this->view->page = $paginator->getPaginate();
-    $this->view->pick($view_name);
+    $this->view->title         = $grid_values['title'];
+    $this->view->noitems       = $grid_values['no_items'];
+    $this->view->newroute      = $grid_values['new_route'];
+    $this->view->editroute     = $grid_values['edit_route'];
+    $this->view->showroute     = $grid_values['show_route'];
+    $this->view->searchroute   = $grid_values['search_route'];
+    $this->view->listroute     = $grid_values['route_list'];
+    $this->view->headercolumns = $grid_values['header_columns'];
+    $this->view->page          = $paginator->getPaginate();
+    $this->view->pick($grid_values['view_name']);
   }
+
+
 
   public function set_grid_order()
   {
