@@ -67,7 +67,7 @@ class CountryController extends ControllerBase
     ,'route_list'=>$routelist
     ,'view_name'=>'country/countrylist'
     ,'numberPage'=>1
-    ,'pagelimit'=>10
+    ,'pagelimit'=>40
     ,'noitems_message'=>'No se encontraron Paises'
     ,'title' =>'Paises'
     ,'header_columns'=>array(

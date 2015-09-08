@@ -7,7 +7,6 @@
 {{assets.outputCss('mastercss')}}
 {{assets.outputJs('masterjs')}}
  {% endblock %}
-
 </head>
 <body>
 <div class="app-bar fixed-top darcula" data-role="appbar">
@@ -46,11 +45,11 @@
         </div>
     </div>
 
-    <div class="page-content">
-        <div class="flex-grid no-responsive-future" style="height: 100%;">
-            <div class="row" style="height: 100%">
-                <div class="cell size-x200" id="cell-sidebar" style="background-color: #71b1d1; height: 100%; width:30%">
-                    <ul class="sidebar">
+    <div class="page-content" style="height:100%;">
+        <div class="flex-grid no-responsive-future">
+            <div class="row" style="background-color: #71b1d1;">
+                <div class="cell size-x200 " id="cell-sidebar" style="background-color: #71b1d1; height:700px;">
+                    <ul class="sidebar fixed-top-left">
 
                         <li><a href="#">
                             <span class="mif-vpn-publ icon"></span>
@@ -85,7 +84,9 @@
                 </div>
             </div>
         </div>
+        <div class="flex-grid no-responsive-future padding30" style="background-color:#0072c6;">
+          <p style="color:white;">&#169; Restaurant Maker 2015</p>
+        </div>
     </div>
-
 </body>
 </html>
