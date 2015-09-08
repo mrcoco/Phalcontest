@@ -1,5 +1,4 @@
 <?php
-
 use Phalcon\Mvc\Controller;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Paginator\Adapter\Model as Paginator;
@@ -11,7 +10,6 @@ class ControllerBase extends Controller
 public function initialize()
 {
 
-
   // Login Assests
   $this->assets
         ->collection('mastercss')
@@ -20,8 +18,6 @@ public function initialize()
         ->addCss('metro/build/css/metro-icons.min.css')
         ->addCss('css/masterpage/masterpage.css')
         ->addCss('css/masterpage/search.css');
-
-
 
   $this->assets
     ->collection('masterjs')
@@ -36,15 +32,14 @@ public function initialize()
         ->addCss('metro/build/css/metro-responsive.min.css')
         ->addCss('css/login/login.css');
 
-
-
   $this->assets
     ->collection('loginjs')
    ->addJs('js/jquery/jquery-2.1.4.min.js')
    ->addJs('metro/build/js/metro.min.js')
    ->addJs('js/jqueryvalidate/jquery.validate.js')
    ->addJs('js/login/validatelogin.js');
-$this->view->globalobj =$this;
+
+   $this->view->globalobj =$this;
 }
 public function checkuser($userid)
 {
@@ -146,7 +141,7 @@ public function bind_search_values($search_values)
          "page" => $numberPage
      ));
     $this->view->title         = $grid_values['title'];
-    $this->view->noitems       = $grid_values['no_items'];
+    $this->view->noitems       = $no_items;
     $this->view->newroute      = $grid_values['new_route'];
     $this->view->editroute     = $grid_values['edit_route'];
     $this->view->showroute     = $grid_values['show_route'];

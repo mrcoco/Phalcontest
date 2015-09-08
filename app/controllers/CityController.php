@@ -30,7 +30,7 @@ class CityController extends ControllerBase
 
   }
 
-  private function set_search_grid_post_values()
+  public function set_search_grid_post_values()
   {
     if ($this->request->isPost()) {
 

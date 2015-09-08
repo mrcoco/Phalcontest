@@ -1,5 +1,4 @@
 {% extends "layouts/masterpage.volt" %}
-
 {% block content %}
 <div align="left"><h4>{{title}}</h4></div>
 <hr class="thin"/>
