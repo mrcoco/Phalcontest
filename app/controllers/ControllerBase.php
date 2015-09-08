@@ -148,6 +148,7 @@ public function bind_search_values($search_values)
     $this->view->searchroute   = $grid_values['search_route'];
     $this->view->listroute     = $grid_values['route_list'];
     $this->view->headercolumns = $grid_values['header_columns'];
+    $this->view->searchcolumns = $grid_values['search_columns'];
     $this->view->page          = $paginator->getPaginate();
     $this->view->pick($grid_values['view_name']);
   }
@@ -215,12 +216,18 @@ public function bind_search_values($search_values)
   $this->response->redirect(array('for' => $redirect_route));
  }
 
- public function set_form_routes($routeform,$routelist,$title,$view_name,$mode,$entity,$form_name)
+ public function set_form_routes($routeform,$routelist,$title
+ ,$view_name,$mode,$entity,$form_name,$form_columns
+ ,$save_button_name,$cancel_button_name,$delete_button_name)
  {
    $this->view->form = new $form_name($entity,array());
    $this->view->routelist =$routelist;
    $this->view->routeform =$routeform;
    $this->view->title =$title;
+   $this->view->formcolumns =$form_columns;
+   $this->view->save_button_name =$save_button_name;
+   $this->view->cancel_button_name =$cancel_button_name;
+   $this->view->delete_button_name =$delete_button_name;
    $this->view->pick($view_name);
  }
   //--------------------------------------------------------------------------END CRUD FUNCTIONS ------------------------

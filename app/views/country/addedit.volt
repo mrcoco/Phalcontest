@@ -10,37 +10,30 @@
 <div class="row cells12">
 <div class="cell colspan12">
   <h4 align="left">{{title}}</h4>
-  <br><hr class="control-label col-sm-12">
+  <br>
+  <hr class="control-label col-sm-12">
 </div>
 </div>
 <div class="error" align="left">{{ content() }}</div><br>
 <div class="grid">
-
-<div class="row cells1">
-   <div class="cell colspan3">
-      <div class="input-control select full-size">
-         {{ form.label('code') }}
-         {{ form.render('code') }}
+	{% for index,item in formcolumns %}
+<div class="{{item['div_row_class']}}">
+   <div class="{{item['div_cell_class']}}">
+      <div class="{{item['div_control_class']}}">
+         {{ form.label(item['name']) }}
+         {{ form.render(item['name']) }}
       </div>
-      <label id ="codeerror" name ="codeerror"></label>
+      {{item['label_error']}}
    </div>
 </div>
-<div class="row cells1">
-   <div class="cell colspan3">
-      <div class="input-control select full-size">
-        {{ form.label('country') }}
-         {{ form.render('country') }}
-      </div>
-      <label id ="countryerror" name ="stateerror"></label>
-   </div>
-</div>
+{% endfor %}
 <br>
 <div class="row cells2">
   <div class="cell colspan0">
-   {{ form.render('Guardar') }}
+   {{ form.render(save_button_name) }}
  </div>
  <div class="cell colspan0">
-   {{ link_to(routelist,"Cancelar","class":"button") }}
+   {{ link_to(routelist,cancel_button_name,"class":"button") }}
 </div>
 </div>
 </div>

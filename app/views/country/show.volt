@@ -14,29 +14,24 @@
 <br><div class="error" align="left">{{ content() }}</div><br>
 <div class="grid">
 {{ form(routeform, "method":"post","id":"appform") }}
-<div class="row cells1">
-   <div class="cell colspan3">
-      <div class="input-control select full-size">
-         {{ form.label('code') }}
-         {{ form.render('code',["disabled":"disabled"]) }}
-      </div>
-   </div>
+{% for index,item in formcolumns %}
+<div class="{{item['div_row_class']}}">
+ <div class="{{item['div_cell_class']}}">
+    <div class="{{item['div_control_class']}}">
+       {{ form.label(item['name']) }}
+       {{ form.render(item['name'],["disabled":"disabled"]) }}
+    </div>
+    {{item['label_error']}}
+ </div>
 </div>
-<div class="row cells1">
-   <div class="cell colspan3">
-      <div class="input-control select full-size">
-        {{ form.label('country') }}
-         {{ form.render('country',['readonly': 'true','disabled':'']) }}
-      </div>
-   </div>
-</div>
+{% endfor %}
 <br>
 <div class="row cells2">
   <div class="cell colspan0">
-    <button class="button">{{'Eliminar'}}</button>
+    <button class="button">{{delete_button_name}}</button>
  </div>
  <div class="cell colspan0">
-   {{ link_to(routelist,"Cancelar","class":"button") }}
+   {{ link_to(routelist,cancel_button_name,"class":"button") }}
 </div>
 </div>
 </form>

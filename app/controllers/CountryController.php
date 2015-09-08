@@ -27,6 +27,33 @@ class CountryController extends ControllerBase
         $this->crud_params['show_view']          = 'country/show';
         $this->crud_params['new_title']          = 'Nuevo País';
         $this->crud_params['edit_title']         = 'Editar País';
+        $this->crud_params['form_columns']       = array(
+        array('name' => 'code'
+        ,'div_control_class'=>'input-control select full-size'
+        ,'div_cell_class'=>'cell colspan3'
+        ,'div_row_class'=>'row cells1'
+        ,'label_error'=>'<label id ="codeerror" name ="codeerror"></label>'),
+        array('name' => 'country'
+        ,'div_control_class'=>'input-control select full-size'
+        ,'div_cell_class'=>'cell colspan3'
+        ,'div_row_class'=>'row cells1'
+        ,'label_error'=>'<label id ="countryerror" name ="stateerror"></label>')
+        );
+        $this->crud_params['save_button_name']       ='Guardar';
+        $this->crud_params['cancel_button_name']     ='Cancelar';
+        $this->crud_params['delete_button_name']     ='Eliminar';
+    }
+
+    public function set_tags($mode,$entity_object)
+    {
+      $this->tag->setDefault("country", $entity_object->getCountry());
+      $this->tag->setDefault("code", $entity_object->getCode());
+    }
+
+    public function set_post_values($entity)
+    {
+      $entity->setCode($this->request->getPost("code"));
+      $entity->setCountry($this->request->getPost("country"));
     }
 
   public function set_grid_parameters($routelist)
@@ -44,8 +71,11 @@ class CountryController extends ControllerBase
     ,'noitems_message'=>'No se encontraron Paises'
     ,'title' =>'Paises'
     ,'header_columns'=>array(
-      array('column_name' => 'code','title' => 'Code','class'=>'sortable-column'),
-      array('column_name'=>'country','title' => 'Country','class'=>'sortable-column')
+      array('column_name' => 'code','title' => 'Código','class'=>'sortable-column'),
+      array('column_name'=>'country','title' => 'País','class'=>'sortable-column'))
+    ,'search_columns'=>array(
+      array('name' => 'code','title' => 'Código','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+      array('name' => 'country','title' => 'País','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
     )
   ];
     return $grid_values;
@@ -109,17 +139,7 @@ class CountryController extends ControllerBase
     ->addJs('js/validatecountry/validate_country.js');
   }
 
-  public function set_tags($mode,$entity_object)
-  {
-    $this->tag->setDefault("country", $entity_object->getCountry());
-    $this->tag->setDefault("code", $entity_object->getCode());
-  }
 
-  public function set_post_values($entity)
-  {
-    $entity->setCode($this->request->getPost("code"));
-    $entity->setCountry($this->request->getPost("country"));
-  }
   /**
   * @Route("/new", methods={"GET"}, name="Countryenew")
   */
@@ -134,7 +154,10 @@ class CountryController extends ControllerBase
     ,'new'
     ,$entity
     ,$this->crud_params['form_name']
-    );
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,'');
   }
 
   /**
@@ -144,7 +167,7 @@ class CountryController extends ControllerBase
   {
     $entity =$this->set_entity(
     $id
-    ,$this->entityname
+    ,$this->crud_params['entityname']
     ,$this->crud_params['not_found_message']
     ,$this->crud_params['controller']
     ,$this->crud_params['action_list']
@@ -159,7 +182,12 @@ class CountryController extends ControllerBase
     ,$this->crud_params['route_list']
     ,$this->crud_params['edit_title']
     ,$this->crud_params['add_edit_view']
-    ,'edit',$entity,$this->crud_params['form_name']  );
+    ,'edit',$entity,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,''
+    );
   }
 
   /**
@@ -169,7 +197,7 @@ class CountryController extends ControllerBase
   {
     $entity = $this->set_entity(
     ''
-    ,$this->entityname
+    ,$this->crud_params['entityname']
     ,$this->crud_params['not_found_message']
     ,$this->crud_params['controller']
     ,$this->crud_params['action_list']
@@ -190,7 +218,7 @@ class CountryController extends ControllerBase
   {
     $entity =$this->set_entity(
     $id
-    ,$this->entityname
+    ,$this->crud_params['entityname']
     ,$this->crud_params['not_found_message']
     ,$this->crud_params['controller']
     ,$this->crud_params['action_list']
@@ -212,7 +240,7 @@ class CountryController extends ControllerBase
   {
     $entity =$this->set_entity(
     $id
-    ,$this->entityname
+    ,$this->crud_params['entityname']
     ,$this->crud_params['not_found_message']
     ,$this->crud_params['controller']
     ,$this->crud_params['action_list']
@@ -226,7 +254,12 @@ class CountryController extends ControllerBase
     ,$this->crud_params['delete_message']
     ,$this->crud_params['show_view'] ,'delete'
     ,$entity
-    ,$this->crud_params['form_name'] );
+    ,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,$this->crud_params['delete_button_name']
+    );
     $this->set_tags('delete',$entity,'Y');
   }
 
@@ -237,7 +270,7 @@ class CountryController extends ControllerBase
   {
     $entity =$this->set_entity(
     $id
-    ,$this->entityname
+    ,$this->crud_params['entityname']
     ,$this->crud_params['not_found_message']
     ,$this->crud_params['controller']
     ,$this->crud_params['action_list']

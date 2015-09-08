@@ -5,18 +5,14 @@
 <div align="left" class="grid">
 {{ form(searchroute, "method":"post", "autocomplete" : "off") }}
 	<div class="row cells2">
+	{% for index,item in searchcolumns %}
 		<div class="cell colspan3">
-			<label class="search" for="country">Código</label>
-			<div class="input-control full-size">
-			{{ text_field("code", "size" : 30) }}
+			<label class="{{item['label_class']}}" for="country">{{item['title']}}</label>
+			<div class="{{item['div_class']}}">
+			{{ text_field(item['name'], "size" : item['size']) }}
 			</div>
 		</div>
-		<div class="cell colspan3">
-			<label class="search" for="country">Pais</label>
-			<div class="input-control full-size">
-			{{ text_field("country", "size" : 30) }}
-			</div>
-		</div>
+	{% endfor %}
 	</div>
 	<div class="row cells1">
 		<div class="cell colspan3">
@@ -62,8 +58,9 @@
 	{% if page.items is defined %}
 		{% for entity in page.items %}
 		<tr>
-		<td width ="45%">{{ entity.code }}</td>
-		<td width ="45%">{{ entity.country}}</td>
+			{% for index,item in headercolumns %}
+		<td width ="45%">{{ entity.readAttribute(item['column_name'])}}</td>
+		  {% endfor %}
 		<td width ="5%">{{link_to(editroute~entity.id,image("img/edit32.png"))}}</td>
 		<td width ="5%">{{link_to(showroute~entity.id,image("img/delete32.png"))}}</td>
 		</tr>
