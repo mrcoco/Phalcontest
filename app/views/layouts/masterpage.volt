@@ -45,11 +45,11 @@
         </div>
     </div>
 
-    <div class="page-content" style="height:100%;">
-        <div class="flex-grid no-responsive-future">
-            <div class="row" style="background-color: #71b1d1;">
-                <div class="cell size-x200 " id="cell-sidebar" style="background-color: #71b1d1; height:700px;">
-                    <ul class="sidebar fixed-top-left">
+    <div class="page-content" style="height:100%;padding-bottom:0;">
+        <div class="flex-grid no-responsive-future"style="padding-bottom:0;">
+            <div class="row auto-size" style="background-color: #71b1d1; padding-bottom:0;margin-bottom:0;">
+                <div class="cell size-x200" id="cell-sidebar" style="background-color:#71b1d1;height:800px;">
+                    <ul class="sidebar" id="sticky">
 
                         <li><a href="#">
                             <span class="mif-vpn-publ icon"></span>
@@ -77,16 +77,64 @@
 
                     </ul>
                 </div>
-                <div class="cell auto-size padding20 bg-white" id="cell-content" >
+                <div class="cell auto-size bg-white" id="cell-content" style="padding-left:60px;padding-top:20px;padding-bottom:20px;padding-right:20px;" >
                   {% block content %}
 
                    {% endblock %}
                 </div>
             </div>
         </div>
-        <div class="flex-grid no-responsive-future padding30" style="background-color:#0072c6;">
-          <p style="color:white;">&#169; Restaurant Maker 2015</p>
-        </div>
+        <footer style="background-color:#0072c6;color:white;height:50px;padding-bottom:0px;margin:0;">
+         <div  align="center" style="padding-top: 10px;">Restaurant Maker 2015</div>
+      </footer>
     </div>
+    <script type="text/javascript">
+    $(document).ready(function()
+    { // document ready
+      if(screen.width <768)
+      {
+        $('#sticky').css({ position: 'fixed', top: 55 ,width:10});
+        $('#cell-sidebar').css({ position: 'fixed', top: 55 ,width:20});
+      }
+		  if ($('#sticky').offset()) { // make sure ".sticky" element exists
+
+		    var stickyTop = $('#sticky').offset().top; // returns number
+
+		    $(window).scroll(function(){ // scroll event
+
+		      var windowTop = $(window).scrollTop(); // returns number
+
+		      if (stickyTop < windowTop){
+
+            if(screen.width <768)
+            {
+              $('#sticky').css({ position: 'fixed', top: 55 ,width:20,left:0});
+              $('#cell-sidebar').css({ position: 'fixed', top: 55 ,width:30});
+            }
+            else {
+              $('#sticky').css({ position: 'fixed', top: 55 ,width:20});
+                $('#cell-sidebar').css({ position: 'fixed', top: 55 ,width:30});
+            }
+		      }
+		      else {
+
+          if(screen.width <768)
+          {
+            $('#sticky').css({ position: 'static', top: 55 ,width:20,left:0});
+            $('#cell-sidebar').css({ position: 'static', top: 55 ,width:30});
+          }
+          else {
+            $('#sticky').css({ position: 'static' ,top: 55 ,width:20,left:0});
+            $('#cell-sidebar').css({ position: 'static', top: 55 ,width:30});
+
+          }
+		      }
+
+		    });
+
+		  }
+
+		});
+	</script>
 </body>
 </html>

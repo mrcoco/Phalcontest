@@ -61,13 +61,13 @@ if ($this->request->isPost())
             else
             {
 
-              $this->flash->error("Invalid Username or Password");
+              $this->flash->error("Usuario o contraseña inválida");
             }
         }
         else
         {
 
-          $this->flash->error("Invalid Username or Password");
+          $this->flash->error("Usuario o contraseña inválida");
         }
   }
 }

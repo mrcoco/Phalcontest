@@ -1,9 +1,8 @@
 {% extends "layouts/masterpage.volt" %}
-
 {% block content %}
 <div align="left"><h4>{{'MANTENER DIRECCIONES'}}</h4></div>
 	<hr class="thin"/>
-<div class="grid">
+<div class="grid" style="height:25%">
   <div class="row cells4">
   <div class="cell colspan2">
   <div class="image-container bordered image-format-hd">

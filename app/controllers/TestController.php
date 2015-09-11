@@ -50,6 +50,17 @@ class TestController extends ControllerBase
   }
 
   /**
+  * @Route("/masterpage", methods={"GET"}, name="masterpage")
+ */
+  public function masterpageAction($entity =null)
+  {
+
+       $this->view->pick('layouts/masterpage2');
+
+  }
+
+
+  /**
   * @Route("/grid", methods={"GET"}, name="testnew")
  */
   public function gridAction($entity =null)

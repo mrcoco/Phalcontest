@@ -1,72 +1,77 @@
-{% extends "layouts/masterpage.volt" %}
-
+{% extends "layouts/masterpage2.volt" %}
+{% block pagetitle %}
+<h3 class="page-title" align ="left">
+	{{'MANTENIMIENTO DEL SISTEMA'}}
+</h3>
+<hr/>
+{% endblock %}
+{% block pagebar %}
+{% endblock %}
 {% block content %}
-<div align="left"><h4>{{'MANTENIMIENTO DEL SISTEMA'}}</h4></div>
-	<hr class="thin"/>
-<div class="grid">
-  <div class="row cells4">
-  <div class="cell colspan2">
-  <div class="image-container bordered image-format-hd">
-  <div class="frame">{{image("img/languages.png") }}</div>
-  <div class="image-overlay op-green">
-    <h5><b>Idiomas</b></h5>
-    </div>
-  </div>
-  </div>
-  <div class="cell colspan2">
-  <div class="image-container bordered image-format-hd">
-  <div class="frame">{{image("img/restaurant.png") }}</div>
-  <div class="image-overlay op-blue">
-    <h5><b>Restaurantes</b></h5>
-  </div>
-  </div>
-  </div>
-  <div class="cell colspan2">
-  <div class="image-container bordered image-format-hd">
-  <div class="frame">{{image("img/menu.png") }}</div>
-  <div class="image-overlay op-red">
-    <h5><b>Menú</b></h5>
-  </div>
-  </div>
-  </div>
-  <div class="cell colspan2">
-  <div class="image-container bordered image-format-hd">
-  <div class="frame">{{image("img/event.png") }}</div>
-  <div class="image-overlay op-yellow">
-    <h5><b>Eventos</b></h5>
-  </div>
-  </div>
-  </div>
-</div>
-<div class="row cells4">
-  <div class="cell colspan2">
-  <div class="image-container bordered image-format-hd">
-  <div class="frame">{{image("img/media.png") }}</div>
-  <div class="image-overlay op-orange">
-    <h5><b>Multimedia</b></h5>
-  </div>
-  </div>
-  </div>
-  <div class="cell colspan2">
-  <div class="image-container bordered image-format-hd">
-  <div class="frame">{{image("img/security.png") }}</div>
-  <div class="image-overlay op-brown">
-    <h5><b>Seguridad</b></h5>
-  </div>
-  </div>
-  </div>
-	<div class="cell colspan2">
 
-  <div class="image-container bordered image-format-hd">
-  <div class="frame">{{ image("img/address.png") }}</div>
-	{{ link_to("address/menu",'<div class="image-overlay op-gray">
-    <h5><b>Direcciones</b></h5>
-  </div>'
-	)}}
-  </div>
-  </div>
-</div>
-</div>
-
-
+	<div class="tiles">
+	<div class="tile bg-green">
+	<div class="tile-body">
+	<i class="fa fa-bar-chart-o"></i>
+	</div>
+	<div class="tile-object">
+	<div class="name"> Idiomas </div>
+	<div class="number"> </div>
+	</div>
+	</div>
+	<div class="tile bg-green">
+	<div class="tile-body">
+	<i class="fa fa-bar-chart-o"></i>
+	</div>
+	<div class="tile-object">
+	<div class="name"> Restaurantes </div>
+	<div class="number"> </div>
+	</div>
+	</div>
+	<div class="tile bg-green">
+	<div class="tile-body">
+	<i class="fa fa-bar-chart-o"></i>
+	</div>
+	<div class="tile-object">
+	<div class="name"> Menú</div>
+	<div class="number"> </div>
+	</div>
+	</div>
+	<div class="tile bg-green">
+	<div class="tile-body">
+	<i class="fa fa-bar-chart-o"></i>
+	</div>
+	<div class="tile-object">
+	<div class="name"> Eventos</div>
+	<div class="number"> </div>
+	</div>
+	</div>
+	<div class="tile bg-green">
+	<div class="tile-body">
+	<i class="fa fa-bar-chart-o"></i>
+	</div>
+	<div class="tile-object">
+	<div class="name"> Multimedia</div>
+	<div class="number"> </div>
+	</div>
+	</div>
+	<div class="tile bg-green">
+	<div class="tile-body">
+	<i class="fa fa-bar-chart-o"></i>
+	</div>
+	<div class="tile-object">
+	<div class="name"> Seguridad </div>
+	<div class="number"> </div>
+	</div>
+	</div>
+	<div class="tile bg-green">
+	<div class="tile-body">
+	<i class="fa fa-bar-chart-o"></i>
+	</div>
+	<div class="tile-object">
+	<div class="name"> {{ link_to("address/menu",'Direcciones')}} </div>
+	<div class="number"> </div>
+	</div>
+	</div>
+	</div>
 {% endblock %}

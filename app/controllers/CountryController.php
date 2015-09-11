@@ -67,12 +67,12 @@ class CountryController extends ControllerBase
     ,'route_list'=>$routelist
     ,'view_name'=>'country/countrylist'
     ,'numberPage'=>1
-    ,'pagelimit'=>40
+    ,'pagelimit'=>5
     ,'noitems_message'=>'No se encontraron Paises'
     ,'title' =>'Paises'
     ,'header_columns'=>array(
-      array('column_name' => 'code','title' => 'Código','class'=>'sortable-column'),
-      array('column_name'=>'country','title' => 'País','class'=>'sortable-column'))
+      array('column_name' => 'code','title' => 'Código','class'=>''),
+      array('column_name'=>'country','title' => 'País','class'=>''))
     ,'search_columns'=>array(
       array('name' => 'code','title' => 'Código','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
       array('name' => 'country','title' => 'País','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')

@@ -39,6 +39,40 @@ public function initialize()
    ->addJs('js/jqueryvalidate/jquery.validate.js')
    ->addJs('js/login/validatelogin.js');
 
+   $this->assets->collection('metronicjs')
+  ->addJs('metronic/assets/global/plugins/jquery.min.js')
+  ->addJs('metronic/assets/global/plugins/jquery-migrate.min.js')
+  ->addJs('metronic/assets/global/plugins/jquery-ui/jquery-ui.min.js')
+  ->addJs('metronic/assets/global/plugins/bootstrap/js/bootstrap.min.js')
+  ->addJs('metronic/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js')
+  ->addJs('metronic/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js')
+  ->addJs('metronic/assets/global/plugins/jquery.blockui.min.js')
+  ->addJs('metronic/assets/global/plugins/jquery.cokie.min.js')
+  ->addJs('metronic/assets/global/plugins/uniform/jquery.uniform.min.js')
+  ->addJs('metronic/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js')
+  ->addJs('metronic/assets/global/scripts/metronic.js')
+  ->addJs('metronic/assets/admin/layout/scripts/layout.js')
+  ->addJs('metronic/assets/admin/layout/scripts/quick-sidebar.js')
+  ->addJs('metronic/assets/admin/layout/scripts/demo.js');
+
+
+
+  $this->assets->collection('metroniccss')
+ ->addCss('metronic/assets/admin/layout/css/googleapifonts.css')
+ ->addCss('metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css')
+ ->addCss('metronic/assets/global/plugins/simple-line-icons/simple-line-icons.min.css')
+ ->addCss('metronic/assets/global/plugins/bootstrap/css/bootstrap.min.css')
+ ->addCss('metronic/assets/global/plugins/uniform/css/uniform.default.css')
+ ->addCss('metronic/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css')
+ ->addCss('metronic/assets/global/css/components.css')
+ ->addCss('metronic/assets/global/css/plugins.css')
+ ->addCss('metronic/assets/admin/layout/css/layout.css')
+ ->addCss('metronic/assets/admin/layout/css/themes/darkblue.css')
+ ->addCss('metronic/assets/admin/layout/css/custom.css');
+
+
+
+
    $this->view->globalobj =$this;
 }
 public function checkuser($userid)

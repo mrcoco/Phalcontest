@@ -1,56 +1,96 @@
-{% extends "layouts/masterpage.volt" %}
-{% block content %}
-<div align="left"><h4>{{title}}</h4></div>
-<hr class="thin"/>
-<div align="left" class="grid">
-{{ form(searchroute, "method":"post", "autocomplete" : "off") }}
-	<div class="row cells2">
-	{% for index,item in searchcolumns %}
-		<div class="cell colspan3">
-			<label class="{{item['label_class']}}" for="country">{{item['title']}}</label>
-			<div class="{{item['div_class']}}">
-			{{ text_field(item['name'], "size" : item['size']) }}
-			</div>
-		</div>
-	{% endfor %}
-	</div>
-	<div class="row cells1">
-		<div class="cell colspan3">
-		<div align ="left">{{ submit_button("Buscar") }}</div>
-		</div>
-	</div>
-</form>
-</div>
+{% extends "layouts/masterpage2.volt" %}
 
-<div align="left">{{ link_to(newroute, image("img/new.png")) }}</div>
+{% block pagetitle %}
+<h3 class="page-title" align ="left">
+	{{title}}
+</h3>
+<hr/>
+{% endblock %}
+
+{% block pagebar %}
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="index.html">Home</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="#">{{'Direcciones'}}</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="#">{{title}}</a>
+		</li>
+	</ul>
+</div>
+{% endblock %}
+{% block content %}
+
+<div align="left" class="grid" >
+{{ form(searchroute, "method":"post", "autocomplete" : "off") }}
+  <div class="row">
+	<div class="form-group col-md-10" style="padding-left:0;">
+	{% for index,item in searchcolumns %}
+		<div class="col-md-5">
+   <label>{{item['title']}}</label>
+  {{ text_field(item['name'], "size" : item['size'],"class":"form-control","placeholder":"") }}
+   </div>
+	{% endfor %}
+	  </div>
+	</div>
+	<div class="row">
+		<div class="form-group col-md-8">
+		<div class="col-md-1" align ="left" style="padding-left:0;">
+			{{ submit_button("Buscar","class":"btn blue") }}
+		</div>
+		</div>
+	</div>
+	</form>
+	</div>
+
+<div align="left">{{ link_to(newroute,'<i class="fa fa-plus"></i>','class':'btn btn-icon-only blue')}}</div>
+<br>
 {% if noitems ==""%}
-	<table class="table striped hovered sortable-markers-on-left border bordered">
+	<table class="table table-bordered table-striped table-condensed flip-content">
 	<thead>
 	<tr>
 	{% for index,item in headercolumns %}
-		<th class="{{item['class']}}" >
-		<ul class="horizontal-menu">
-		<li><span class="mif-arrow-{% if order =='asc'%}up{% else %}down{%endif%}"></span>{{' '}}{{item['title']}}</li>
-		<li>
-		<a href="#" class="dropdown-toggle" style="font-size: 0.8rem;"></a>
-		<ul class="d-menu" data-role="dropdown">
-		<li>
-		<a href="{{ '..'~ router.getRewriteUri() ~'?page='~page.current~'&order='~item['column_name']~' asc'}}" style="font-size: 0.8rem;">
-		<span class="mif-arrow-up"></span>
-		{{' Ascendente'}}
-		</a>
-		</li>
-		<li>
-		<a href="{{ '..'~ router.getRewriteUri() ~'?page='~page.current~'&order='~item['column_name']~' desc'}}" style="font-size: 0.8rem;">
-		<span class="mif-arrow-down"></span>
-		{{' Descendente'}}
-		</a>
-		</li>
-		</ul>
-		</li>
-		</ul>
+		<th style="background-color:#eee;">
+			<span>{{item['title']}}</span>
+            <div class="btn-group pull-right">
+						<button aria-expanded="false" type="button" class="btn btn-fit-height gray dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
+            {% if order =='asc' %}
+						{% set order_class ='fa fa-arrow-up'%}
+						{% else %}
+						   {% if order =='desc' %}
+						   {% set order_class ='fa fa-arrow-down'%}
+							{% else %}
+                {% set order_class ='fa fa-sort'%}
+							{% endif %}
+						{% endif %}
+					 <i class="{{order_class}}"></i>
+						</button>
+						<ul class="dropdown-menu pull-right" role="menu">
+							<li class="ms-hover">
+								<a href="{{ '..'~ router.getRewriteUri() ~'?page='~page.current~'&order='~item['column_name']~' asc'}}">
+								<i class="fa fa-arrow-up"></i>
+								{{' Asc'}}
+								</a>
+							</li>
+							<li class="divider">
+							</li>
+							<li class="ms-hover">
+								<a href="{{ '..'~ router.getRewriteUri() ~'?page='~page.current~'&order='~item['column_name']~' desc'}}">
+ 				 			<i class="fa fa-arrow-down"></i>
+ 				 			{{' Desc'}}
+ 				 			</a>
+							</li>
+						</ul>
+					</div>
 		</th>
 	{% endfor %}
+	<th></th>
 	<th></th>
 	</tr>
 	</thead>
@@ -59,29 +99,31 @@
 		{% for entity in page.items %}
 		<tr>
 			{% for index,item in headercolumns %}
-		<td width ="45%">{{ entity.readAttribute(item['column_name'])}}</td>
+		<td width ="40%">{{ entity.readAttribute(item['column_name'])}}</td>
 		  {% endfor %}
-		<td width ="5%">{{link_to(editroute~entity.id,image("img/edit32.png"))}}</td>
-		<td width ="5%">{{link_to(showroute~entity.id,image("img/delete32.png"))}}</td>
+		<td width ="2%">{{link_to(editroute~entity.id,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}</td>
+		<td width ="2%">{{link_to(showroute~entity.id,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}</td>
 		</tr>
 		{% endfor %}
 	{% endif %}
 	</tbody>
 	</table>
   <div align="left">{{ 'Página '~ page.current ~" de "~page.total_pages }}</div>
-	<div  class="pagination">
-		{{ link_to(listroute, "Primera","class":"item") }}
-		{{ link_to(listroute~"?page="~page.before, "Anterior","class":"item") }}
+	<div align ="left">
+		<ul class="pagination">
+		<li>{{ link_to(listroute,'<i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i>Primero') }}</li>
+		<li>{{ link_to(listroute~"?page="~page.before, '<i class="fa fa-angle-left"></i>Anterior') }}</li>
 		{% for i in 1..page.total_pages %}
 		{% if page.current == i %}
-			{% set classitem ='current' %}
+			{% set classitem ='active' %}
 		{% else %}
 			{% set classitem ='' %}
 		{% endif %}
-		{{ link_to(listroute~"?page="~i, i,"class":"item"~" "~classitem) }}
+		<li class="{{classitem}}">{{ link_to(listroute~"?page="~i, i) }}</li>
 		{% endfor %}
-		{{ link_to(listroute~"?page="~page.next, "Siguiente","class":"item") }}
-		{{ link_to(listroute~"?page="~page.last, "Ultima","class":"item") }}
+		<li>{{ link_to(listroute~"?page="~page.next, 'Siguiente <i class="fa fa-angle-right"></i>') }}</li>
+		<li>{{ link_to(listroute~"?page="~page.last, 'Ultimo <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i>') }}</li>
+	</ul>
 	</div>
 
 {% else %}
