@@ -2,7 +2,7 @@ $(function() {
 
     // Setup form validation on the #register-form element
     $("#appform").validate({
-
+      errorClass: "has-error", 
       errorPlacement: function(error, element) {
         //Custom position: first name
         if (element.attr("name") == "code" ) {
@@ -13,7 +13,6 @@ $(function() {
         }
 
         // Default position: if no match is met (other fields)
-
     },
         // Specify the validation rules
         rules: {

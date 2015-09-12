@@ -1,39 +1,59 @@
 {% extends "layouts/masterpage.volt" %}
-{% block head %}
-{{super()}}
+{% block javascripts %}
+{{super() }}
+{{assets.outputJs('validate_forms_js')}}
+{{assets.outputJs('validatejs')}}
 {% endblock %}
 {% block content %}
-{{super()}}
-<div align="left" class="grid">
-<div class="row cells12">
-<div class="cell colspan12">
-  <h4 align="left">{{title}}</h4>
-  <br><hr class="control-label col-sm-12">
+<div class="row">
+<div class="col-md-12">
+<!-- BEGIN PORTLET-->
+<div class="portlet box blue">
+	<div class="portlet-title">
+	<div class="caption">
+	{{title}}
+	</div>
+	</div>
+	<div class="portlet-body form">
+	<!-- BEGIN FORM-->
+	{{ form(routeform, "method":"post","id":"appform","role":"form","class":"form-horizontal") }}
+	<div class="form-body">
+	<!-- FORM ERROR MESSAGES-->
+	{% set errorvar = content() %}
+	{% if errorvar is not empty %}
+	<div class="alert alert-danger">
+	<button data-close="alert" class="close"></button>
+	{{ content() }}
+	</div>
+	{% endif %}
+		<!-- LOAD FORM CONTROLS-->
+	{% for index,item in formcolumns %}
+		<div class="form-group">
+		<label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
+		{{item['label']}}
+		<span class="required" aria-required="true">
+		* </span>
+		</label>
+		<div class="col-md-4">
+		{{ form.render(item['name'],["class":"form-control",'disabled':'""']) }}
+		</div>
+		</div>
+	{% endfor %}
+	</div>
+	<!-- FORM ACTION BUTTONS-->
+	<div class="form-actions">
+	<div class="row">
+	<div class="col-md-offset-2 col-md-4">
+    <button class="btn red">{{delete_button_name}}</button>
+		{{ link_to(routelist,cancel_button_name,"class":"btn grey-cascade") }}
+	</div>
+	</div>
+	</div>
+	</form>
+	<!-- END FORM-->
+	</div>
 </div>
+<!-- END PORTLET-->
 </div>
-<br><div class="error" align="left">{{ content() }}</div><br>
-<div class="grid">
-{{ form(routeform, "method":"post","id":"appform") }}
-{% for index,item in formcolumns %}
-<div class="{{item['div_row_class']}}">
- <div class="{{item['div_cell_class']}}">
-    <div class="{{item['div_control_class']}}">
-       {{ form.label(item['name']) }}
-       {{ form.render(item['name'],["disabled":"disabled"]) }}
-    </div>
-    {{item['label_error']}}
- </div>
-</div>
-{% endfor %}
-<br>
-<div class="row cells2">
-  <div class="cell colspan0">
-    <button class="button">{{delete_button_name}}</button>
- </div>
- <div class="cell colspan0">
-   {{ link_to(routelist,cancel_button_name,"class":"button") }}
-</div>
-</div>
-</form>
 </div>
 {% endblock %}

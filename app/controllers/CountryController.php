@@ -28,16 +28,16 @@ class CountryController extends ControllerBase
         $this->crud_params['new_title']          = 'Nuevo País';
         $this->crud_params['edit_title']         = 'Editar País';
         $this->crud_params['form_columns']       = array(
-        array('name' => 'code'
+        array('name' => 'code','label'=>'Código'
         ,'div_control_class'=>'input-control select full-size'
         ,'div_cell_class'=>'cell colspan3'
         ,'div_row_class'=>'row cells1'
-        ,'label_error'=>'<label id ="codeerror" name ="codeerror"></label>'),
-        array('name' => 'country'
+        ,'label_error'=>'<span id ="codeerror" name ="codeerror" class="has-error"></span>'),
+        array('name' => 'country','label'=>'País'
         ,'div_control_class'=>'input-control select full-size'
         ,'div_cell_class'=>'cell colspan3'
         ,'div_row_class'=>'row cells1'
-        ,'label_error'=>'<label id ="countryerror" name ="stateerror"></label>')
+        ,'label_error'=>'<span id ="countryerror" name ="stateerror" class="has-error"></span>')
         );
         $this->crud_params['save_button_name']       ='Guardar';
         $this->crud_params['cancel_button_name']     ='Cancelar';

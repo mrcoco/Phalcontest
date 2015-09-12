@@ -70,9 +70,15 @@ public function initialize()
  ->addCss('metronic/assets/admin/layout/css/themes/darkblue.css')
  ->addCss('metronic/assets/admin/layout/css/custom.css');
 
-
-
-
+  $this->assets->collection('validate_forms_js')
+  ->addJs('metronic/assets/global/plugins/select2/select2.min.js')
+  ->addJs('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')
+  ->addJs('metronic/assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js')
+  ->addJs('metronic/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js')
+  ->addJs('metronic/assets/global/plugins/ckeditor/ckeditor.js')
+  ->addJs('metronic/assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js')
+  ->addJs('metronic/assets/global/plugins/bootstrap-markdown/lib/markdown.js');
+  
    $this->view->globalobj =$this;
 }
 public function checkuser($userid)
