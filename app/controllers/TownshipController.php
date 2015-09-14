@@ -1,61 +1,150 @@
 <?php
-
-
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Validation;
-use TownshipForm as TownshipForm;
+use CountryForm as CountryForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
 /**
  * @RoutePrefix("/township")
  */
 class TownshipController extends ControllerBase
 {
+  public $crud_params =array();
+  public function onConstruct()
+    {
+        $this->crud_params['route_list']         = 'township/list';
+        $this->crud_params['entityname']         = 'Township';
+        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada Country';
+        $this->crud_params['controller']         = 'Township';
+        $this->crud_params['action_list']        = 'townshiplist';
+        $this->crud_params['form_name']          = 'TownshipForm';
+        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar este Sector?';
+        $this->crud_params['create_route']       = 'township/create';
+        $this->crud_params['save_route']         = 'township/save/';
+        $this->crud_params['delete_route']       = 'township/delete/';
+        $this->crud_params['add_edit_view']      = 'township/addedit';
+        $this->crud_params['show_view']          = 'township/show';
+        $this->crud_params['new_title']          = 'Nuevo Sector';
+        $this->crud_params['edit_title']         = 'Editar Sector';
+        $this->crud_params['form_columns']       = array(
+        array('name' => 'country','label'=>'País'
+        ,'required'=>''
+        ,'div_control_class'=>'input-control select full-size'
+        ,'div_cell_class'=>'cell colspan3'
+        ,'div_row_class'=>'row cells1'
+        ,'label_error'=>''),
+        array('name' => 'state','label'=>'Estado'
+        ,'required'=>''
+        ,'div_control_class'=>'input-control select full-size'
+        ,'div_cell_class'=>'cell colspan3'
+        ,'div_row_class'=>'row cells1'
+        ,'label_error'=>''),
+        array('name' => 'cityid','label'=>'Ciudad'
+        ,'required'=>''
+        ,'div_control_class'=>'input-control select full-size'
+        ,'div_cell_class'=>'cell colspan3'
+        ,'div_row_class'=>'row cells1'
+        ,'label_error'=>''),
+        array('name' => 'township','label'=>'Sector'
+        ,'required'=>'<span class="required" aria-required="true">* </span>'
+        ,'div_control_class'=>'input-control select full-size'
+        ,'div_cell_class'=>'cell colspan3'
+        ,'div_row_class'=>'row cells1'
+        ,'label_error'=>'<span id ="townshiperror" name ="stateerror" class="has-error"></span>')
+        );
+        $this->crud_params['save_button_name']       ='Guardar';
+        $this->crud_params['cancel_button_name']     ='Cancelar';
+        $this->crud_params['delete_button_name']     ='Eliminar';
+    }
 
-  private function listsearch($param,$entityname,$parameters)
+    private function set_tags($mode,$entity_object)
+
+    {
+      $this->tag->setDefault("township", $entity_object->getTownship());
+      $this->tag->setDefault("cityid", $entity_object->getCityid());
+      $this->tag->setDefault("country", $entity_object->getCity()->getCountry()->getCountry());
+      $this->tag->setDefault("state", $entity_object->getCity()->getState()->getState());
+
+   }
+   private function set_post_values($entity)
+   {
+   $entity->setTownship($this->request->getPost("township"));
+   $entity->setCityid($this->request->getPost("cityid"));
+   }
+
+
+  public function set_grid_parameters($routelist)
   {
+    $grid_values =
+    [
+     'new_route'=>'township/new'
+    ,'edit_route'=>'township/edit/'
+    ,'show_route'=>'township/show/'
+    ,'search_route'=>'township/search'
+    ,'route_list'=>$routelist
+    ,'view_name'=>'township/townshiplist'
+    ,'numberPage'=>1
+    ,'pagelimit'=>10
+    ,'noitems_message'=>'No se encontraron Sectores'
+    ,'title' =>'Sectores'
+    ,'header_columns'=>array(
+      array('column_name' => 'country','title' => 'País','class'=>''),
+      array('column_name'=>'state','title' => 'Estado','class'=>''),
+      array('column_name'=>'city','title' => 'Ciudad','class'=>''),
+      array('column_name'=>'township','title' => 'Sector','class'=>''))
+    ,'search_columns'=>array(
+      array('name' => 'country','title' => 'País','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+      array('name' => 'state','title' => 'Estado','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+      array('name' => 'city','title' => 'Ciudad','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+      array('name' => 'township','title' => 'Sector','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
+    )
+  ];
+    return $grid_values;
+  }
 
-      if ($param =='list')
-      {
 
-        $entity = $this->modelsManager->createBuilder()
-                     ->columns(array('t.id as id','c.city as city','c2.country as country','s.state as state','t.township as township'))
-                     ->from(array('t' => 'Township'))
-                     ->join('City', 'c.id =t.cityid', 'c')
-                     ->join('Country', 'c2.id =c.countryid', 'c2')
-                     ->join('State', 's.id =c.stateid', 's')
-                     ->getQuery()
-                     ->execute();
-      }
-      else {
-
-       $params_query =$this->set_search_grid_post_values();
-       $entity = $this->set_search_query($params_query);
-      }
-
-    $this->set_grid_values($entity,'township/new','township/edit/','township/show/','township/search'
-    ,'township/list','township/townshiplist',1,10,"No se encontraron Sectores","Sectores");
+  /**
+  * @Route("/list", methods={"GET","POST"}, name="townshiplist")
+  */
+  public function listAction()
+  {
+    $order=$this->set_grid_order();
+    $grid_values =$this->set_grid_parameters('township/list');
+    $query= $this->modelsManager->createBuilder()
+                 ->columns(array('t.id as id','c.city as city','c2.country as country','s.state as state','t.township as township'))
+                 ->from(array('t' => 'Township'))
+                 ->join('City', 'c.id =t.cityid', 'c')
+                 ->join('Country', 'c2.id =c.countryid', 'c2')
+                 ->join('State', 's.id =c.stateid', 's')
+                 ->getQuery()
+                 ->execute();
+    $this->set_grid_values($query,$grid_values);
 
   }
 
-  private function set_search_grid_post_values()
-  {
-    $params_query['country'] =$this->request->getPost("country");
-    $params_query['state'] =$this->request->getPost("state");
-    $params_query['city'] =$this->request->getPost("city");
-    $params_query['township'] =$this->request->getPost("township");
-    return $params_query;
 
-  }
 
-  private function set_list_query($entityname,$parameters)
+  /**
+  * @Route("/search", methods={"GET","POST"}, name="townshipsearch")
+  */
+  public function searchAction()
+
   {
-    $entity =$entityname::find($parameters);
-    return $entity;
-  }
-  private function set_search_query($params_query)
-  {
-    $entity = $this->modelsManager->createBuilder()
+
+    $order=$this->set_grid_order();
+
+    $grid_values =$this->set_grid_parameters('township/search');
+
+    $search_values =array(array('name'=>'country','value'=>$this->request->getPost("country"))
+    ,array('name'=>'state','value'=>$this->request->getPost("state"))
+    ,array('name'=>'city','value'=>$this->request->getPost("city"))
+    ,array('name'=>'township','value'=>$this->request->getPost("township"))
+    );
+
+    $params_query =$this->set_search_grid_post_values($search_values);
+
+    $query = $this->modelsManager->createBuilder()
                  ->columns(array('t.id as id','c.city as city','c2.country as country','s.state as state','t.township as township'))
                  ->from(array('t' => 'Township'))
                  ->join('City', 'c.id =t.cityid', 'c')
@@ -67,152 +156,189 @@ class TownshipController extends ControllerBase
                  ->andWhere('s.state LIKE :state:', array('state' => '%' . $params_query['state'] . '%'))
                  ->getQuery()
                  ->execute();
-      return $entity;
+    $this->set_grid_values($query,$grid_values);
+
   }
 
 
- private function set_tags($mode,$entity_object)
-
- {
-   $this->tag->setDefault("township", $entity_object->getTownship());
-   $this->tag->setDefault("cityid", $entity_object->getCityid());
-   $this->tag->setDefault("country", $entity_object->getCity()->getCountry()->getCountry());
-   $this->tag->setDefault("state", $entity_object->getCity()->getState()->getState());
-
-}
-private function set_post_values($entity)
-{
-$entity->setTownship($this->request->getPost("township"));
-$entity->setCityid($this->request->getPost("cityid"));
-}
-
-
-  /**
-  * @Route("/list", methods={"GET","POST"}, name="townshiplist")
- */
-  public function listAction()
+  public function get_assets()
   {
-
-    $this->listsearch('list','Townshipview',array(
-      'order' => 'country,state,city,township ASC'
-  ));
-
+    $this->assets
+       ->collection('validatejs')
+        ->addJs('js/jqueryvalidate/jquery.validate.js')
+        ->addJs('js/jqueryvalidate/additional-methods.min.js')
+        ->addJs('js/validatetownship/validate_township.js')
+        ->addJs('js/validatetownship/get_city_data.js');
   }
 
 
   /**
-  * @Route("/search", methods={"POST"}, name="townshipsearch")
+  * @Route("/new", methods={"GET"}, name="townshipnew")
+  */
+  public function newAction($entity=null)
+  {
+    $this->get_assets();
+    $this->set_form_routes(
+    $this->crud_params['create_route']
+    ,$this->crud_params['route_list']
+    ,$this->crud_params['new_title']
+    ,$this->crud_params['add_edit_view']
+    ,'new'
+    ,$entity
+    ,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,'');
+  }
+
+  /**
+  * @Route("/edit/{id}", methods={"GET"}, name="townshipedit")
+  */
+  public function editAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'edit');
+
+    $this->get_assets();
+    $this->set_tags('edit',$entity);
+    $this->view->id = $entity->id;
+
+    $this->set_form_routes(
+    $this->crud_params['save_route'].$id
+    ,$this->crud_params['route_list']
+    ,$this->crud_params['edit_title']
+    ,$this->crud_params['add_edit_view']
+    ,'edit',$entity,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,''
+    );
+  }
+
+  /**
+  * @Route("/create", methods={"POST"}, name="townshipcreate")
+  */
+  public function createAction()
+  {
+    $entity = $this->set_entity(
+    ''
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'create');
+
+    $this->set_post_values($entity);
+
+    $this->execute_entity_action($entity
+    ,$this->crud_params['controller']
+    ,'new',array($entity),$this->crud_params['action_list']
+    ,'create');
+  }
+
+  /**
+  * @Route("/save/{id}", methods={"POST"}, name="townshipsave")
+  */
+  public function saveAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'update');
+
+    $this->set_post_values($entity);
+
+    $this->execute_entity_action(
+    $entity
+    ,$this->crud_params['controller']
+    ,'edit',array($entity->id)
+    ,$this->crud_params['action_list'],'update');
+  }
+
+  /**
+  * @Route("/show/{id}", methods={"GET"}, name="townshipshow")
+  */
+  public function showAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'show');
+
+    $this->get_assets();
+
+    $this->set_form_routes(
+    $this->crud_params['delete_route'].$id
+    ,$this->crud_params['route_list']
+    ,$this->crud_params['delete_message']
+    ,$this->crud_params['show_view'] ,'delete'
+    ,$entity
+    ,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,$this->crud_params['delete_button_name']
+    );
+    $this->set_tags('delete',$entity,'Y');
+  }
+
+  /**
+  * @Route("/delete/{id}", methods={"POST"}, name="townshipdelete")
+  */
+  public function deleteAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'delete');
+    $this->execute_entity_action(
+    $entity
+    ,$this->crud_params['controller']
+    ,'show'
+    ,array('id'=>$id)
+    ,$this->crud_params['action_list']
+    ,'delete');
+  }
+  /**
+  * @Route("/get_citydata/{cityid}", methods={"POST"}, name="township_citydata")
  */
-    public function searchAction()
-    {
-     $this->listsearch('search','',array(
-       'order' => 'c2.country,s.state,c.city,t.township ASC'
-   ));
-    }
+  public function get_citydataAction($cityid)
+  {
+     $this->view->disable();
+    $city = $this->modelsManager->createBuilder()
+                ->columns(array('c.id as idcity','s.state as state','c2.country as country'))
+                ->from(array('c' => 'City'))
+                ->join('State', 's.id =c.stateid', 's')
+                ->join('Country', 'c2.id =c.countryid', 'c2')
+                ->where('c.id = :cityid:', array('cityid' =>$cityid ))
+                ->getQuery()
+                ->execute();
+      $data = array();
+              foreach ($city as $cityitem) {
+                  $data= array(
+                      'country'   => $cityitem->country,
+                      'state' => $cityitem->state
+                  );
+              }
 
-    public function get_assets()
-    {
+    echo json_encode($data);
 
-      $this->assets
-         ->collection('validatejs')
-          ->addJs('js/jqueryvalidate/jquery.validate.js')
-          ->addJs('js/jqueryvalidate/additional-methods.min.js')
-          ->addJs('js/validatetownship/validate_township.js')
-          ->addJs('js/validatetownship/get_city_data.js');
-    }
-
-    /**
-    * @Route("/get_citydata/{cityid}", methods={"POST"}, name="township_citydata")
-   */
-    public function get_citydataAction($cityid)
-    {
-       $this->view->disable();
-      $city = $this->modelsManager->createBuilder()
-                  ->columns(array('c.id as idcity','s.state as state','c2.country as country'))
-                  ->from(array('c' => 'City'))
-                  ->join('State', 's.id =c.stateid', 's')
-                  ->join('Country', 'c2.id =c.countryid', 'c2')
-                  ->where('c.id = :cityid:', array('cityid' =>$cityid ))
-                  ->getQuery()
-                  ->execute();
-        $data = array();
-                foreach ($city as $cityitem) {
-                    $data= array(
-                        'country'   => $cityitem->country,
-                        'state' => $cityitem->state
-                    );
-                }
-
-      echo json_encode($data);
-
-    }
-    /**
-    * @Route("/new", methods={"GET"}, name="townshipenew")
-   */
-    public function newAction($entity=null)
-    {
-      $this->get_assets();
-      $this->set_form_routes('township/create','township/list','Nuevo Sector','township/addedit','new',$entity,'TownshipForm');
-
-    }
-
-
-    /**
-    * @Route("/edit/{id}", methods={"GET"}, name="townshipedit")
-   */
-    public function editAction($id)
-    {
-            $entity =$this->set_entity($id,'Township','No se encontro una entidad llamada Township','township','townshiplist','edit');
-            $this->get_assets();
-            $this->set_tags('edit',$entity);
-            $this->view->id = $entity->id;
-            $this->set_form_routes('township/save/'.$id,'township/list','Editar Sector','township/addedit','edit',$entity,'TownshipForm');
-    }
-
-    /**
-    * @Route("/create", methods={"POST"}, name="townshipcreate")
-   */
-    public function createAction()
-    {
-        $entity = $this->set_entity('','Township','No se encontro una entidad llamada Township','township','townshiplist','create');
-        $this->set_post_values($entity);
-        $this->execute_entity_action($entity,'township','new',array($entity),'townshiplist','create');
-    }
-
-    /**
-    * @Route("/save/{id}", methods={"POST"}, name="townshipsave")
-   */
-    public function saveAction($id)
-    {
-
-        $entity =$this->set_entity($id,'Township','No se encontro una entidad llamada Township','township','townshiplist','update');
-        $this->set_post_values($entity);
-        $this->execute_entity_action($entity,'township','edit',array($entity->id),'townshiplist','update');
-
-    }
-
-    /**
-    * @Route("/show/{id}", methods={"GET"}, name="townshipshow")
-   */
-   public function showAction($id)
-   {
-         $entity =$this->set_entity($id,'Township','No se encontro una entidad llamada Township','township','townshiplist','show_delete');
-         $this->get_assets();
-         $this->set_form_routes('township/delete/'.$id,'township/list'
-         ,'Esta seguro que desea eliminar este sector?','township/show','delete',$entity,'TownshipForm');
-         $this->set_tags('delete',$entity,'Y');
-
-
-   }
-
-    /**
-    * @Route("/delete/{id}", methods={"POST"}, name="townshipdelete")
-   */
-    public function deleteAction($id)
-    {
-
-      $entity =$this->set_entity($id,'Township','No se encontro una entidad llamada Township','township','townshiplist','delete');
-      $this->execute_entity_action($entity,'township','show',array(),'townshiplist','delete');
-    }
+  }
 
 }

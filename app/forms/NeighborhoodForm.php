@@ -21,19 +21,18 @@ class NeighborhoodForm extends Form
 ,'useEmpty' => TRUE,'emptyText' => 'Seleccione una Ciudad'));
    $city->setLabel('Ciudad');
    $this->add($city);
+ //var_dump($entity->townshipid);
 
   if (isset($entity))
   {
-
-
     $township = new Select('townshipid', Township::find(array(
                         "columns"   =>  array("id,township"),
                         "conditions"=>  "id = :id:" ,
                         "bind"      =>  array("id"=>$entity->townshipid)
                     )), array(
                         "useEmpty" => true,
-                        "emptyText" => 'Seleccione un Sector',
-                        'using' => array('id', 'state'))
+                        "emptyText" => 'Seleccione un Sector2',
+                        'using' => array('id', 'township'))
                 );
     $township->setLabel('Sector');
     $this->add($township);
@@ -43,6 +42,24 @@ class NeighborhoodForm extends Form
     $township->setLabel('Sector');
     $this->add($township);
   }
+
+  $countryvalue="";
+  $statevalue="";
+  $city ="";
+  if (isset($entity))
+ {
+   $countryvalue=$entity->getCity()->getCountry()->getCountry();
+   $statevalue=$entity->getCity()->getState()->getState();
+ }
+  $country = new Text('country');
+  $country ->setLabel('País');
+  $country->setDefault($countryvalue);
+  $this->add($country);
+
+  $state = new Text('state');
+  $state->setDefault($statevalue);
+  $state ->setLabel('Estado');
+  $this->add($state);
 
   $neighborhood = new Text('neighborhood');
   $neighborhood->setLabel('Barrio');

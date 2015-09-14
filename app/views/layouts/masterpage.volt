@@ -47,7 +47,7 @@
 <!-- END RESPONSIVE MENU TOGGLER -->
 <!-- BEGIN TOP NAVIGATION MENU -->
 <div class="top-menu">
-    
+
 <ul class="nav navbar-nav pull-right">
     <li>	<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
            </a>
@@ -105,17 +105,23 @@
 <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
 <ul class="page-sidebar-menu page-sidebar-menu-closed" data-slide-speed="200" data-auto-scroll="true" data-keep-expanded="false">
 
-  <li class="start">
+  <li class="{% for key,name in ['country','state','city','township','neighborhood'] %}
+    {% if name  in router.getRewriteUri() %}
+        active open
+    {% else %}
+    start
+    {% endif%}
+    {% endfor %}">
     <a href="" style="padding-left:20px;">
     <span class="arrow "></span>
     <p align="left"><i class="icon-home"></i> Direcciones</p>
-    </a> 
+    </a>
     <ul class="sub-menu">
-        <li> <a href="{{ url("country/list") }}" ><p align="left"><i class="icon-flag" ></i> Paises</p></a></li>
-        <li> <a href="{{ url("state/list") }}" ><p align="left"><i class="icon-flag" ></i> Estados<p></a></li>
-       <li> <a href="{{ url("city/list") }}" ><p align="left"><i class="icon-flag" ></i> Ciudades</p></a></li>
-       <li> <a href="{{ url("township/list") }}" ><p align="left"><i class="icon-flag" ></i> Sectores</p></a></li>
-        <li> <a href="{{ url("neighborhood/list") }}" ><p align="left"><i class="icon-flag"></i> Barrios</p></a></li>
+        <li class="{% if 'country' in router.getRewriteUri() %}active{% endif %}"> <a href="{{ url("country/list") }}" ><p align="left"><i class="icon-flag" ></i> Paises</p></a></li>
+        <li class="{% if 'state' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("state/list") }}" ><p align="left"><i class="icon-flag" ></i> Estados<p></a></li>
+        <li class="{% if 'city' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("city/list") }}" ><p align="left"><i class="icon-flag" ></i> Ciudades</p></a></li>
+        <li class="{% if 'township' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("township/list") }}" ><p align="left"><i class="icon-flag" ></i> Sectores</p></a></li>
+        <li class="{% if 'neighborhood' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("neighborhood/list") }}" ><p align="left"><i class="icon-flag"></i> Barrios</p></a></li>
         <li> <a href="{{ url("index/list") }}"><p align="left"><i class="icon-flag"></i> Direcciones</p></a></li>
     </ul>
   </li>
@@ -124,7 +130,7 @@
 </div>
 </div>
 <!-- END SIDEBAR -->
-        
+
 <!-- BEGIN CONTENT -->
 <div class="page-content-wrapper">
 <div class="page-content">
@@ -143,11 +149,11 @@
 <!-- END PAGE HEADER-->
 
 <!-- BEGIN PAGE CONTENT-->
-   
+
     {% block content %}
 <!--CONTENT-->
     {% endblock %}
-  
+
 <!-- END PAGE CONTENT-->
 </div>
 </div>
@@ -170,7 +176,7 @@
 {% block javascripts %}
 
 <script>
-jQuery(document).ready(function() 
+jQuery(document).ready(function()
 {
 Metronic.init(); // init metronic core components
 Layout.init(); // init current layout

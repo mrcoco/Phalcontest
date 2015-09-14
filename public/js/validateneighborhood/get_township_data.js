@@ -9,13 +9,21 @@ $(document).ready(function()
   var cityid = $('#cityid').val();
   $.ajax
   ({
+   dataType:'json',
    type: "POST",
    url: urlpath+cityid ,
    data:{"cityid":cityid},
    cache: false,
-   success: function(html)
+   success: function(data)
    {
-      $("#townshipid").html(html);
+        var townshipdata = data['township'];
+        var citydata =data.citydata;
+         $("#townshipid").empty().append('<option selected="selected" value="">Seleccione un Sector</option>');
+         $('#state').val(data.citydata.state);
+         $('#country').val(data.citydata.country);
+         $.each(townshipdata, function(index, object) {
+         $("#townshipid").append('<option value="' +object.id + '">' + object.township + '</option>');
+        });
    }
    });
   });
