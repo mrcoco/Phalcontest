@@ -2,6 +2,7 @@
 use Phalcon\Mvc\Model\Validator;
 use Phalcon\Mvc\Model\Validator\Email as Email;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 
 class State extends \Phalcon\Mvc\Model
 {
@@ -23,6 +24,8 @@ class State extends \Phalcon\Mvc\Model
      * @var integer
      */
     protected $countryid;
+    
+    
 
     /**
      * Method to set the value of field id
@@ -99,7 +102,12 @@ class State extends \Phalcon\Mvc\Model
     public function initialize()
     {
         $this->hasMany('id', 'Address', 'stateid', array('alias' => 'Address'));
-        $this->hasMany('id', 'City', 'stateid', array('alias' => 'City'));
+        $this->hasMany('id', 'City', 'stateid', 
+                array('alias' => 'City'
+                    ,"foreignKey" => array(
+                    "message" => "No se Puede eliminar,Existe una ciudad que tien ese estado asociado"
+                )
+                    ));
         $this->belongsTo('countryid', 'Country', 'id', array('alias' => 'Country'));
     }
 
@@ -172,7 +180,10 @@ class State extends \Phalcon\Mvc\Model
               )
           )
       );
-
+      
+      $this->validate(new Uniqueness(array(
+         'field' => array('countryid', 'state')
+     )));         
 
         if ($this->validationHasFailed() == true) {
             return false;
@@ -185,7 +196,9 @@ class State extends \Phalcon\Mvc\Model
        $messages = array();
        $txtmessage ="";
        foreach (parent::getMessages() as $message) {
+           
            switch ($message->getType()) {
+           
                case 'PresenceOf':
                    switch ($message->getField()) {
                     case 'countryid':
@@ -197,6 +210,29 @@ class State extends \Phalcon\Mvc\Model
                    }
                     $messages[] =$txtmessage;
                    break;
+               case 'Unique':
+
+                if (is_array($message->getField()))
+                {
+                  $field =implode("-", $message->getField());
+                }
+                else {
+                  $field =$message->getField();
+                }
+
+                switch ($field) 
+                {
+                 case 'countryid-state':
+                    $txtmessage ='Ya Existe ese estado para el país seleccionado';
+                 break;
+                 }
+                $messages[] =$txtmessage;
+               break;
+              case 'ConstraintViolation':
+               $txtmessage ='No se puede eliminar este estado por que tiene registros asociados';
+               $messages[] =$txtmessage;    
+               break;    
+           
            }
        }
 

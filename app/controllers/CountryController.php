@@ -29,11 +29,13 @@ class CountryController extends ControllerBase
         $this->crud_params['edit_title']         = 'Editar País';
         $this->crud_params['form_columns']       = array(
         array('name' => 'code','label'=>'Código'
+        ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'div_control_class'=>'input-control select full-size'
         ,'div_cell_class'=>'cell colspan3'
         ,'div_row_class'=>'row cells1'
         ,'label_error'=>'<span id ="codeerror" name ="codeerror" class="has-error"></span>'),
         array('name' => 'country','label'=>'País'
+        ,'required'=>'<span class="required" aria-required="true">* </span>'    
         ,'div_control_class'=>'input-control select full-size'
         ,'div_cell_class'=>'cell colspan3'
         ,'div_row_class'=>'row cells1'
@@ -67,7 +69,7 @@ class CountryController extends ControllerBase
     ,'route_list'=>$routelist
     ,'view_name'=>'country/countrylist'
     ,'numberPage'=>1
-    ,'pagelimit'=>5
+    ,'pagelimit'=>10
     ,'noitems_message'=>'No se encontraron Paises'
     ,'title' =>'Paises'
     ,'header_columns'=>array(
@@ -279,7 +281,7 @@ class CountryController extends ControllerBase
     $entity
     ,$this->crud_params['controller']
     ,'show'
-    ,array()
+    ,array('id'=>$id)
     ,$this->crud_params['action_list']
     ,'delete');
   }

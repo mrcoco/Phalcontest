@@ -2,7 +2,7 @@ $(function() {
 
     // Setup form validation on the #register-form element
     $("#appform").validate({
-
+      errorClass: "has-error",
       errorPlacement: function(error, element) {
         //Custom position: first name
         if (element.attr("name") == "state" ) {
@@ -30,7 +30,7 @@ $(function() {
 
             },
              state:{
-                required:"Debe ingresar un estado",
+                required:"Debe ingresar un estado"
 
             }
 

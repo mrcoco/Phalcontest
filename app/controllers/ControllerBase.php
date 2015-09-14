@@ -11,7 +11,7 @@ public function initialize()
 {
 
   // Login Assests
-  $this->assets
+ /* $this->assets
         ->collection('mastercss')
         ->addCss('metro/build/css/metro.min.css')
         ->addCss('metro/build/css/metro-responsive.min.css')
@@ -24,7 +24,7 @@ public function initialize()
    ->addJs('js/jquery/jquery-2.1.4.min.js')
    ->addJs('metro/build/js/metro.min.js');
 
-
+*/
   // Login Assests
   $this->assets
         ->collection('logincss')

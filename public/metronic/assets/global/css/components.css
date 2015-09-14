@@ -3604,6 +3604,14 @@ input[type='text'].has-error  {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
+select.has-error
+{
+  border-color: #ebccd1 ;  
+}
+select.has-error:focus
+{
+  border-color: #ebccd1 ;   
+}
 label.has-error
 {
   color: #a94442;

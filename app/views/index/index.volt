@@ -1,4 +1,4 @@
-{% extends "layouts/masterpage2.volt" %}
+{% extends "layouts/masterpage.volt" %}
 {% block pagetitle %}
 <h3 class="page-title" align ="left">
 	{{'MANTENIMIENTO DEL SISTEMA'}}

@@ -99,8 +99,10 @@ class Country extends \Phalcon\Mvc\Model
     public function initialize()
     {
         $this->hasMany('id', 'Address', 'countryid', array('alias' => 'Address'));
-        $this->hasMany('id', 'City', 'countryid', array('alias' => 'City'));
-        $this->hasMany('id', 'State', 'countryid', array('alias' => 'State'));
+        $this->hasMany('id', 'City', 'countryid', array('alias' => 'City',"foreignKey" => array(
+                    "message" => "No se Puede eliminar,Existe una ciudad que tien ese pais asociado")));
+        $this->hasMany('id', 'State', 'countryid', array('alias' => 'State',"foreignKey" => array(
+                    "message" => "No se Puede eliminar,Existe un estado  que tien ese pais asociado")));
     }
 
     /**
@@ -226,9 +228,14 @@ class Country extends \Phalcon\Mvc\Model
                case 'code-country':
                   $txtmessage ='Ya Existe un país con el código y nombre ingresados';
                break;
+             
            }
            $messages[] =$txtmessage;
           break;
+          case 'ConstraintViolation':
+               $txtmessage ='No se puede eliminar este país por que tiene registros asociados';
+               $messages[] =$txtmessage;    
+               break;
        }
 
        return $messages;

@@ -1,57 +1,126 @@
 <?php
-
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Validation;
-use StateForm as StateForm;
+use CountryForm as CountryForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
 /**
  * @RoutePrefix("/state")
  */
 class StateController extends ControllerBase
 {
-
-    private function listsearch($param,$entityname,$parameters)
+  public $crud_params =array();
+  public function onConstruct()
     {
-
-        if ($param =='list')
-        {
-
-        $entity =$this->set_list_query($entityname,$parameters);
-        }
-        else {
-
-         $params_query =$this->set_search_grid_post_values();
-         $entity = $this->set_search_query($params_query);
-        }
-
-      $this->set_grid_values($entity,'state/new','state/edit/','state/show/','state/search'
-      ,'state/list','state/statelist',1,10,"No se encontraron Estados","Estados");
-
+        $this->crud_params['route_list']         = 'state/list';
+        $this->crud_params['entityname']         = 'State';
+        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada State';
+        $this->crud_params['controller']         = 'State';
+        $this->crud_params['action_list']        = 'statelist';
+        $this->crud_params['form_name']          = 'StateForm';
+        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar este Estado?';
+        $this->crud_params['create_route']       = 'state/create';
+        $this->crud_params['save_route']         = 'state/save/';
+        $this->crud_params['delete_route']       = 'state/delete/';
+        $this->crud_params['add_edit_view']      = 'state/addedit';
+        $this->crud_params['show_view']          = 'state/show';
+        $this->crud_params['new_title']          = 'Nuevo Estado';
+        $this->crud_params['edit_title']         = 'Editar Estado';
+        $this->crud_params['form_columns']       = array(
+        array('name' => 'countryid','label'=>'País'
+        ,'required'=>'<span class="required" aria-required="true">* </span>'
+        ,'div_control_class'=>'input-control select full-size'
+        ,'div_cell_class'=>'cell colspan3'
+        ,'div_row_class'=>'row cells1'
+        ,'label_error'=>''),
+        array('name' => 'state','label'=>'Estado'
+        ,'required'=>'<span class="required" aria-required="true">* </span>'    
+        ,'div_control_class'=>'input-control select full-size'
+        ,'div_cell_class'=>'cell colspan3'
+        ,'div_row_class'=>'row cells1'
+        ,'label_error'=>'<span id ="stateerror" name ="stateerror" class="has-error"></span>')
+        );
+        $this->crud_params['save_button_name']       ='Guardar';
+        $this->crud_params['cancel_button_name']     ='Cancelar';
+        $this->crud_params['delete_button_name']     ='Eliminar';
     }
 
-    private function set_search_grid_post_values()
+    public function set_tags($mode,$entity_object)
     {
-      $params_query['country'] =$this->request->getPost("country");
-      $params_query['state'] =$this->request->getPost("state");
-      return $params_query;
-
+      $this->tag->setDefault("countryid", $entity_object->getCountryid());
+      $this->tag->setDefault("state", $entity_object->getState());
     }
 
-    private function set_list_query($entityname,$parameters)
+    public function set_post_values($entity)
     {
-      $entity = $this->modelsManager->createBuilder()
+      $entity->setCountryid($this->request->getPost("countryid"));
+      $entity->setState($this->request->getPost("state"));
+    }
+
+  public function set_grid_parameters($routelist)
+  {
+    $grid_values =
+    [
+     'new_route'=>'state/new'
+    ,'edit_route'=>'state/edit/'
+    ,'show_route'=>'state/show/'
+    ,'search_route'=>'state/search'
+    ,'route_list'=>$routelist
+    ,'view_name'=>'state/statelist'
+    ,'numberPage'=>1
+    ,'pagelimit'=>5
+    ,'noitems_message'=>'No se encontraron Estados'
+    ,'title' =>'Estados'
+    ,'header_columns'=>array(
+      array('column_name' => 'country','title' => 'País','class'=>''),
+      array('column_name'=>'state','title' => 'Estado','class'=>''))
+    ,'search_columns'=>array(
+      array('name' => 'country','title' => 'País','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+      array('name' => 'state','title' => 'Estado','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
+    )
+  ];
+    return $grid_values;
+  }
+
+
+  /**
+  * @Route("/list", methods={"GET","POST"}, name="statelist")
+  */
+  public function listAction()
+  {
+    $order=$this->set_grid_order();
+    $grid_values =$this->set_grid_parameters('state/list');
+    $query= $this->modelsManager->createBuilder()
                    ->columns(array('s.id as id','s.state as state','c.country as country'))
                    ->from(array('s' => 'State'))
                    ->join('Country', 'c.id = s.countryid', 'c')
                    ->orderBy('c.country,s.state')
                    ->getQuery()
                    ->execute();
-      return $entity;
-    }
-    private function set_search_query($params_query)
-    {
-      $entity = $this->modelsManager->createBuilder()
+    $this->set_grid_values($query,$grid_values);
+
+  }
+
+
+
+  /**
+  * @Route("/search", methods={"GET","POST"}, name="statesearch")
+  */
+  public function searchAction()
+
+  {
+
+    $order=$this->set_grid_order();
+
+    $grid_values =$this->set_grid_parameters('state/search');
+
+    $search_values =array(array('name'=>'country','value'=>$this->request->getPost("country"))
+    ,array('name'=>'state','value'=>$this->request->getPost("state")));
+
+    $params_query =$this->set_search_grid_post_values($search_values);
+
+    $query = $this->modelsManager->createBuilder()
                    ->columns(array('s.id as id','s.state as state','c.country as country'))
                    ->from(array('s' => 'State'))
                    ->join('Country', 'c.id = s.countryid', 'c')
@@ -60,125 +129,163 @@ class StateController extends ControllerBase
                    ->orderBy('c.country,s.state')
                    ->getQuery()
                    ->execute();
-        return $entity;
-    }
-
-
-   private function set_tags($mode,$entity_object)
-
-   {
-     $this->tag->setDefault("countryid", $entity_object->getCountryid());
-     $this->tag->setDefault("state", $entity_object->getstate());
+    $this->set_grid_values($query,$grid_values);
 
   }
-  private function set_post_values($entity)
+
+
+  public function get_assets()
   {
-  $entity->setState($this->request->getPost("state"));
-  $entity->setCountryid($this->request->getPost("countryid"));
+    $this->assets
+    ->collection('validatejs')
+    ->addJs('js/jqueryvalidate/jquery.validate.js')
+    ->addJs('js/jqueryvalidate/additional-methods.min.js')
+    ->addJs('js/validatestate/validate_state.js');
   }
 
 
-    /**
-    * @Route("/list", methods={"GET","POST"}, name="countrylist")
-   */
-    public function listAction()
-    {
+  /**
+  * @Route("/new", methods={"GET"}, name="statenew")
+  */
+  public function newAction($entity=null)
+  {
+    $this->get_assets();
+    $this->set_form_routes(
+    $this->crud_params['create_route']
+    ,$this->crud_params['route_list']
+    ,$this->crud_params['new_title']
+    ,$this->crud_params['add_edit_view']
+    ,'new'
+    ,$entity
+    ,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,'');
+  }
 
-      $this->listsearch('list','State',array(
-        'order' => 'country,state ASC'
-    ));
+  /**
+  * @Route("/edit/{id}", methods={"GET"}, name="stateedit")
+  */
+  public function editAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'edit');
 
-    }
+    $this->get_assets();
+    $this->set_tags('edit',$entity);
+    $this->view->id = $entity->id;
 
+    $this->set_form_routes(
+    $this->crud_params['save_route'].$id
+    ,$this->crud_params['route_list']
+    ,$this->crud_params['edit_title']
+    ,$this->crud_params['add_edit_view']
+    ,'edit',$entity,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,''
+    );
+  }
 
-    /**
-    * @Route("/search", methods={"POST"}, name="Countrysearch")
-   */
-      public function searchAction()
-      {
-       $this->listsearch('search','',array(
-         'order' => 'country,state ASC'
-     ));
-      }
+  /**
+  * @Route("/create", methods={"POST"}, name="statecreate")
+  */
+  public function createAction()
+  {
+    $entity = $this->set_entity(
+    ''
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'create');
 
-      public function get_assets()
-      {
+    $this->set_post_values($entity);
 
-        $this->assets
-           ->collection('validatejs')
-            ->addJs('js/jqueryvalidate/jquery.validate.js')
-            ->addJs('js/jqueryvalidate/additional-methods.min.js')
-            ->addJs('js/validatestate/validate_state.js');
+    $this->execute_entity_action($entity
+    ,$this->crud_params['controller']
+    ,'new',array($entity),$this->crud_params['action_list']
+    ,'create');
+  }
 
-      }
+  /**
+  * @Route("/save/{id}", methods={"POST"}, name="statesave")
+  */
+  public function saveAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'update');
 
+    $this->set_post_values($entity);
 
-      /**
-      * @Route("/new", methods={"GET"}, name="Countryenew")
-     */
-      public function newAction($entity=null)
-      {
-        $this->get_assets();
-        $this->set_form_routes('state/create','state/list','Nuevo Estado','state/addedit','new',$entity,'StateForm');
+    $this->execute_entity_action(
+    $entity
+    ,$this->crud_params['controller']
+    ,'edit',array($entity->id)
+    ,$this->crud_params['action_list'],'update');
+  }
 
-      }
+  /**
+  * @Route("/show/{id}", methods={"GET"}, name="stateshow")
+  */
+  public function showAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'show');
 
+    $this->get_assets();
 
-      /**
-      * @Route("/edit/{id}", methods={"GET"}, name="Countryedit")
-     */
-      public function editAction($id)
-      {
-              $entity =$this->set_entity($id,'State','No se encontro una entidad llamada State','State','statelist','edit');
-              $this->get_assets();
-              $this->set_tags('edit',$entity);
-              $this->view->id = $entity->id;
-              $this->set_form_routes('state/save/'.$id,'state/list','Editar Estado','state/addedit','edit',$entity,'StateForm');
-      }
+    $this->set_form_routes(
+    $this->crud_params['delete_route'].$id
+    ,$this->crud_params['route_list']
+    ,$this->crud_params['delete_message']
+    ,$this->crud_params['show_view'] ,'delete'
+    ,$entity
+    ,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,$this->crud_params['delete_button_name']
+    );
+    $this->set_tags('delete',$entity,'Y');
+  }
 
-      /**
-      * @Route("/create", methods={"POST"}, name="Countrycreate")
-     */
-      public function createAction()
-      {
-          $entity = $this->set_entity('','State','No se encontro una entidad llamada Estado','State','statelist','create');
-          $this->set_post_values($entity);
-          $this->execute_entity_action($entity,'State','new',array($entity),'statelist','create');
-      }
+  /**
+  * @Route("/delete/{id}", methods={"POST"}, name="statedelete")
+  */
+  public function deleteAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'delete');
+    $this->execute_entity_action(
+    $entity
+    ,$this->crud_params['controller']
+    ,'show'
+    ,array('id'=>$id)
+    ,$this->crud_params['action_list']
+    ,'delete');
+  }
 
-      /**
-      * @Route("/save/{id}", methods={"POST"}, name="Countrysave")
-     */
-      public function saveAction($id)
-      {
-
-          $entity =$this->set_entity($id,'State','No se encontro una entidad llamada Estado','State','statelist','update');
-          $this->set_post_values($entity);
-          $this->execute_entity_action($entity,'State','edit',array($entity->id),'statelist','update');
-
-      }
-
-      /**
-      * @Route("/show/{id}", methods={"GET"}, name="Countryshow")
-     */
-     public function showAction($id)
-     {
-           $entity =$this->set_entity($id,'State','No se encontro una entidad llamada Estado','State','statelist','show_delete');
-           $this->get_assets();
-           $this->set_form_routes('state/delete/'.$id,'state/list'
-           ,'Esta seguro que desea eliminar este Estado?','state/show','delete',$entity,'StateForm');
-           $this->set_tags('delete',$entity,'Y');
-
-
-     }
-
-      /**
-      * @Route("/delete/{id}", methods={"POST"}, name="Countrydelete")
-     */
-      public function deleteAction($id)
-      {
-
-        $entity =$this->set_entity($id,'State','No se encontro una entidad llamada Estado','State','statelist','delete');
-        $this->execute_entity_action($entity,'State','show',array(),'statelist','delete');
-      }
 }

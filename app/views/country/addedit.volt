@@ -31,9 +31,8 @@
 		<div class="form-group">
 		<label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
 		{{item['label']}}
-		<span class="required" aria-required="true">
-		* </span>
-		</label>
+		{{item['required']}}
+                </label>
 		<div class="col-md-4">
 		{{ form.render(item['name'],["class":"form-control"]) }}
 		<!-- LOAD CONTROL ERROR LABEL-->
