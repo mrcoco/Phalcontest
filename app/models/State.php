@@ -223,7 +223,7 @@ class State extends \Phalcon\Mvc\Model
                 switch ($field) 
                 {
                  case 'countryid-state':
-                    $txtmessage ='Ya Existe ese estado para el país seleccionado';
+                    $txtmessage ='Ya existe ese estado para el país seleccionado';
                  break;
                  }
                 $messages[] =$txtmessage;

@@ -27,8 +27,8 @@ class NeighborhoodForm extends Form
   {
     $township = new Select('townshipid', Township::find(array(
                         "columns"   =>  array("id,township"),
-                        "conditions"=>  "id = :id:" ,
-                        "bind"      =>  array("id"=>$entity->townshipid)
+                        "conditions"=>  "cityid =:cityid:",
+                        "bind"      =>  array("cityid"=>$entity->cityid)
                     )), array(
                         "useEmpty" => true,
                         "emptyText" => 'Seleccione un Sector2',

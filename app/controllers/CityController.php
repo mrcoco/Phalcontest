@@ -298,7 +298,7 @@ public function get_assets()
     $entity
     ,$this->crud_params['controller']
     ,'show'
-    ,array()
+    ,array('id'=>$id)
     ,$this->crud_params['action_list']
     ,'delete');
   }

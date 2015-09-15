@@ -100,7 +100,9 @@ class Township extends \Phalcon\Mvc\Model
     public function initialize()
     {
         $this->hasMany('id', 'Address', 'townshipid', array('alias' => 'Address'));
-        $this->hasMany('id', 'Neighborhood', 'townshipid', array('alias' => 'Neighborhood'));
+        $this->hasMany('id', 'Neighborhood', 'townshipid', array('alias' => 'Neighborhood',"foreignKey" => array(
+                    "message" => "No se Puede eliminar,existe un sector que tiene esta ciudad asociado"
+                )));
         $this->belongsTo('cityid', 'City', 'id', array('alias' => 'City'));
     }
 
@@ -220,6 +222,10 @@ class Township extends \Phalcon\Mvc\Model
            }
            $messages[] =$txtmessage;
           break;
+           case 'ConstraintViolation':
+               $txtmessage ='No se puede eliminar este sector por que existen registros asociados';
+               $messages[] =$txtmessage;    
+               break;      
        }
 
        return $messages;

@@ -130,8 +130,12 @@ class City extends \Phalcon\Mvc\Model
     public function initialize()
     {
         $this->hasMany('id', 'Address', 'cityid', array('alias' => 'Address'));
-        $this->hasMany('id', 'Neighborhood', 'cityid', array('alias' => 'Neighborhood'));
-        $this->hasMany('id', 'Township', 'cityid', array('alias' => 'Township'));
+        $this->hasMany('id', 'Neighborhood', 'cityid', array('alias' => 'Neighborhood',"foreignKey" => array(
+                    "message" => "No se Puede eliminar,existe un barrio que tiene esta ciudad asociada"
+                )));
+        $this->hasMany('id', 'Township', 'cityid', array('alias' => 'Township',"foreignKey" => array(
+                    "message" => "No se Puede eliminar,existe un sector que tiene esta ciudad asociado"
+                )));
         $this->belongsTo('countryid', 'Country', 'id', array('alias' => 'Country'));
         $this->belongsTo('stateid', 'State', 'id', array('alias' => 'State'));
     }
@@ -264,6 +268,10 @@ class City extends \Phalcon\Mvc\Model
                 }
                 $messages[] =$txtmessage;
                break;
+               case 'ConstraintViolation':
+               $txtmessage ='No se puede eliminar esta ciudad por que tiene registros asociados';
+               $messages[] =$txtmessage;    
+               break;   
            }
        }
 
