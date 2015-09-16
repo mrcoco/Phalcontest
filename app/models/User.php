@@ -29,15 +29,43 @@ class User extends Phalcon\Mvc\Model
      */
     protected $password;
 
+
     /**
+     *
+     * @var string
+     */
+    protected $confirm_password;
 
-        /**
-         *
-         * @var string
-         */
-        protected $confirm_password;
+    /**
+    /**
+    /**
+     *
+     * @var string
+     */
+    protected $createuser;
 
-        /**
+    /**
+    /**
+     *
+     * @var string
+     */
+    protected $modifyuser;
+
+    /**
+    /**
+     *
+     * @var datetime
+     */
+    protected $createdate;
+
+    /**
+    /**
+     *
+     * @var datetime
+     */
+    protected $modifydate;
+
+    /**
 
      * Method to set the value of field id
      *
@@ -107,6 +135,54 @@ class User extends Phalcon\Mvc\Model
     }
 
     /**
+     * Method to set the value of field createuser
+     *
+     * @param string $createuser
+     * @return $this
+     */
+    public function setCreateuser($createuser)
+    {
+        $this->createuser = $createuser;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field modifyuser
+     *
+     * @param string $modifyuser
+     * @return $this
+     */
+    public function setModifyuser($modifyuser)
+    {
+        $this->modifyuser = $modifyuser;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field createdate
+     *
+     * @param datetime $createdate
+     * @return $this
+     */
+    public function setCreatedate($createdate)
+    {
+        $this->createdate = $createdate;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field modifydate
+     *
+     * @param datetime $modifydate
+     * @return $this
+     */
+    public function setModifydate($modifydate)
+    {
+        $this->modifydate = $modifydate;
+
+        return $this;
+    }
+    /**
      * Returns the value of field id
      *
      * @return integer
@@ -156,6 +232,42 @@ class User extends Phalcon\Mvc\Model
         return $this->confirm_password;
     }
 
+    /**
+     * Returns the value of field createuser
+     *
+     * @return string
+     */
+    public function getCreateuser()
+    {
+        return $this->createuser;
+    }
+    /**
+     * Returns the value of field modifyuser
+     *
+     * @return string
+     */
+    public function getModifyuser()
+    {
+        return $this->modifyuser;
+    }
+    /**
+     * Returns the value of field createdate
+     *
+     * @return datetime
+     */
+    public function getCreatedate()
+    {
+        return $this->createdate;
+    }
+    /**
+     * Returns the value of field modifydate
+     *
+     * @return datetime
+     */
+    public function getModifydate()
+    {
+        return $this->modifydate;
+    }
 
     /**
      * Validations and business logic
@@ -172,6 +284,8 @@ class User extends Phalcon\Mvc\Model
               )
           )
       );
+      if(!$this->getId())
+      {
       $this->validate(
           new PresenceOf(
               array(
@@ -180,7 +294,7 @@ class User extends Phalcon\Mvc\Model
               )
           )
       );
-
+     }
         $this->validate(
             new Email(
                 array(
@@ -237,6 +351,7 @@ class User extends Phalcon\Mvc\Model
    {
     $this->password =  $this->getDI()->getSecurity()->hash($this->password);
     }
+  
 
     public function beforeValidationOnCreate(){
         $confirm_data = [
@@ -266,6 +381,6 @@ class User extends Phalcon\Mvc\Model
         }
 
     }
-    
+
 
 }

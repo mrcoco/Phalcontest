@@ -26,18 +26,34 @@
 	{{ content() }}
 	</div>
 	{% endif %}
+
 		<!-- LOAD FORM CONTROLS-->
 	{% for index,item in formcolumns %}
+	  {% if(mode=='edit')  %}
+     {% if item['name'] not in['password','confirm_password']  %}
+		 <div class="form-group">
+		 <label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
+		 {{item['label']}}
+		 {{item['required']}}
+								 </label>
+		 <div class="col-md-4">
+		 {{ form.render(item['name'],["class":"form-control"]) }}
+		 <!-- LOAD CONTROL ERROR LABEL-->
+		 </div>
+		 </div>
+      {% endif %}
+		{% else %}
 		<div class="form-group">
 		<label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
 		{{item['label']}}
 		{{item['required']}}
-                </label>
+								</label>
 		<div class="col-md-4">
 		{{ form.render(item['name'],["class":"form-control"]) }}
 		<!-- LOAD CONTROL ERROR LABEL-->
 		</div>
 		</div>
+		{% endif %}
 	{% endfor %}
 	</div>
 	<!-- FORM ACTION BUTTONS-->

@@ -12,7 +12,7 @@ use Phalcon\Validation\Validator\StringLength;
 use Phalcon\Validation\Validator\Confirmation;
 class UserForm extends Form
 {
-  public function initialize()
+  public function initialize($entity =null , $options=null)
 	{
   // Company
   $username = new Text('username');
@@ -23,6 +23,7 @@ class UserForm extends Form
   $email->setLabel('Email');
   $this->add($email);
 
+
   $password= new Password('password');
   $password->setLabel('Password');
   $this->add($password);
@@ -30,6 +31,7 @@ class UserForm extends Form
   $confirm_password= new Password('confirm_password');
   $confirm_password->setLabel('Confirmar Password');
   $this->add($confirm_password);
+
   //añadimos un botón de tipo submit
   $submit = $this->add(new Submit('Guardar', array(
   'class' => 'btn btn-success'

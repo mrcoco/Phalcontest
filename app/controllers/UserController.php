@@ -60,11 +60,16 @@ class UserController extends ControllerBase
     {
       if($entity_object)
       {
+
         $this->tag->setDefault("id", $entity_object->getId());
         $this->tag->setDefault("username", $entity_object->getUsername());
         $this->tag->setDefault("email", $entity_object->getEmail());
-        $this->tag->setDefault("password", $entity_object->getPassword());
-        $this->tag->setDefault("confirm_password", $entity_object->getConfirm_password());
+
+        if($mode !='edit')
+        {
+          $this->tag->setDefault("password", $entity_object->getPassword());
+          $this->tag->setDefault("confirm_password", $entity_object->getConfirm_password());
+        }
       }
     }
 
@@ -72,8 +77,11 @@ class UserController extends ControllerBase
     {
       $entity->setUsername($this->request->getPost("username"));
       $entity->setEmail($this->request->getPost("email", "email"));
-      $entity->setPassword($this->request->getPost("password"));
-      $entity->setConfirm_password($this->request->getPost("confirm_password"));
+      if ($this->request->getPost("password"))
+      {
+        $entity->setPassword($this->request->getPost("password"));
+        $entity->setConfirm_password($this->request->getPost("confirm_password"));
+      }
     }
 
   public function set_grid_parameters($routelist)
@@ -177,6 +185,7 @@ class UserController extends ControllerBase
     ,$this->crud_params['save_button_name']
     ,$this->crud_params['cancel_button_name']
     ,'');
+    $this->view->mode ='new';
   }
 
   /**
@@ -195,14 +204,26 @@ class UserController extends ControllerBase
     $this->get_assets();
     $this->set_tags('edit',$entity);
     $this->view->id = $entity->id;
-
+    $this->view->mode ='edit';
     $this->set_form_routes(
     $this->crud_params['save_route'].$id
     ,$this->crud_params['route_list']
     ,$this->crud_params['edit_title']
     ,$this->crud_params['add_edit_view']
     ,'edit',$entity,$this->crud_params['form_name']
-    ,$this->crud_params['form_columns']
+    ,array(
+    array('name' => 'username','label'=>'User Name'
+    ,'required'=>'<span class="required" aria-required="true">* </span>'
+    ,'div_control_class'=>'input-control select full-size'
+    ,'div_cell_class'=>'cell colspan3'
+    ,'div_row_class'=>'row cells1'
+    ,'label_error'=>'<span id ="usernameerror" name ="codeerror" class="has-error"></span>'),
+    array('name' => 'email','label'=>'E-mail'
+    ,'required'=>'<span class="required" aria-required="true">* </span>'
+    ,'div_control_class'=>'input-control select full-size'
+    ,'div_cell_class'=>'cell colspan3'
+    ,'div_row_class'=>'row cells1'
+    ,'label_error'=>'<span id ="emailerror" name ="stateerror" class="has-error"></span>'))
     ,$this->crud_params['save_button_name']
     ,$this->crud_params['cancel_button_name']
     ,''
@@ -223,6 +244,7 @@ class UserController extends ControllerBase
     ,'create');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'create');
 
     $this->execute_entity_action($entity
     ,$this->crud_params['controller']

@@ -276,6 +276,22 @@ public function bind_search_values($search_values)
    $this->view->delete_button_name =$delete_button_name;
    $this->view->pick($view_name);
  }
+
+ //-------Set Audit Fields-----------------
+   public function audit_fields($entity,$mode)
+   {
+
+     if ($mode =='create')
+     {
+      $entity->setCreateuser($this->session->get('username'));
+      $entity->setCreatedate(date('Y-m-d H:i:s'));
+     }
+
+     $entity->setModifyuser($this->session->get('username'));
+     $entity->setModifydate(date('Y-m-d H:i:s'));
+   }
+
+
   //--------------------------------------------------------------------------END CRUD FUNCTIONS ------------------------
 
 }
