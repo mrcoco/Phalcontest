@@ -1,3 +1,4 @@
+{{globalobj.checkuser(session.get('username'))}}
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
@@ -7,7 +8,7 @@
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8"/>
-<title>Metronic | Page Layouts - Full Height Content</title>
+<title>Restaurant Maker</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -19,7 +20,8 @@
  {% endblock %}
 
 <!-- END THEME STYLES -->
-<link rel="shortcut icon" href="favicon.ico"/>
+
+<link rel="shortcut icon" href="{{static_url('img/favicon.ico')}}"/>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -56,7 +58,7 @@
         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
         {{image('metronic/assets/admin/layout/img/avatar.png')}}
         <span class="username username">
-        {{session.get('username')}}</span>
+        <b>{{session.get('username')}}</b></span>
         <i class="fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu dropdown-menu-default">
@@ -114,7 +116,7 @@
     {% endfor %}">
     <a href="" style="padding-left:20px;">
     <span class="arrow "></span>
-    <p align="left"><i class="icon-home"></i> Direcciones</p>
+    <p align="left"><b><i class="fa fa-home"></i> Direcciones</b></p>
     </a>
     <ul class="sub-menu">
         <li class="{% if 'country' in router.getRewriteUri() %}active{% endif %}"> <a href="{{ url("country/list") }}" ><p align="left"><i class="icon-flag" ></i> Paises</p></a></li>
@@ -123,6 +125,23 @@
         <li class="{% if 'township' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("township/list") }}" ><p align="left"><i class="icon-flag" ></i> Sectores</p></a></li>
         <li class="{% if 'neighborhood' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("neighborhood/list") }}" ><p align="left"><i class="icon-flag"></i> Barrios</p></a></li>
         <li> <a href="{{ url("index/list") }}"><p align="left"><i class="icon-flag"></i> Direcciones</p></a></li>
+    </ul>
+  </li>
+  <li class="{% for key,name in ['user','role','action'] %}
+    {% if name  in router.getRewriteUri() %}
+        active open
+    {% else %}
+    start
+    {% endif%}
+    {% endfor %}">
+    <a href="" style="padding-left:20px;">
+    <span class="arrow "></span>
+    <p align="left"><b><i class="fa fa-lock"></i> Seguridad</b></p>
+    </a>
+    <ul class="sub-menu">
+        <li class="{% if 'user' in router.getRewriteUri() %}active{% endif %}"> <a href="{{ url("user/list") }}" ><p align="left"><i class="icon-user" ></i> Usuarios</p></a></li>
+        <li class="{% if 'role' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("role/list") }}" ><p align="left"><i class="icon-shield" ></i> Roles<p></a></li>
+        <li class="{% if 'action' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("action/list") }}" ><p align="left"><i class="icon-star" ></i> Acciones</p></a></li>
     </ul>
   </li>
 </ul>

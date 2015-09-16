@@ -28,19 +28,19 @@ class CityController extends ControllerBase
         $this->crud_params['edit_title']         = 'Editar Ciudad';
         $this->crud_params['form_columns']       = array(
         array('name' => 'countryid','label'=>'País'
-        ,'required'=>'<span class="required" aria-required="true">* </span>'    
+        ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'div_control_class'=>'input-control select full-size'
         ,'div_cell_class'=>'cell colspan3'
         ,'div_row_class'=>'row cells1'
         ,'label_error'=>''),
           array('name' => 'stateid','label'=>'Estado'
-        ,'required'=>'<span class="required" aria-required="true">* </span>'      
+        ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'div_control_class'=>'input-control select full-size'
         ,'div_cell_class'=>'cell colspan3'
         ,'div_row_class'=>'row cells1'
-        ,'label_error'=>''),    
+        ,'label_error'=>''),
         array('name' => 'city','label'=>'Ciudad'
-        ,'required'=>'<span class="required" aria-required="true">* </span>'    
+        ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'div_control_class'=>'input-control select full-size'
         ,'div_cell_class'=>'cell colspan3'
         ,'div_row_class'=>'row cells1'
@@ -53,9 +53,12 @@ class CityController extends ControllerBase
 
     public function set_tags($mode,$entity_object)
     {
+      if($entity_object)
+      {
       $this->tag->setDefault("countryid", $entity_object->getCountryid());
       $this->tag->setDefault("stateid", $entity_object->getStateid());
       $this->tag->setDefault("city", $entity_object->getCity());
+      }
     }
 
     public function set_post_values($entity)
@@ -81,7 +84,7 @@ class CityController extends ControllerBase
     ,'title' =>'Ciudades'
     ,'header_columns'=>array(
       array('column_name' => 'country','title' => 'País','class'=>''),
-      array('column_name' => 'state','title' => 'Estado','class'=>''),  
+      array('column_name' => 'state','title' => 'Estado','class'=>''),
       array('column_name'=>'city','title' => 'Ciudad','class'=>''))
     ,'search_columns'=>array(
       array('name' => 'country','title' => 'País','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
@@ -127,7 +130,7 @@ class CityController extends ControllerBase
     $search_values =array(
      array('name'=>'country','value'=>$this->request->getPost("country"))
     ,array('name'=>'state','value'=>$this->request->getPost("state"))
-    ,array('name'=>'city','value'=>$this->request->getPost("city"))    
+    ,array('name'=>'city','value'=>$this->request->getPost("city"))
      );
 
     $params_query =$this->set_search_grid_post_values($search_values);
@@ -302,7 +305,7 @@ public function get_assets()
     ,$this->crud_params['action_list']
     ,'delete');
   }
-  
+
    // FUNCION QUE RECIBE DEL LLAMADO DE AJAX
  /**
 * @Route("/get_state/{countryid}", methods={"POST"}, name="get_state")
@@ -322,8 +325,3 @@ public function get_assets()
 }
 
 }
-
-
-
-
-

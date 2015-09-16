@@ -44,8 +44,8 @@
 <div class="row cells1">
    <div class="cell colspan3">
       <div class="input-control full-size">
-       {{ form.label('password2') }}
-       {{ form.render('password2') }}
+       {{ form.label('confirm_password') }}
+       {{ form.render('confirm_password') }}
       </div>
    </div>
 </div>

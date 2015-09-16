@@ -35,7 +35,7 @@ class CountryController extends ControllerBase
         ,'div_row_class'=>'row cells1'
         ,'label_error'=>'<span id ="codeerror" name ="codeerror" class="has-error"></span>'),
         array('name' => 'country','label'=>'País'
-        ,'required'=>'<span class="required" aria-required="true">* </span>'    
+        ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'div_control_class'=>'input-control select full-size'
         ,'div_cell_class'=>'cell colspan3'
         ,'div_row_class'=>'row cells1'
@@ -48,8 +48,11 @@ class CountryController extends ControllerBase
 
     public function set_tags($mode,$entity_object)
     {
+      if($entity_object)
+      {
       $this->tag->setDefault("country", $entity_object->getCountry());
       $this->tag->setDefault("code", $entity_object->getCode());
+      }
     }
 
     public function set_post_values($entity)

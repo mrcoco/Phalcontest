@@ -61,10 +61,13 @@ class TownshipController extends ControllerBase
     private function set_tags($mode,$entity_object)
 
     {
+      if($entity_object)
+      {
       $this->tag->setDefault("township", $entity_object->getTownship());
       $this->tag->setDefault("cityid", $entity_object->getCityid());
       $this->tag->setDefault("country", $entity_object->getCity()->getCountry()->getCountry());
       $this->tag->setDefault("state", $entity_object->getCity()->getState()->getState());
+     }
 
    }
    private function set_post_values($entity)

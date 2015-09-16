@@ -66,11 +66,14 @@ class NeighborhoodController extends ControllerBase
     private function set_tags($mode,$entity_object)
 
     {
+      if($entity_object)
+      {
       $this->tag->setDefault("neighborhood", $entity_object->getNeighborhood());
       $this->tag->setDefault("cityid", $entity_object->getCityid());
       $this->tag->setDefault("townshipid", $entity_object->getTownshipid());
       $this->tag->setDefault("country", $entity_object->getCity()->getCountry()->getCountry());
       $this->tag->setDefault("state", $entity_object->getCity()->getState()->getState());
+      }
 
    }
    private function set_post_values($entity)

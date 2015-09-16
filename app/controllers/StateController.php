@@ -35,7 +35,7 @@ class StateController extends ControllerBase
         ,'div_row_class'=>'row cells1'
         ,'label_error'=>''),
         array('name' => 'state','label'=>'Estado'
-        ,'required'=>'<span class="required" aria-required="true">* </span>'    
+        ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'div_control_class'=>'input-control select full-size'
         ,'div_cell_class'=>'cell colspan3'
         ,'div_row_class'=>'row cells1'
@@ -48,8 +48,11 @@ class StateController extends ControllerBase
 
     public function set_tags($mode,$entity_object)
     {
+      if($entity_object)
+      {
       $this->tag->setDefault("countryid", $entity_object->getCountryid());
       $this->tag->setDefault("state", $entity_object->getState());
+      }
     }
 
     public function set_post_values($entity)

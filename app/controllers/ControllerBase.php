@@ -78,7 +78,7 @@ public function initialize()
   ->addJs('metronic/assets/global/plugins/ckeditor/ckeditor.js')
   ->addJs('metronic/assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js')
   ->addJs('metronic/assets/global/plugins/bootstrap-markdown/lib/markdown.js');
-  
+
    $this->view->globalobj =$this;
 }
 public function checkuser($userid)
@@ -217,18 +217,24 @@ public function bind_search_values($search_values)
         else
         {
 
+         $entity = $entityname::findFirstByid($id);
+         if ($mode='edit' and !$entity)
+         {
+           return $this->dispatcher->forward(array(
+             "controller" => "Error",
+             "action" => "error404"
+           ));
+         }
+         else {
+           if (!$entity) {
+               $this->flash->error($errormessage);
+               return $this->dispatcher->forward(array(
+                   "controller" => $controller,
+                   "action" => $action
+               ));
+           }
+         }
 
-       $entity = $entityname::findFirstByid($id);
-
-
-        if (!$entity) {
-            $this->flash->error($errormessage);
-
-            return $this->dispatcher->forward(array(
-                "controller" => $controller,
-                "action" => $action
-            ));
-        }
         }
 
     return $entity;

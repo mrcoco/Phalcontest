@@ -2,7 +2,7 @@ $(function() {
 
     // Setup form validation on the #register-form element
     $("#appform").validate({
-
+         errorClass:'has-error',
         // Specify the validation rules
         rules: {
             username:{
@@ -17,22 +17,33 @@ $(function() {
             password:{
                 required:true
 
+            },
+            confirm_password:{
+                required:true,
+                equalTo: "#password"
+
             }
 
         },
         // Specify the validation error messages
         messages: {
             username:{
-                required:"Debe ingresar un Username"
+                required:"Debe ingresar un username"
 
             },
              email:{
-                required:"Debe ingresar un Email",
-                email:"Debe ingresar un Email válido"
+                required:"Debe ingresar un e-mail",
+                email:"Debe ingresar un e-mail válido"
 
             },
             password:{
-                required:"Debe ingresar un Password"
+                required:"Debe ingresar un password"
+
+
+            },
+            confirm_password:{
+                required:"Debe ingresar una confirmación de password",
+                equalTo: "El password de confirmación debe ser igual al password"
 
             }
 

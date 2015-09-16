@@ -4,7 +4,6 @@
  *
  * @var \Phalcon\Config $config
  */
-
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Url as UrlResolver;
@@ -116,41 +115,9 @@ $di->set('translate', function() use ($config,$language) {
         "content" => $messages
     ));
 });
-$di['router'] = function() {
 
-    //Use the annotations router
-    $router = new RouterAnnotations(false);
-
-    $router->notFound(
-        [
-
-          "controller" => "Error",
-          "action" => "error404"
-        ]
-      );
-
-  $router->add(
-  "/setlang/{lang}",
-  array(
-      "controller" => "Manager",
-      "action"     => "setlanguage"
-  )
-);
-
-
-   $router->addResource('User', '/user');
-   $router->addResource('Apartment', '/apartment');
-   $router->addResource('Tower', '/tower');
-   $router->addResource('Login', '/login');
-   $router->addResource('Country', '/country');
-   $router->addResource('State', '/state');
-   $router->addResource('City', '/city');
-   $router->addResource('Township', '/township');
-   $router->addResource('Neighborhood', '/neighborhood');
-   $router->addResource('Index', '/index');
-   $router->addResource('Test', '/test');
-   $router->addResource('Address', '/address');
-
-
+//SET APP ROUTES
+$di->set('router', function () {
+    require APP_PATH.'/app/config/routes.php';
     return $router;
-};
+});

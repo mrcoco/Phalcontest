@@ -2,7 +2,7 @@
 use Phalcon\Mvc\Model\Validator\Email as Email;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 
-class User extends \Phalcon\Mvc\Model
+class User extends Phalcon\Mvc\Model
 {
 
     /**
@@ -30,6 +30,15 @@ class User extends \Phalcon\Mvc\Model
     protected $password;
 
     /**
+
+        /**
+         *
+         * @var string
+         */
+        protected $confirm_password;
+
+        /**
+
      * Method to set the value of field id
      *
      * @param integer $id
@@ -41,7 +50,11 @@ class User extends \Phalcon\Mvc\Model
 
         return $this;
     }
-
+    public function initialize()
+    {
+         $this->skipAttributesOnCreate(array('confirm_password'));
+         $this->skipAttributesOnUpdate(array('confirm_password'));
+    }
     /**
      * Method to set the value of field username
      *
@@ -77,6 +90,18 @@ class User extends \Phalcon\Mvc\Model
     public function setPassword($password)
     {
         $this->password = $password;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field confirm_password
+     *
+     * @param string $confirm_password
+     * @return $this
+     */
+    public function setConfirm_password($confirm_password)
+    {
+        $this->confirm_password = $confirm_password;
 
         return $this;
     }
@@ -122,6 +147,17 @@ class User extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Returns the value of field confirm_password
+     *
+     * @return string
+     */
+    public function getConfirm_password()
+    {
+        return $this->confirm_password;
+    }
+
+
+    /**
      * Validations and business logic
      *
      * @return boolean
@@ -132,7 +168,7 @@ class User extends \Phalcon\Mvc\Model
           new PresenceOf(
               array(
                   'field'    => 'username',
-                  'message'  => 'The username is required2'
+                  'message'  => 'Debe ingresar un nombre de usuario'
               )
           )
       );
@@ -140,7 +176,7 @@ class User extends \Phalcon\Mvc\Model
           new PresenceOf(
               array(
                   'field'    => 'password',
-                  'message'  => 'The password is required2'
+                  'message'  => 'Debe ingresar un password'
               )
           )
       );
@@ -149,10 +185,14 @@ class User extends \Phalcon\Mvc\Model
             new Email(
                 array(
                     'field'    => 'email',
-                    'message'=>'The email must be valid2'
+                    'message'=>'El e-mail debe ser válido'
                 )
             )
         );
+
+
+
+
 
         if ($this->validationHasFailed() == true) {
             return false;
@@ -192,5 +232,40 @@ class User extends \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
+
+    public function beforeCreate()
+   {
+    $this->password =  $this->getDI()->getSecurity()->hash($this->password);
+    }
+
+    public function beforeValidationOnCreate(){
+        $confirm_data = [
+            'password' => $this->getPassword(),
+            'confirm_password' => $this->getConfirm_password()
+        ];
+        $validator = new Phalcon\Validation();
+        $validator->add('password', new \Phalcon\Validation\Validator\Confirmation(array(
+            'message' => 'El password y la confirmación de password deben ser iguales',
+            'with' => 'confirm_password'
+        )));
+
+        $messages = $validator->validate($confirm_data);
+        if (count($messages)) {
+            foreach ($messages as $message) {
+                $model_message = new Phalcon\Mvc\Model\Message(
+                    $message->getMessage(),
+                    'password',
+                    'confirm_password'
+                );
+                $this->appendMessage($model_message);
+            }
+            return false;
+        }
+        else {
+          return true;
+        }
+
+    }
+    
 
 }
