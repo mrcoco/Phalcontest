@@ -13,7 +13,7 @@ class UserController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'user/list';
         $this->crud_params['entityname']         = 'User';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada Country';
+        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada User';
         $this->crud_params['controller']         = 'User';
         $this->crud_params['action_list']        = 'userlist';
         $this->crud_params['form_name']          = 'UserForm';
@@ -324,5 +324,111 @@ class UserController extends ControllerBase
     ,$this->crud_params['action_list']
     ,'delete');
   }
+  
+  /**
+  * @Route("/set_password_change/{id}", methods={"GET","POST"}, name="set_password_change")
+  */
+  public function set_password_changeAction($id)
+  {
+      
+            $entity = User::findFirstByid($id);
+            if (!$entity) {
+                $this->flash->error($this->crud_params['not_found_message']);
+
+                return $this->dispatcher->forward(array(
+                    "controller" => "user",
+                    "action" => "change_password"
+                ));
+            }
+            $this->set_change_password_assets();
+            $this->view->id = $entity->id;
+            $this->view->title ='Cambiar Password '.$entity->username;
+            $this->view->routeform ='user/change_password/';
+            $this->view->cancel_button_name=$this->crud_params['cancel_button_name'];
+            $this->view->routelist =$this->crud_params['route_list'];
+           
+            $this->view->pick('user/changepassword');
+        
+  }
+   /**
+  * @Route("/change_password/{id}", methods={"POST"}, name="change_password")
+  */
+    public function Change_password_Action($id)
+    {
+
+        $entity = User::findFirstByid($id);
+        if (!$entity) {
+            $this->flash->error($this->crud_params['not_found_message']);
+
+            return $this->dispatcher->forward(array(
+                "controller" => "user",
+                "action" => "set_password_change"
+            ));
+        }
+        
+          
+        $message = $this->validate_password($this->request->getPost("password"),$this->request->getPost("confirm_password"));
+        if ($message =="")
+        {
+        $entity->setPassword( $this->getDI()->getSecurity()->hash($this->request->getPost("password")));
+        
+        if (!$entity->save()) {
+
+            foreach ($entity->getMessages() as $message) {
+                $this->flash->error($message);
+            }
+
+            return $this->dispatcher->forward(array(
+                "controller" => "user",
+                "action" => "set_password_change",
+                "params" => array($id)
+            ));
+        }
+        else
+        {    
+        $this->response->redirect(array('for' => 'userlist'));
+        }
+        
+        }
+        else
+        {
+             $this->flash->error($message);
+             $this->dispatcher->forward(array(
+             "action" => "set_password_change",
+             "parameters"=>array($id)
+            
+                ));
+        }
+
+        
+        
+    }
+       
+       public function set_change_password_assets()
+       {
+           $this->assets
+         ->collection('change_password')
+        ->addJs('js/jqueryvalidate/jquery.validate.js')
+        ->addJs('js/jqueryvalidate/additional-methods.min.js')
+        ->addJs('js/validateuser/change_password.js');
+       }
+       
+       public function validate_password($password,$confirm_password)
+        {
+           $message=""; 
+           if((empty($password) ==true) or (empty($password) ==true))
+            {
+             $message = "El password y el password de confirmacion no pueden estar vacios";   
+            }
+           if($password !=$confirm_password)
+          {
+           $message="El password y el password de confirmación deben ser iguales.";   
+          }
+          
+          return $message;
+          
+       }
+
+    
 
 }

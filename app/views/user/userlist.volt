@@ -90,6 +90,7 @@
 			{% for index,item in headercolumns %}
 				<td width ="40%">{{ entity.readAttribute(item['column_name'])}}</td>
 			{% endfor %}
+                        <td width ="2%">{{link_to('user/set_password_change/'~entity.id,'<i class="fa fa-lock"></i>','class':'btn btn-icon-only yellow')}}</td>
 			<td width ="2%">{{link_to(editroute~entity.id,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}</td>
 			<td width ="2%">{{link_to(showroute~entity.id,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}</td>
 			</tr>
