@@ -1,7 +1,7 @@
 {% extends "layouts/masterpage.volt" %}
 {% block pagetitle %}
 	<h3 class="page-title" align ="left">
-	{{title}}
+	{{title}} {{username}}
 	</h3>
 	<hr/>
 {% endblock %}
@@ -33,7 +33,7 @@
   <!-- END GRID SEARCH-->
 
 	 <!-- NEW ITEM ICON-->
-	<div align="left">{{ link_to(newroute,'<i class="fa fa-plus"></i>','class':'btn btn-icon-only blue')}}</div>
+	<div align="left">{{ link_to(newroute~'/'~userid,'<i class="fa fa-plus"></i>','class':'btn btn-icon-only blue')}}</div>
 
 	<br>
 	{% if noitems ==""%}
@@ -78,7 +78,6 @@
 	</th>
 	{% endfor %}
 	<th></th>
-	<th></th>
 	</tr>
 	</thead>
 	<!-- END HEADER-->
@@ -90,10 +89,7 @@
 			{% for index,item in headercolumns %}
 				<td width ="40%">{{ entity.readAttribute(item['column_name'])}}</td>
 			{% endfor %}
-			<td width ="2%">{{link_to('userrole/list/'~entity.id,'<i class="fa fa-shield"></i>','class':'btn btn-icon-only blue')}}</td>
-      <td width ="2%">{{link_to('user/set_password_change/'~entity.id,'<i class="fa fa-lock"></i>','class':'btn btn-icon-only yellow')}}</td>
-			<td width ="2%">{{link_to(editroute~entity.id,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}</td>
-			<td width ="2%">{{link_to(showroute~entity.id,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}</td>
+			<td width ="2%">{{link_to(showroute~entity.userid~'-'~entity.roleid,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}</td>
 			</tr>
 		{% endfor %}
 		{% endif %}

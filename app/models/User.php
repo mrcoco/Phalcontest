@@ -1,6 +1,7 @@
 <?php
 use Phalcon\Mvc\Model\Validator\Email as Email;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 
 class User extends Phalcon\Mvc\Model
 {
@@ -304,9 +305,10 @@ class User extends Phalcon\Mvc\Model
             )
         );
 
-
-
-
+        $this->validate(new Uniqueness(array(
+           'field' => 'username',
+           'message'=>'Ya existe ese User Name'
+       )));
 
         if ($this->validationHasFailed() == true) {
             return false;
@@ -351,7 +353,7 @@ class User extends Phalcon\Mvc\Model
    {
     $this->password =  $this->getDI()->getSecurity()->hash($this->password);
     }
-  
+
 
     public function beforeValidationOnCreate(){
         $confirm_data = [

@@ -1,221 +1,297 @@
 <?php
- 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
+use Phalcon\Validation;
+use UserRoleForm as UserRoleForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
+/**
+ * @RoutePrefix("/userrole")
+ */
 class UserRoleController extends ControllerBase
 {
-
-    /**
-     * Index action
-     */
-    public function indexAction()
+  public $crud_params =array();
+  public function onConstruct()
     {
-        $this->persistent->parameters = null;
+        $this->crud_params['route_list']         = 'userrole/list';
+        $this->crud_params['entityname']         = 'UserRole';
+        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada UserRole';
+        $this->crud_params['controller']         = 'UserRole';
+        $this->crud_params['action_list']        = 'userrolelist';
+        $this->crud_params['form_name']          = 'UserRoleForm';
+        $this->crud_params['delete_message']     = 'Esta seguro que desea quitar ese rol?';
+        $this->crud_params['create_route']       = 'userrole/create';
+        $this->crud_params['save_route']         = 'userrole/save/';
+        $this->crud_params['delete_route']       = 'userrole/delete/';
+        $this->crud_params['add_edit_view']      = 'user_role/addedit';
+        $this->crud_params['show_view']          = 'user_role/show';
+        $this->crud_params['new_title']          = 'Nuevo Rol del usuario';
+        $this->crud_params['edit_title']         = 'Editar Rol del Usuario';
+        $this->crud_params['form_columns']       = array(
+
+        array('name' => 'roleid','label'=>'Rol'
+        ,'required'=>'<span class="required" aria-required="true">*</span>'
+        ,'div_control_class'=>'input-control select full-size'
+        ,'div_cell_class'=>'cell colspan3'
+        ,'div_row_class'=>'row cells1'
+        ,'label_error'=>'<span id ="userroleerror" name ="stateerror" class="has-error"></span>')
+        );
+        $this->crud_params['save_button_name']       ='Guardar';
+        $this->crud_params['cancel_button_name']     ='Cancelar';
+        $this->crud_params['delete_button_name']     ='Eliminar';
     }
 
-    /**
-     * Searches for user_role
-     */
-    public function searchAction()
+    public function set_tags($mode,$entity_object)
     {
-
-        $numberPage = 1;
-        if ($this->request->isPost()) {
-            $query = Criteria::fromInput($this->di, "UserRole", $_POST);
-            $this->persistent->parameters = $query->getParams();
-        } else {
-            $numberPage = $this->request->getQuery("page", "int");
-        }
-
-        $parameters = $this->persistent->parameters;
-        if (!is_array($parameters)) {
-            $parameters = array();
-        }
-        $parameters["order"] = "userid";
-
-        $user_role = UserRole::find($parameters);
-        if (count($user_role) == 0) {
-            $this->flash->notice("The search did not find any user_role");
-
-            return $this->dispatcher->forward(array(
-                "controller" => "user_role",
-                "action" => "index"
-            ));
-        }
-
-        $paginator = new Paginator(array(
-            "data" => $user_role,
-            "limit"=> 10,
-            "page" => $numberPage
-        ));
-
-        $this->view->page = $paginator->getPaginate();
+      if($entity_object)
+      {
+      $this->tag->setDefault("roleid", $entity_object->getRoleid());
+      }
     }
 
-    /**
-     * Displays the creation form
-     */
-    public function newAction()
+    public function set_post_values($entity)
     {
 
+      $entity->setRoleid($this->request->getPost("roleid"));
     }
 
-    /**
-     * Edits a user_role
-     *
-     * @param string $userid
-     */
-    public function editAction($userid)
-    {
+  public function set_grid_parameters($userid,$routelist)
+  {
+    $grid_values =
+    [
+     'new_route'=>'userrole/new'
+    ,'edit_route'=>'userrole/edit/'
+    ,'show_route'=>'userrole/show/'
+    ,'search_route'=>'userrole/search'
+    ,'route_list'=>$routelist
+    ,'view_name'=>'user_role/userrolelist'
+    ,'numberPage'=>1
+    ,'pagelimit'=>10
+    ,'noitems_message'=>'No se encontraron roles asociados al usuario'
+    ,'title' =>'Roles del Usuario'
+    ,'header_columns'=>array(
+      array('column_name'=>'role','title' => 'Rol','class'=>''))
+    ,'search_columns'=>array(
+     array('name' => 'role','title' => 'Rol','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
+    )
+  ];
+    return $grid_values;
+  }
 
-        if (!$this->request->isPost()) {
 
-            $user_role = UserRole::findFirstByuserid($userid);
-            if (!$user_role) {
-                $this->flash->error("user_role was not found");
+  /**
+  * @Route("/list/{userid}", methods={"GET","POST"}, name="userrolelist")
+  */
+  public function listAction($userid)
+  {
+    $order=$this->set_grid_order();
+    $grid_values =$this->set_grid_parameters('userrole/list/'.$userid);
+    $query= $this->modelsManager->createBuilder()
+             ->columns(array('ur.userid as userid','ur.roleid as roleid','u.username as username','r.role as role'))
+             ->from(array('ur' => 'UserRole'))
+             ->join('User', 'u.id = ur.userid', 'u')
+             ->join('Role', 'r.id = ur.roleid', 'r')
+             ->where('ur.userid = :userid:', array('userid' => $userid))
+              ->orderBy($order)
+             ->getQuery()
+             ->execute();
 
-                return $this->dispatcher->forward(array(
-                    "controller" => "user_role",
-                    "action" => "index"
-                ));
-            }
+    $this->set_grid_values($query,$grid_values);
+    $this->view->userid =$userid;
+    $user= User::findFirstByid($userid);
+    $this->view->username =$user->username;
+  }
 
-            $this->view->userid = $user_role->userid;
 
-            $this->tag->setDefault("userid", $user_role->getUserid());
-            $this->tag->setDefault("roleid", $user_role->getRoleid());
-            
-        }
-    }
 
-    /**
-     * Creates a new user_role
-     */
-    public function createAction()
-    {
+  /**
+  * @Route("/search", methods={"GET","POST"}, name="userrolesearch")
+  */
+  public function searchAction()
 
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "user_role",
-                "action" => "index"
-            ));
-        }
+  {
 
-        $user_role = new UserRole();
+    $order=$this->set_grid_order();
 
-        $user_role->setUserid($this->request->getPost("userid"));
-        $user_role->setRoleid($this->request->getPost("roleid"));
-        
+    $grid_values =$this->set_grid_parameters('userrole/search');
 
-        if (!$user_role->save()) {
-            foreach ($user_role->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+    $search_values =array(array('name'=>'code','value'=>$this->request->getPost("code"))
+    ,array('name'=>'country','value'=>$this->request->getPost("userrole")));
 
-            return $this->dispatcher->forward(array(
-                "controller" => "user_role",
-                "action" => "new"
-            ));
-        }
+    $params_query =$this->set_search_grid_post_values($search_values);
 
-        $this->flash->success("user_role was created successfully");
+    $query = $this->modelsManager->createBuilder()
+              ->columns(array('ur.userid as userid','ur.roleid as roleid','u.username as username','r.role as role'))
+              ->from(array('ur' => 'UserRole'))
+              ->join('User', 'u.id = ur.userid', 'u')
+              ->join('Role', 'r.id = ur.roleid', 'r')
+             ->Where('u.username LIKE :username:', array('username' => '%' . $params_query['username']. '%'))
+             ->AndWhere('r.role LIKE :role:', array('role' => '%' . $params_query['role']. '%'))
+             ->orderBy($order)
+             ->getQuery()
+             ->execute();
+    $this->set_grid_values($query,$grid_values);
 
-        return $this->dispatcher->forward(array(
-            "controller" => "user_role",
-            "action" => "index"
-        ));
+  }
 
-    }
 
-    /**
-     * Saves a user_role edited
-     *
-     */
-    public function saveAction()
-    {
+  public function get_assets()
+  {
+    $this->assets
+    ->collection('validatejs')
+    ->addJs('js/jqueryvalidate/jquery.validate.js')
+    ->addJs('js/jqueryvalidate/additional-methods.min.js')
+    ->addJs('js/validateuserrole/validate_country.js');
+  }
 
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "user_role",
-                "action" => "index"
-            ));
-        }
 
-        $userid = $this->request->getPost("userid");
+  /**
+  * @Route("/new/{userid}", methods={"GET"}, name="userroleenew")
+  */
+  public function newAction($userid)
+  {
+    $user= User::findFirstByid($userid);
 
-        $user_role = UserRole::findFirstByuserid($userid);
-        if (!$user_role) {
-            $this->flash->error("user_role does not exist " . $userid);
+    $this->get_assets();
+    $this->set_form_routes(
+    $this->crud_params['create_route'].'/'.$userid
+    ,$this->crud_params['route_list'].'/'.$userid
+    ,$this->crud_params['new_title'].' '.$user->username
+    ,$this->crud_params['add_edit_view']
+    ,'new'
+    ,null
+    ,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,'');
+  }
 
-            return $this->dispatcher->forward(array(
-                "controller" => "user_role",
-                "action" => "index"
-            ));
-        }
+  /**
+  * @Route("/edit/{id}", methods={"GET"}, name="userroleedit")
+  */
+  public function editAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'edit');
 
-        $user_role->setUserid($this->request->getPost("userid"));
-        $user_role->setRoleid($this->request->getPost("roleid"));
-        
+    $this->get_assets();
+    $this->set_tags('edit',$entity);
+    $this->view->id = $entity->id;
 
-        if (!$user_role->save()) {
+    $this->set_form_routes(
+    $this->crud_params['save_route'].$id
+    ,$this->crud_params['route_list']
+    ,$this->crud_params['edit_title']
+    ,$this->crud_params['add_edit_view']
+    ,'edit',$entity,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,''
+    );
+  }
 
-            foreach ($user_role->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+  /**
+  * @Route("/create/{userid}", methods={"POST"}, name="userrolecreate")
+  */
+  public function createAction($userid)
+  {
+    $entity = $this->set_entity(
+    ''
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'create');
 
-            return $this->dispatcher->forward(array(
-                "controller" => "user_role",
-                "action" => "edit",
-                "params" => array($user_role->userid)
-            ));
-        }
+    $this->set_post_values($entity);
+    $entity->SetUserid($userid);
+    $this->execute_entity_action($entity
+    ,$this->crud_params['controller']
+    ,'new',array($entity),$this->crud_params['action_list'].'/'.$userid
+    ,'create');
+  }
 
-        $this->flash->success("user_role was updated successfully");
+  /**
+  * @Route("/save/{id}", methods={"POST"}, name="userrolesave")
+  */
+  public function saveAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'update');
 
-        return $this->dispatcher->forward(array(
-            "controller" => "user_role",
-            "action" => "index"
-        ));
+    $this->set_post_values($entity);
 
-    }
+    $this->execute_entity_action(
+    $entity
+    ,$this->crud_params['controller']
+    ,'edit',array($entity->id)
+    ,$this->crud_params['action_list'],'update');
+  }
 
-    /**
-     * Deletes a user_role
-     *
-     * @param string $userid
-     */
-    public function deleteAction($userid)
-    {
+  /**
+  * @Route("/show/{id}", methods={"GET"}, name="userroleshow")
+  */
+  public function showAction($id)
+  {
+    $userid =explode('-',$id,0);
+    $roleid =explode('-',$id,1);
 
-        $user_role = UserRole::findFirstByuserid($userid);
-        if (!$user_role) {
-            $this->flash->error("user_role was not found");
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'show');
 
-            return $this->dispatcher->forward(array(
-                "controller" => "user_role",
-                "action" => "index"
-            ));
-        }
+    $this->get_assets();
 
-        if (!$user_role->delete()) {
+    $this->set_form_routes(
+    $this->crud_params['delete_route'].$id
+    ,$this->crud_params['route_list']
+    ,$this->crud_params['delete_message']
+    ,$this->crud_params['show_view'] ,'delete'
+    ,$entity
+    ,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,$this->crud_params['delete_button_name']
+    );
+    $this->set_tags('delete',$entity,'Y');
+  }
 
-            foreach ($user_role->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            return $this->dispatcher->forward(array(
-                "controller" => "user_role",
-                "action" => "search"
-            ));
-        }
-
-        $this->flash->success("user_role was deleted successfully");
-
-        return $this->dispatcher->forward(array(
-            "controller" => "user_role",
-            "action" => "index"
-        ));
-    }
+  /**
+  * @Route("/delete/{id}", methods={"POST"}, name="userroledelete")
+  */
+  public function deleteAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'delete');
+    $this->execute_entity_action(
+    $entity
+    ,$this->crud_params['controller']
+    ,'show'
+    ,array('id'=>$id)
+    ,$this->crud_params['action_list']
+    ,'delete');
+  }
 
 }

@@ -1,4 +1,6 @@
 <?php
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 
 class Action extends \Phalcon\Mvc\Model
 {
@@ -99,16 +101,6 @@ class Action extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Returns table name mapped in the model.
-     *
-     * @return string
-     */
-    public function getSource()
-    {
-        return 'action';
-    }
-
-    /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
@@ -143,6 +135,38 @@ class Action extends \Phalcon\Mvc\Model
             'action' => 'action',
             'description' => 'description'
         );
+    }
+
+    /**
+     * Returns table name mapped in the model.
+     *
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'action';
+    }
+
+    public function validation()
+    {
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'action',
+                  'message'  => 'Debe ingresar una acción'
+              )
+          )
+      );
+      $this->validate(new Uniqueness(array(
+         'field' => 'action',
+         'message'=>'Ya existe una accion con ese nombre'
+     )));
+
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+
+        return true;
     }
 
 }

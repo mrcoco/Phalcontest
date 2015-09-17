@@ -1,5 +1,6 @@
 <?php
-
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 class Role extends \Phalcon\Mvc\Model
 {
 
@@ -144,6 +145,27 @@ class Role extends \Phalcon\Mvc\Model
             'role' => 'role',
             'description' => 'description'
         );
+    }
+    public function validation()
+    {
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'role',
+                  'message'  => 'Debe ingresar un rol'
+              )
+          )
+      );
+      $this->validate(new Uniqueness(array(
+         'field' => 'role',
+         'message'=>'Ya existe un rol con ese nombre'
+     )));
+
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+
+        return true;
     }
 
 }

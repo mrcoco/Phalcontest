@@ -39,6 +39,9 @@ $router->addResource('Test', '/test');
 $router->addResource('Address', '/address');
 $router->addResource('Error', '/error');
 $router->addResource('User', '/user');
+$router->addResource('Role', '/role');
+$router->addResource('Action', '/action');
+$router->addResource('UserRole', '/userrole');
 
 
 return $router;

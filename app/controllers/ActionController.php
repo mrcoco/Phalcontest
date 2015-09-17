@@ -1,222 +1,292 @@
 <?php
- 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
+use Phalcon\Validation;
+use ActionForm as ActionForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
+/**
+ * @RoutePrefix("/action")
+ */
 class ActionController extends ControllerBase
 {
-
-    /**
-     * Index action
-     */
-    public function indexAction()
+  public $crud_params =array();
+  public function onConstruct()
     {
-        $this->persistent->parameters = null;
+        $this->crud_params['route_list']         = 'action/list';
+        $this->crud_params['entityname']         = 'action';
+        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada action';
+        $this->crud_params['controller']         = 'Action';
+        $this->crud_params['action_list']        = 'actionlist';
+        $this->crud_params['form_name']          = 'ActionForm';
+        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar esta acción?';
+        $this->crud_params['create_route']       = 'action/create';
+        $this->crud_params['save_route']         = 'action/save/';
+        $this->crud_params['delete_route']       = 'action/delete/';
+        $this->crud_params['add_edit_view']      = 'action/addedit';
+        $this->crud_params['show_view']          = 'action/show';
+        $this->crud_params['new_title']          = 'Nueva Acción';
+        $this->crud_params['edit_title']         = 'Editar Acción';
+        $this->crud_params['form_columns']       = array(
+        array('name' => 'action','label'=>'Acción'
+        ,'required'=>'<span class="required" aria-required="true">* </span>'
+        ,'div_control_class'=>'input-control select full-size'
+        ,'div_cell_class'=>'cell colspan3'
+        ,'div_row_class'=>'row cells1'
+        ,'label_error'=>'<span id ="actionerror" name ="codeerror" class="has-error"></span>'),
+        array('name' => 'description','label'=>'Descripción'
+        ,'required'=>''
+        ,'div_control_class'=>'input-control select full-size'
+        ,'div_cell_class'=>'cell colspan3'
+        ,'div_row_class'=>'row cells1'
+        ,'label_error'=>'')
+        );
+        $this->crud_params['save_button_name']       ='Guardar';
+        $this->crud_params['cancel_button_name']     ='Cancelar';
+        $this->crud_params['delete_button_name']     ='Eliminar';
     }
 
-    /**
-     * Searches for action
-     */
-    public function searchAction()
+    public function set_tags($mode,$entity_object)
     {
-
-        $numberPage = 1;
-        if ($this->request->isPost()) {
-            $query = Criteria::fromInput($this->di, "Action", $_POST);
-            $this->persistent->parameters = $query->getParams();
-        } else {
-            $numberPage = $this->request->getQuery("page", "int");
-        }
-
-        $parameters = $this->persistent->parameters;
-        if (!is_array($parameters)) {
-            $parameters = array();
-        }
-        $parameters["order"] = "id";
-
-        $action = Action::find($parameters);
-        if (count($action) == 0) {
-            $this->flash->notice("The search did not find any action");
-
-            return $this->dispatcher->forward(array(
-                "controller" => "action",
-                "action" => "index"
-            ));
-        }
-
-        $paginator = new Paginator(array(
-            "data" => $action,
-            "limit"=> 10,
-            "page" => $numberPage
-        ));
-
-        $this->view->page = $paginator->getPaginate();
+      if($entity_object)
+      {
+      $this->tag->setDefault("action", $entity_object->getAction());
+      $this->tag->setDefault("description", $entity_object->getDescription());
+      }
     }
 
-    /**
-     * Displays the creation form
-     */
-    public function newAction()
+    public function set_post_values($entity)
     {
-
+      $entity->setAction($this->request->getPost("action"));
+      $entity->setDescription($this->request->getPost("description"));
     }
 
-    /**
-     * Edits a action
-     *
-     * @param string $id
-     */
-    public function editAction($id)
-    {
+  public function set_grid_parameters($routelist)
+  {
+    $grid_values =
+    [
+     'new_route'=>'action/new'
+    ,'edit_route'=>'action/edit/'
+    ,'show_route'=>'action/show/'
+    ,'search_route'=>'action/search'
+    ,'route_list'=>$routelist
+    ,'view_name'=>'action/actionlist'
+    ,'numberPage'=>1
+    ,'pagelimit'=>10
+    ,'noitems_message'=>'No se encontraron acciones'
+    ,'title' =>'Acciones'
+    ,'header_columns'=>array(
+      array('column_name' => 'action','title' => 'Acción','class'=>''),
+      array('column_name'=>'description','title' => 'Descripción','class'=>''))
+    ,'search_columns'=>array(
+      array('name' => 'action','title' => 'Acción','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+      array('name' => 'description','title' => 'Descripción','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
+    )
+  ];
+    return $grid_values;
+  }
 
-        if (!$this->request->isPost()) {
 
-            $action = Action::findFirstByid($id);
-            if (!$action) {
-                $this->flash->error("action was not found");
+  /**
+  * @Route("/list", methods={"GET","POST"}, name="actionlist")
+  */
+  public function listAction()
+  {
+    $order=$this->set_grid_order();
+    $grid_values =$this->set_grid_parameters('action/list');
+    $query= $this->modelsManager->createBuilder()
+             ->columns(array('a.id ','a.action','a.description'))
+             ->from(array('a' => 'Action'))
+             ->orderBy($order)
+             ->getQuery()
+             ->execute();
+    $this->set_grid_values($query,$grid_values);
 
-                return $this->dispatcher->forward(array(
-                    "controller" => "action",
-                    "action" => "index"
-                ));
-            }
+  }
 
-            $this->view->id = $action->id;
 
-            $this->tag->setDefault("id", $action->getId());
-            $this->tag->setDefault("action", $action->getAction());
-            $this->tag->setDefault("description", $action->getDescription());
-            
-        }
-    }
 
-    /**
-     * Creates a new action
-     */
-    public function createAction()
-    {
+  /**
+  * @Route("/search", methods={"GET","POST"}, name="actionsearch")
+  */
+  public function searchAction()
 
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "action",
-                "action" => "index"
-            ));
-        }
+  {
 
-        $action = new Action();
+    $order=$this->set_grid_order();
 
-        $action->setAction($this->request->getPost("action"));
-        $action->setDescription($this->request->getPost("description"));
-        
+    $grid_values =$this->set_grid_parameters('action/search');
 
-        if (!$action->save()) {
-            foreach ($action->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+    $search_values =array(array('name'=>'action','value'=>$this->request->getPost("action"))
+    ,array('name'=>'description','value'=>$this->request->getPost("description")));
 
-            return $this->dispatcher->forward(array(
-                "controller" => "action",
-                "action" => "new"
-            ));
-        }
+    $params_query =$this->set_search_grid_post_values($search_values);
 
-        $this->flash->success("action was created successfully");
+    $query = $this->modelsManager->createBuilder()
+              ->columns(array('a.id ','a.action','a.description'))
+              ->from(array('a' => 'Action'))
+             ->Where('a.action LIKE :action:', array('action' => '%' . $params_query['action']. '%'))
+             ->AndWhere('a.description LIKE :desc:', array('desc' => '%' . $params_query['description']. '%'))
+             ->orderBy($order)
+             ->getQuery()
+             ->execute();
+    $this->set_grid_values($query,$grid_values);
 
-        return $this->dispatcher->forward(array(
-            "controller" => "action",
-            "action" => "index"
-        ));
+  }
 
-    }
 
-    /**
-     * Saves a action edited
-     *
-     */
-    public function saveAction()
-    {
+  public function get_assets()
+  {
+    $this->assets
+    ->collection('validatejs')
+    ->addJs('js/jqueryvalidate/jquery.validate.js')
+    ->addJs('js/jqueryvalidate/additional-methods.min.js')
+    ->addJs('js/validateaction/validate_action.js');
+  }
 
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "action",
-                "action" => "index"
-            ));
-        }
 
-        $id = $this->request->getPost("id");
+  /**
+  * @Route("/new", methods={"GET"}, name="actionenew")
+  */
+  public function newAction($entity=null)
+  {
+    $this->get_assets();
+    $this->set_form_routes(
+    $this->crud_params['create_route']
+    ,$this->crud_params['route_list']
+    ,$this->crud_params['new_title']
+    ,$this->crud_params['add_edit_view']
+    ,'new'
+    ,$entity
+    ,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,'');
+  }
 
-        $action = Action::findFirstByid($id);
-        if (!$action) {
-            $this->flash->error("action does not exist " . $id);
+  /**
+  * @Route("/edit/{id}", methods={"GET"}, name="actionedit")
+  */
+  public function editAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'edit');
 
-            return $this->dispatcher->forward(array(
-                "controller" => "action",
-                "action" => "index"
-            ));
-        }
+    $this->get_assets();
+    $this->set_tags('edit',$entity);
+    $this->view->id = $entity->id;
 
-        $action->setAction($this->request->getPost("action"));
-        $action->setDescription($this->request->getPost("description"));
-        
+    $this->set_form_routes(
+    $this->crud_params['save_route'].$id
+    ,$this->crud_params['route_list']
+    ,$this->crud_params['edit_title']
+    ,$this->crud_params['add_edit_view']
+    ,'edit',$entity,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,''
+    );
+  }
 
-        if (!$action->save()) {
+  /**
+  * @Route("/create", methods={"POST"}, name="actioncreate")
+  */
+  public function createAction()
+  {
+    $entity = $this->set_entity(
+    ''
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'create');
 
-            foreach ($action->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+    $this->set_post_values($entity);
 
-            return $this->dispatcher->forward(array(
-                "controller" => "action",
-                "action" => "edit",
-                "params" => array($action->id)
-            ));
-        }
+    $this->execute_entity_action($entity
+    ,$this->crud_params['controller']
+    ,'new',array($entity),$this->crud_params['action_list']
+    ,'create');
+  }
 
-        $this->flash->success("action was updated successfully");
+  /**
+  * @Route("/save/{id}", methods={"POST"}, name="actionsave")
+  */
+  public function saveAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'update');
 
-        return $this->dispatcher->forward(array(
-            "controller" => "action",
-            "action" => "index"
-        ));
+    $this->set_post_values($entity);
 
-    }
+    $this->execute_entity_action(
+    $entity
+    ,$this->crud_params['controller']
+    ,'edit',array($entity->id)
+    ,$this->crud_params['action_list'],'update');
+  }
 
-    /**
-     * Deletes a action
-     *
-     * @param string $id
-     */
-    public function deleteAction($id)
-    {
+  /**
+  * @Route("/show/{id}", methods={"GET"}, name="actionshow")
+  */
+  public function showAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'show');
 
-        $action = Action::findFirstByid($id);
-        if (!$action) {
-            $this->flash->error("action was not found");
+    $this->get_assets();
 
-            return $this->dispatcher->forward(array(
-                "controller" => "action",
-                "action" => "index"
-            ));
-        }
+    $this->set_form_routes(
+    $this->crud_params['delete_route'].$id
+    ,$this->crud_params['route_list']
+    ,$this->crud_params['delete_message']
+    ,$this->crud_params['show_view'] ,'delete'
+    ,$entity
+    ,$this->crud_params['form_name']
+    ,$this->crud_params['form_columns']
+    ,$this->crud_params['save_button_name']
+    ,$this->crud_params['cancel_button_name']
+    ,$this->crud_params['delete_button_name']
+    );
+    $this->set_tags('delete',$entity,'Y');
+  }
 
-        if (!$action->delete()) {
-
-            foreach ($action->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            return $this->dispatcher->forward(array(
-                "controller" => "action",
-                "action" => "search"
-            ));
-        }
-
-        $this->flash->success("action was deleted successfully");
-
-        return $this->dispatcher->forward(array(
-            "controller" => "action",
-            "action" => "index"
-        ));
-    }
+  /**
+  * @Route("/delete/{id}", methods={"POST"}, name="actiondelete")
+  */
+  public function deleteAction($id)
+  {
+    $entity =$this->set_entity(
+    $id
+    ,$this->crud_params['entityname']
+    ,$this->crud_params['not_found_message']
+    ,$this->crud_params['controller']
+    ,$this->crud_params['action_list']
+    ,'delete');
+    $this->execute_entity_action(
+    $entity
+    ,$this->crud_params['controller']
+    ,'show'
+    ,array('id'=>$id)
+    ,$this->crud_params['action_list']
+    ,'delete');
+  }
 
 }
