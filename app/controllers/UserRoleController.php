@@ -45,7 +45,11 @@ class UserRoleController extends ControllerBase
     {
       if($entity_object)
       {
-      $this->tag->setDefault("roleid", $entity_object->getRoleid());
+        foreach ($entity_object  as $entityitem )
+        {
+        $roleid =$entityitem['roleid'];
+       }
+      $this->tag->setDefault("roleid", $roleid);
       }
     }
 
@@ -62,7 +66,7 @@ class UserRoleController extends ControllerBase
      'new_route'=>'userrole/new'
     ,'edit_route'=>'userrole/edit/'
     ,'show_route'=>'userrole/show/'
-    ,'search_route'=>'userrole/search'
+    ,'search_route'=>'userrole/search/'.$userid
     ,'route_list'=>$routelist
     ,'view_name'=>'user_role/userrolelist'
     ,'numberPage'=>1
@@ -105,9 +109,9 @@ class UserRoleController extends ControllerBase
 
 
   /**
-  * @Route("/search", methods={"GET","POST"}, name="userrolesearch")
+  * @Route("/search/{userid}", methods={"GET","POST"}, name="userrolesearch")
   */
-  public function searchAction()
+  public function searchAction($userid)
 
   {
 
@@ -115,8 +119,7 @@ class UserRoleController extends ControllerBase
 
     $grid_values =$this->set_grid_parameters('userrole/search');
 
-    $search_values =array(array('name'=>'code','value'=>$this->request->getPost("code"))
-    ,array('name'=>'country','value'=>$this->request->getPost("userrole")));
+    $search_values =array(array('name'=>'role','value'=>$this->request->getPost("role")));
 
     $params_query =$this->set_search_grid_post_values($search_values);
 
@@ -125,12 +128,15 @@ class UserRoleController extends ControllerBase
               ->from(array('ur' => 'UserRole'))
               ->join('User', 'u.id = ur.userid', 'u')
               ->join('Role', 'r.id = ur.roleid', 'r')
-             ->Where('u.username LIKE :username:', array('username' => '%' . $params_query['username']. '%'))
-             ->AndWhere('r.role LIKE :role:', array('role' => '%' . $params_query['role']. '%'))
+              ->Where('r.role LIKE :role:', array('role' => '%' . $params_query['role']. '%'))
+              ->AndWhere('ur.userid LIKE :userid:', array('userid' => '%' . $userid. '%'))
              ->orderBy($order)
              ->getQuery()
              ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->view->userid =$userid;
+    $user= User::findFirstByid($userid);
+    $this->view->username =$user->username;
 
   }
 
@@ -212,10 +218,26 @@ class UserRoleController extends ControllerBase
 
     $this->set_post_values($entity);
     $entity->SetUserid($userid);
-    $this->execute_entity_action($entity
+
+    $form_action =$entity->save();
+
+     if (!$form_action)
+       {
+
+           foreach ($entity->getMessages() as $message) {
+               $this->flash->error($message);
+           }
+           return $this->dispatcher->forward(array(
+               "controller" => 'UserRole',
+               "action" => 'new',
+               "params"=>array($userid)
+           ));
+     }
+     $this->response->redirect(array('for' =>'userrolelist','userid'=>$userid));
+  /*  $this->execute_entity_action($entity
     ,$this->crud_params['controller']
-    ,'new',array($entity),$this->crud_params['action_list'].'/'.$userid
-    ,'create');
+    ,'new',array($entity),'userrole/list'.'/'.$userid
+    ,'create');*/
   }
 
   /**
@@ -245,12 +267,11 @@ class UserRoleController extends ControllerBase
   */
   public function showAction($id)
   {
-    $userid =explode('-',$id,0);
-    $roleid =explode('-',$id,1);
 
-    $entity =$this->set_entity(
+    $userdata =explode('-',$id);
+    $userid =$userdata[0];
+    $entity =$this->set_user_role_entity(
     $id
-    ,$this->crud_params['entityname']
     ,$this->crud_params['not_found_message']
     ,$this->crud_params['controller']
     ,$this->crud_params['action_list']
@@ -260,7 +281,7 @@ class UserRoleController extends ControllerBase
 
     $this->set_form_routes(
     $this->crud_params['delete_route'].$id
-    ,$this->crud_params['route_list']
+    ,$this->crud_params['route_list'].'/'.$userid
     ,$this->crud_params['delete_message']
     ,$this->crud_params['show_view'] ,'delete'
     ,$entity
@@ -271,6 +292,59 @@ class UserRoleController extends ControllerBase
     ,$this->crud_params['delete_button_name']
     );
     $this->set_tags('delete',$entity,'Y');
+
+
+  }
+
+  public function set_user_role_entity($id,$errormessage,$controller,$action,$mode)
+  {
+
+    $userdata =explode('-',$id);
+    $userid =$userdata[0];
+
+    $roleid =$userdata[1];
+
+    //var_dump($userid);
+    //var_dump($userid[0]);
+
+          if ($mode =='create')
+          {
+            $entity = new $entityname();
+          }
+          else
+          {
+
+          $entity  = $this->modelsManager->createBuilder()
+                      ->columns(array('ur.userid as userid','ur.roleid as roleid','u.username as username','r.role as role'))
+                      ->from(array('ur' => 'UserRole'))
+                      ->join('User', 'u.id = ur.userid', 'u')
+                      ->join('Role', 'r.id = ur.roleid', 'r')
+                     ->Where('ur.userid = :userid: ', array('userid' => $userid))
+                     ->AndWhere('ur.roleid = :roleid: ', array('roleid' =>  $roleid))
+                     ->getQuery()
+                     ->execute();
+           if ($mode='edit' and !$entity)
+           {
+             return $this->dispatcher->forward(array(
+               "controller" => "Error",
+               "action" => "error404"
+             ));
+           }
+           else {
+             if (!$entity) {
+                 $this->flash->error($errormessage);
+                 return $this->dispatcher->forward(array(
+                     "controller" => $controller,
+                     "action" => $action
+                 ));
+             }
+           }
+
+          }
+
+      return $entity;
+
+
   }
 
   /**
@@ -278,20 +352,33 @@ class UserRoleController extends ControllerBase
   */
   public function deleteAction($id)
   {
-    $entity =$this->set_entity(
-    $id
-    ,$this->crud_params['entityname']
-    ,$this->crud_params['not_found_message']
-    ,$this->crud_params['controller']
-    ,$this->crud_params['action_list']
-    ,'delete');
-    $this->execute_entity_action(
-    $entity
-    ,$this->crud_params['controller']
-    ,'show'
-    ,array('id'=>$id)
-    ,$this->crud_params['action_list']
-    ,'delete');
-  }
+    $userdata =explode('-',$id);
+    $userid =$userdata[0];
+
+    $roleid =$userdata[1];
+
+    $entity =UserRole::find(array(
+        "conditions" => "userid = :userid: and roleid = :roleid:",
+        "bind"       => array('userid' => $userid ,'roleid'=>$roleid)
+    ));
+
+    if (!$entity->delete()) {
+
+        foreach ($addres->getMessages() as $message) {
+            $this->flash->error($message);
+        }
+
+        return $this->dispatcher->forward(array(
+            "controller" => "UserRole",
+            "action" => "show",
+            "parameters"=>array($id)
+        ));
+    }
+    else {
+      $this->response->redirect(array('for' => 'userrolelist','userid'=>$userid));
+    }
+
+
+}
 
 }

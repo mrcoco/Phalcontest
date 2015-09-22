@@ -1,7 +1,7 @@
 {% extends "layouts/masterpage.volt" %}
 {% block pagetitle %}
 	<h3 class="page-title" align ="left">
-	{{title}} {{username}}
+	{{title}} {{username}} <div align="right"><a href ="{{url('user/list')}}" class="btn btn blue">{{'Usuarios'}} <i class="fa fa-arrow-right "></i> </a></div>
 	</h3>
 	<hr/>
 {% endblock %}
@@ -10,7 +10,7 @@
 {% block content %}
   <!-- GRID SEARCH -->
 	<div align="left" >
-	{{ form(searchroute, "method":"post", "autocomplete" : "off") }}
+	{{ form('userrole/search/'~userid, "method":"post", "autocomplete" : "off") }}
 	<div class="row">
 	<div class="form-group col-md-10" style="padding-left:0;">
 	{% for index,item in searchcolumns %}

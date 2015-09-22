@@ -1,7 +1,7 @@
 {% extends "layouts/masterpage.volt" %}
 {% block pagetitle %}
 	<h3 class="page-title" align ="left">
-	{{title}}
+	{{title}} {{role}} <div align="right"><a href ="{{url('role/list')}}" class="btn btn blue">{{'Roles'}} <i class="fa fa-arrow-right "></i> </a></div>
 	</h3>
 	<hr/>
 {% endblock %}
@@ -10,7 +10,7 @@
 {% block content %}
   <!-- GRID SEARCH -->
 	<div align="left" >
-	{{ form(searchroute, "method":"post", "autocomplete" : "off") }}
+	{{ form('userrole/search/'~roleid, "method":"post", "autocomplete" : "off") }}
 	<div class="row">
 	<div class="form-group col-md-10" style="padding-left:0;">
 	{% for index,item in searchcolumns %}
@@ -33,7 +33,7 @@
   <!-- END GRID SEARCH-->
 
 	 <!-- NEW ITEM ICON-->
-	<div align="left">{{ link_to(newroute,'<i class="fa fa-plus"></i>','class':'btn btn-icon-only blue')}}</div>
+	<div align="left">{{ link_to(newroute~'/'~roleid,'<i class="fa fa-plus"></i>','class':'btn btn-icon-only blue')}}</div>
 
 	<br>
 	{% if noitems ==""%}
@@ -78,7 +78,6 @@
 	</th>
 	{% endfor %}
 	<th></th>
-	<th></th>
 	</tr>
 	</thead>
 	<!-- END HEADER-->
@@ -90,9 +89,7 @@
 			{% for index,item in headercolumns %}
 				<td width ="40%">{{ entity.readAttribute(item['column_name'])}}</td>
 			{% endfor %}
-			<td width ="2%">{{link_to('actionrole/list/'~entity.id,'<i class="fa fa-shield"></i>','class':'btn btn-icon-only blue')}}</td>
-			<td width ="2%">{{link_to(editroute~entity.id,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}</td>
-			<td width ="2%">{{link_to(showroute~entity.id,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}</td>
+			<td width ="2%">{{link_to(showroute~entity.roleid~'-'~entity.actionid,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}</td>
 			</tr>
 		{% endfor %}
 		{% endif %}

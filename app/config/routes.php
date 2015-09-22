@@ -42,6 +42,7 @@ $router->addResource('User', '/user');
 $router->addResource('Role', '/role');
 $router->addResource('Action', '/action');
 $router->addResource('UserRole', '/userrole');
+$router->addResource('ActionRole', '/actionrole');
 
 
 return $router;
