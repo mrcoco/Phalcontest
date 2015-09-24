@@ -28,22 +28,21 @@ $(function() {
         // Specify the validation error messages
         messages: {
             username:{
-                required:"Debe ingresar un username"
+                required: validatemessages.username//"Debe ingresar un username"
 
             },
              email:{
-                required:"Debe ingresar un e-mail",
-                email:"Debe ingresar un e-mail válido"
+                required:validatemessages.email_req,
+                email:validatemessages.email
 
             },
             password:{
-                required:"Debe ingresar un password"
-
+                required:validatemessages.pass
 
             },
             confirm_password:{
-                required:"Debe ingresar una confirmación de password",
-                equalTo: "El password de confirmación debe ser igual al password"
+                required:validatemessages.confirm,
+                equalTo:validatemessages.equal
 
             }
 

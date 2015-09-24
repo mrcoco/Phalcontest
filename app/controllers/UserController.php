@@ -44,7 +44,7 @@ class UserController extends ControllerBase
         ,'div_cell_class'=>'cell colspan3'
         ,'div_row_class'=>'row cells1'
         ,'label_error'=>'<span id ="passworderror" name ="codeerror" class="has-error"></span>'),
-        array('name' => 'confirm_password','label'=>'Comfirmar Password'
+        array('name' => 'confirm_password','label'=>'Confirmar Password'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'div_control_class'=>'input-control select full-size'
         ,'div_cell_class'=>'cell colspan3'
@@ -115,6 +115,7 @@ class UserController extends ControllerBase
   */
   public function listAction()
   {
+    $userid = $this->session->get('userid');
     $order=$this->set_grid_order();
     $grid_values =$this->set_grid_parameters('user/list');
     $query= $this->modelsManager->createBuilder()
@@ -125,7 +126,40 @@ class UserController extends ControllerBase
              ->execute();
     $this->set_grid_values($query,$grid_values);
 
-  }
+    $this->view->permissions =$this->check_user_actions(
+    $userid
+    ,'Create User'
+    ,'Edit User'
+    ,'Manage Users'
+    ,'Delete User');
+    $this->view->special_permission =$this->check_user_special_actions(
+    $userid
+    ,'Change User Password'
+    ,'Manage User Role');
+
+}
+
+  public function check_user_special_actions($userid,$change_password_action,$add_user_role)
+  {
+    $special_permission =array();
+    $special_permission['change_password'] ='N';
+    $special_permission['add_user_role']  ='N';
+    $actions = $this->get_user_actions($userid);
+    foreach ($actions as $item)
+    {
+     if ($item->action ==$change_password_action)
+     {
+      $special_permission['change_password'] ='Y';
+     }
+     if ($item->action ==$add_user_role)
+     {
+     $special_permission['add_user_role'] ='Y';
+     }
+
+   }
+   return $special_permission;
+   }
+
 
 
 
@@ -231,7 +265,7 @@ class UserController extends ControllerBase
   }
 
   /**
-  * @Route("/create", methods={"POST"}, name="usercreate")
+  * @Route("/create", methods={"GET","POST"}, name="usercreate")
   */
   public function createAction()
   {
@@ -324,13 +358,13 @@ class UserController extends ControllerBase
     ,$this->crud_params['action_list']
     ,'delete');
   }
-  
+
   /**
   * @Route("/set_password_change/{id}", methods={"GET","POST"}, name="set_password_change")
   */
   public function set_password_changeAction($id)
   {
-      
+
             $entity = User::findFirstByid($id);
             if (!$entity) {
                 $this->flash->error($this->crud_params['not_found_message']);
@@ -346,9 +380,9 @@ class UserController extends ControllerBase
             $this->view->routeform ='user/change_password/';
             $this->view->cancel_button_name=$this->crud_params['cancel_button_name'];
             $this->view->routelist =$this->crud_params['route_list'];
-           
+
             $this->view->pick('user/changepassword');
-        
+
   }
    /**
   * @Route("/change_password/{id}", methods={"POST"}, name="change_password")
@@ -365,13 +399,13 @@ class UserController extends ControllerBase
                 "action" => "set_password_change"
             ));
         }
-        
-          
+
+
         $message = $this->validate_password($this->request->getPost("password"),$this->request->getPost("confirm_password"));
         if ($message =="")
         {
         $entity->setPassword( $this->getDI()->getSecurity()->hash($this->request->getPost("password")));
-        
+
         if (!$entity->save()) {
 
             foreach ($entity->getMessages() as $message) {
@@ -385,10 +419,10 @@ class UserController extends ControllerBase
             ));
         }
         else
-        {    
+        {
         $this->response->redirect(array('for' => 'userlist'));
         }
-        
+
         }
         else
         {
@@ -396,14 +430,14 @@ class UserController extends ControllerBase
              $this->dispatcher->forward(array(
              "action" => "set_password_change",
              "parameters"=>array($id)
-            
+
                 ));
         }
 
-        
-        
+
+
     }
-       
+
        public function set_change_password_assets()
        {
            $this->assets
@@ -412,23 +446,23 @@ class UserController extends ControllerBase
         ->addJs('js/jqueryvalidate/additional-methods.min.js')
         ->addJs('js/validateuser/change_password.js');
        }
-       
+
        public function validate_password($password,$confirm_password)
         {
-           $message=""; 
+           $message="";
            if((empty($password) ==true) or (empty($password) ==true))
             {
-             $message = "El password y el password de confirmacion no pueden estar vacios";   
+             $message = "El password y el password de confirmacion no pueden estar vacios";
             }
            if($password !=$confirm_password)
           {
-           $message="El password y el password de confirmación deben ser iguales.";   
+           $message="El password y el password de confirmación deben ser iguales.";
           }
-          
+
           return $message;
-          
+
        }
 
-    
+
 
 }

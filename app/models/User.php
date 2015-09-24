@@ -281,7 +281,8 @@ class User extends Phalcon\Mvc\Model
           new PresenceOf(
               array(
                   'field'    => 'username',
-                  'message'  => 'Debe ingresar un nombre de usuario'
+                  'message'  => $this->di->get('translate')->_('username.required')
+
               )
           )
       );
@@ -291,7 +292,7 @@ class User extends Phalcon\Mvc\Model
           new PresenceOf(
               array(
                   'field'    => 'password',
-                  'message'  => 'Debe ingresar un password'
+                  'message'  => $this->di->get('translate')->_('pass.required')
               )
           )
       );
@@ -300,14 +301,14 @@ class User extends Phalcon\Mvc\Model
             new Email(
                 array(
                     'field'    => 'email',
-                    'message'=>'El e-mail debe ser válido'
+                    'message'=> $this->di->get('translate')->_('email.valid')
                 )
             )
         );
 
         $this->validate(new Uniqueness(array(
            'field' => 'username',
-           'message'=>'Ya existe ese User Name'
+           'message'=>$this->di->get('translate')->_('username.unique')
        )));
 
         if ($this->validationHasFailed() == true) {

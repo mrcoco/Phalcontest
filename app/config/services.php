@@ -106,7 +106,7 @@ $di->set('translate', function() use ($config,$language) {
      require APP_PATH ."/app/messages/" . $language . ".php";
   } else {
      // fallback to some default
-     require APP_PATH ."/app/messages/en.php";
+     require APP_PATH ."/app/messages/es.php";
   }
 
     //require $config->application->messagesDir."es.php";

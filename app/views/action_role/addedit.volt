@@ -1,16 +1,6 @@
 {% extends "layouts/masterpage.volt" %}
 {% block javascripts %}
 {{super() }}
-<script>
-var validatemessages = {
-username:'{{"username.required"|t}}'
-,email_req:'{{"email.required"|t}}'
-,email:'{{"email.valid"|t}}'
-,pass:'{{"pass.required"|t}}'
-,confirm:'{{"confirm.required"|t}}'
-,equal:'{{"confirm.equal"|t}}'
-};
-</script>
 {{assets.outputJs('validate_forms_js')}}
 {{assets.outputJs('validatejs')}}
 {% endblock %}
@@ -21,7 +11,7 @@ username:'{{"username.required"|t}}'
 <div class="portlet box blue">
 	<div class="portlet-title">
 	<div class="caption">
-	{{title|t}}
+	{{title}}
 	</div>
 	</div>
 	<div class="portlet-body form">
@@ -36,42 +26,27 @@ username:'{{"username.required"|t}}'
 	{{ content() }}
 	</div>
 	{% endif %}
-
 		<!-- LOAD FORM CONTROLS-->
 	{% for index,item in formcolumns %}
-	  {% if(mode=='edit')  %}
-     {% if item['name'] not in['password','confirm_password']  %}
-		 <div class="form-group">
-		 <label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
-		 {{item['label']|t}}
-		 {{item['required']}}
-								 </label>
-		 <div class="col-md-4">
-		 {{ form.render(item['name'],["class":"form-control"]) }}
-		 <!-- LOAD CONTROL ERROR LABEL-->
-		 </div>
-		 </div>
-      {% endif %}
-		{% else %}
 		<div class="form-group">
 		<label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
-		{{item['label']|t}}
+		{{item['label']}}
 		{{item['required']}}
-								</label>
+                </label>
 		<div class="col-md-4">
 		{{ form.render(item['name'],["class":"form-control"]) }}
 		<!-- LOAD CONTROL ERROR LABEL-->
+		{{item['label_error']}}
 		</div>
 		</div>
-		{% endif %}
 	{% endfor %}
 	</div>
 	<!-- FORM ACTION BUTTONS-->
 	<div class="form-actions">
 	<div class="row">
 	<div class="col-md-offset-2 col-md-4">
-	 <input type="submit" class="btn blue-madison" value="{{'Guardar'|t}}"></input>
-		{{ link_to(routelist,cancel_button_name|t,"class":"btn grey-cascade") }}
+		{{ form.render(save_button_name,["class":"btn blue-madison"]) }}
+		{{ link_to(routelist,cancel_button_name,"class":"btn grey-cascade") }}
 	</div>
 	</div>
 	</div>

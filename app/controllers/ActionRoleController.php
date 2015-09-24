@@ -14,22 +14,22 @@ class ActionRoleController extends ControllerBase
   public function onConstruct()
     {
         $this->crud_params['route_list']         = 'actionrole/list';
-        $this->crud_params['entityname']         = 'UserRole';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada UserRole';
+        $this->crud_params['entityname']         = 'actionrole';
+        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada actionrole';
         $this->crud_params['controller']         = 'ActionRole';
         $this->crud_params['action_list']        = 'actionrolelist';
         $this->crud_params['form_name']          = 'ActionRoleForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea quitar ea acción?';
+        $this->crud_params['delete_message']     = 'Esta seguro que desea quitar esta acción?';
         $this->crud_params['create_route']       = 'actionrole/create';
         $this->crud_params['save_route']         = 'actionrole/save/';
         $this->crud_params['delete_route']       = 'actionrole/delete/';
-        $this->crud_params['add_edit_view']      = 'actionrole/addedit';
-        $this->crud_params['show_view']          = 'actionrole/show';
+        $this->crud_params['add_edit_view']      = 'action_role/addedit';
+        $this->crud_params['show_view']          = 'action_role/show';
         $this->crud_params['new_title']          = 'Nuevo Acción del Rol';
         $this->crud_params['edit_title']         = 'Editar Acción del Rol';
         $this->crud_params['form_columns']       = array(
 
-        array('name' => 'roleid','label'=>'Acción'
+        array('name' => 'actionid','label'=>'Acción'
         ,'required'=>'<span class="required" aria-required="true">*</span>'
         ,'div_control_class'=>'input-control select full-size'
         ,'div_cell_class'=>'cell colspan3'
@@ -74,7 +74,7 @@ class ActionRoleController extends ControllerBase
     ,'noitems_message'=>'No se encontraron acciones asociadas al rol'
     ,'title' =>'Acciones del Rol'
     ,'header_columns'=>array(
-      array('column_name'=>'role','title' => 'Rol','class'=>''))
+      array('column_name'=>'action','title' => 'Action','class'=>''))
     ,'search_columns'=>array(
      array('name' => 'action','title' => 'Acción','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
     )
@@ -104,15 +104,16 @@ class ActionRoleController extends ControllerBase
     $this->view->roleid =$roleid;
     $role= Role::findFirstByid($roleid);
     $this->view->role =$role->role;
+    $this->view->listroute ='actionrole/list/'.$roleid;
     $this->view->pick('action_role/actionrolelist');
   }
 
 
 
   /**
-  * @Route("/search", methods={"GET","POST"}, name="actionrolesearch")
+  * @Route("/search/{roleid}", methods={"GET","POST"}, name="actionrolesearch")
   */
-  public function searchAction()
+  public function searchAction($roleid)
 
   {
 
@@ -120,23 +121,26 @@ class ActionRoleController extends ControllerBase
 
     $grid_values =$this->set_grid_parameters('actionrole/search');
 
-    $search_values =array(array('name'=>'code','value'=>$this->request->getPost("code"))
-    ,array('name'=>'country','value'=>$this->request->getPost("actionrole")));
+    $search_values =array(array('name'=>'action','value'=>$this->request->getPost("action")));
 
     $params_query =$this->set_search_grid_post_values($search_values);
 
     $query = $this->modelsManager->createBuilder()
-             ->columns(array('ar.roleid as roleid','ar.actionid as actionid','r.role as role','a.action as action'))
-             ->from(array('ur' => 'ActionRole'))
-             ->join('Role', 'r.id = ar.roleid', 'r')
-             ->join('Action', 'a.id = ar.actionid', 'a')
-             ->Where('u.username LIKE :username:', array('username' => '%' . $params_query['username']. '%'))
-             ->AndWhere('r.role LIKE :role:', array('role' => '%' . $params_query['role']. '%'))
+            ->columns(array('ar.roleid as roleid','ar.actionid as actionid','r.role as role','a.action as action'))
+            ->from(array('ar' => 'ActionRole'))
+            ->join('Role', 'r.id = ar.roleid', 'r')
+            ->join('Action', 'a.id = ar.actionid', 'a')
+             ->Where('a.action LIKE :action:', array('action' => '%' . $params_query['action']. '%'))
+             ->AndWhere('ar.roleid = :roleid: ', array('roleid' =>  $roleid))
              ->orderBy($order)
              ->getQuery()
              ->execute();
     $this->set_grid_values($query,$grid_values);
-
+    $this->view->roleid =$roleid;
+    $role= Role::findFirstByid($roleid);
+    $this->view->role =$role->role;
+    $this->view->listroute ='actionrole/search/'.$roleid;
+    $this->view->pick('action_role/actionrolelist');
   }
 
 
@@ -151,17 +155,17 @@ class ActionRoleController extends ControllerBase
 
 
   /**
-  * @Route("/new/{userid}", methods={"GET"}, name="actionroleenew")
+  * @Route("/new/{roleid}", methods={"GET"}, name="actionroleenew")
   */
-  public function newAction($userid)
+  public function newAction($roleid)
   {
-    $user= User::findFirstByid($userid);
+    $role= Role::findFirstByid($roleid);
 
     $this->get_assets();
     $this->set_form_routes(
-    $this->crud_params['create_route'].'/'.$userid
-    ,$this->crud_params['route_list'].'/'.$userid
-    ,$this->crud_params['new_title'].' '.$user->username
+    $this->crud_params['create_route'].'/'.$roleid
+    ,$this->crud_params['route_list'].'/'.$roleid
+    ,$this->crud_params['new_title'].' '.$role->role
     ,$this->crud_params['add_edit_view']
     ,'new'
     ,null
@@ -203,9 +207,9 @@ class ActionRoleController extends ControllerBase
   }
 
   /**
-  * @Route("/create/{userid}", methods={"POST"}, name="actionrolecreate")
+  * @Route("/create/{roleid}", methods={"POST"}, name="actionrolecreate")
   */
-  public function createAction($userid)
+  public function createAction($roleid)
   {
     $entity = $this->set_entity(
     ''
@@ -216,7 +220,7 @@ class ActionRoleController extends ControllerBase
     ,'create');
 
     $this->set_post_values($entity);
-    $entity->SetUserid($userid);
+    $entity->SetRoleid($roleid);
 
     $form_action =$entity->save();
 
@@ -227,12 +231,12 @@ class ActionRoleController extends ControllerBase
                $this->flash->error($message);
            }
            return $this->dispatcher->forward(array(
-               "controller" => 'UserRole',
+               "controller" => 'ActionRole',
                "action" => 'new',
-               "params"=>array($userid)
+               "params"=>array($roleid)
            ));
      }
-     $this->response->redirect(array('for' =>'userrolelist','userid'=>$userid));
+     $this->response->redirect(array('for' =>'actionrolelist','roleid'=>$roleid));
   /*  $this->execute_entity_action($entity
     ,$this->crud_params['controller']
     ,'new',array($entity),'actionrole/list'.'/'.$userid
@@ -268,7 +272,7 @@ class ActionRoleController extends ControllerBase
   {
 
     $userdata =explode('-',$id);
-    $userid =$userdata[0];
+    $roleid =$userdata[0];
     $entity =$this->set_user_role_entity(
     $id
     ,$this->crud_params['not_found_message']
@@ -280,7 +284,7 @@ class ActionRoleController extends ControllerBase
 
     $this->set_form_routes(
     $this->crud_params['delete_route'].$id
-    ,$this->crud_params['route_list'].'/'.$userid
+    ,$this->crud_params['route_list'].'/'.$roleid
     ,$this->crud_params['delete_message']
     ,$this->crud_params['show_view'] ,'delete'
     ,$entity
@@ -298,10 +302,10 @@ class ActionRoleController extends ControllerBase
   public function set_user_role_entity($id,$errormessage,$controller,$action,$mode)
   {
 
-    $userdata =explode('-',$id);
-    $userid =$userdata[0];
+    $roledata =explode('-',$id);
+    $roleid =$roledata[0];
 
-    $roleid =$userdata[1];
+    $actionid =$roledata[1];
 
     //var_dump($userid);
     //var_dump($userid[0]);
@@ -314,12 +318,12 @@ class ActionRoleController extends ControllerBase
           {
 
           $entity  = $this->modelsManager->createBuilder()
-                      ->columns(array('ar.userid as userid','ar.roleid as roleid','u.username as username','r.role as role'))
-                      ->from(array('ur' => 'UserRole'))
-                      ->join('User', 'u.id = ar.userid', 'u')
+                      ->columns(array('ar.actionid as actionid','ar.roleid as roleid','a.action as action','r.role as role'))
+                      ->from(array('ar' => 'Actionrole'))
+                      ->join('Action', 'a.id = ar.actionid', 'a')
                       ->join('Role', 'r.id = ar.roleid', 'r')
-                     ->Where('ar.userid = :userid: ', array('userid' => $userid))
-                     ->AndWhere('ar.roleid = :roleid: ', array('roleid' =>  $roleid))
+                     ->Where('ar.roleid = :roleid: ', array('roleid' => $roleid))
+                     ->AndWhere('ar.actionid = :actionid: ', array('actionid' =>  $actionid))
                      ->getQuery()
                      ->execute();
            if ($mode='edit' and !$entity)
@@ -351,14 +355,14 @@ class ActionRoleController extends ControllerBase
   */
   public function deleteAction($id)
   {
-    $userdata =explode('-',$id);
-    $userid =$userdata[0];
+    $roledata =explode('-',$id);
+    $roleid =$roledata[0];
 
-    $roleid =$userdata[1];
+    $actionid =$roledata[1];
 
-    $entity =UserRole::find(array(
-        "conditions" => "userid = :userid: and roleid = :roleid:",
-        "bind"       => array('userid' => $userid ,'roleid'=>$roleid)
+    $entity =ActionRole::find(array(
+        "conditions" => "actionid = :actionid: and roleid = :roleid:",
+        "bind"       => array('actionid' => $actionid ,'roleid'=>$roleid)
     ));
 
     if (!$entity->delete()) {
@@ -368,13 +372,13 @@ class ActionRoleController extends ControllerBase
         }
 
         return $this->dispatcher->forward(array(
-            "controller" => "actionrole",
+            "controller" => "ActionRole",
             "action" => "show",
             "parameters"=>array($id)
         ));
     }
     else {
-      $this->response->redirect(array('for' => 'userrolelist','userid'=>$userid));
+      $this->response->redirect(array('for' => 'actionrolelist','roleid'=>$roleid));
     }
 
 

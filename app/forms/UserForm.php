@@ -33,9 +33,9 @@ class UserForm extends Form
   $this->add($confirm_password);
 
   //añadimos un botón de tipo submit
-  $submit = $this->add(new Submit('Guardar', array(
-  'class' => 'btn btn-success'
-  )));
+//  $submit = $this->add(new Submit('G', array(
+  //'class' => 'btn btn-success'
+  //)));
 
 
   }

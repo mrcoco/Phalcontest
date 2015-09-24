@@ -8,7 +8,6 @@
 {% block pagebar %}
 {% endblock %}
 {% block content %}
-
 	<div class="tiles">
 	<div class="tile bg-green">
 	<div class="tile-body">

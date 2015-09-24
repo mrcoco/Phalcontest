@@ -1,4 +1,7 @@
-{{globalobj.checkuser(session.get('username'))}}
+{{globalobj.checkuser(session.get('userid'))}}
+{%set actions = globalobj.get_user_actions(session.get('userid')) %}
+
+
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
@@ -54,6 +57,38 @@
     <li>	<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
            </a>
     </li>
+    <li class="dropdown dropdown-language">
+             {#Default language spanish#}
+
+             {% set flag ='es.png' %}
+             {% set languagename ='Spanish' %}
+            {% if session.get('language')=='en'%}
+                {% set flag ='us.png' %}
+                {% set languagename ='English' %}
+               {% else %}
+               {% if session.get('language')=='es'%}
+               {% set flag ='es.png' %}
+               {% set languagename ='Spanish' %}
+               {% endif %}
+           {% endif %}
+
+          <a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="javascript:;">
+					<img src="{{static_url('metronic/assets/global/img/flags/'~flag)}}" alt="">
+					<span class="langname">
+					{{languagename|t}}</span>
+					<i class="fa fa-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu dropdown-menu-default">
+						<li>
+							<a href="{{ url('setlang')~'/es'}}">
+							<img src="{{static_url('metronic/assets/global/img/flags/es.png')}}" alt=""> {{'Spanish'|t}} </a>
+						</li>
+            <li>
+							<a href="{{ url('setlang')~'/en'}}">
+							<img src="{{static_url('metronic/assets/global/img/flags/us.png')}}" alt="">{{'English'|t}} </a>
+						</li>
+					</ul>
+				</li>
     <li class="dropdown dropdown-user">
         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
         {{image('metronic/assets/admin/layout/img/avatar.png')}}
@@ -105,8 +140,34 @@
 <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
 <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
 <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-<ul class="page-sidebar-menu page-sidebar-menu-closed" data-slide-speed="200" data-auto-scroll="true" data-keep-expanded="false">
 
+{# MENU OPTIONS SECURITY#}
+{% set security ='N' %}
+{% set address ='N' %}
+{% set users ='N' %}
+{% set action ='N' %}
+{% set roles ='N' %}
+{# END MENU OPTIONS SECURITY#}
+{% for item in actions %}
+{#Chek menu options#}
+{% if item.action =='Manage Security' %}
+ {% set security ='Y'%}
+{% endif %}
+{% if item.action =='Manage Addresses' %}
+ {% set address ='Y' %}
+{% endif %}
+{% if item.action =='Manage Users' %}
+ {% set users ='Y' %}
+{% endif %}
+{% if item.action =='Manage Actions' %}
+ {% set action ='Y' %}
+{% endif %}
+{% if item.action =='Manage Roles' %}
+ {% set roles ='Y' %}
+{% endif %}
+{% endfor %}
+<ul class="page-sidebar-menu page-sidebar-menu-closed" data-slide-speed="200" data-auto-scroll="true" data-keep-expanded="false">
+   {% if address =='Y'%}
   <li class="{% for key,name in ['country','state','city','township','neighborhood'] %}
     {% if name  in router.getRewriteUri() %}
         active open
@@ -127,6 +188,8 @@
         <li> <a href="{{ url("index/list") }}"><p align="left"><i class="icon-flag"></i> Direcciones</p></a></li>
     </ul>
   </li>
+  {% endif %}
+   {% if security =='Y'%}
   <li class="{% for key,name in ['user','role','action'] %}
     {% if name  in router.getRewriteUri() %}
         active open
@@ -139,12 +202,32 @@
     <p align="left"><b><i class="fa fa-lock"></i> Seguridad</b></p>
     </a>
     <ul class="sub-menu">
-        <li class="{% if 'user' in router.getRewriteUri() %}active{% endif %}"> <a href="{{ url("user/list") }}" ><p align="left"><i class="icon-user" ></i> Usuarios</p></a></li>
-        <li class="{% if 'role' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("role/list") }}" ><p align="left"><i class="icon-shield" ></i> Roles<p></a></li>
-        <li class="{% if 'action' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("action/list") }}" ><p align="left"><i class="icon-star" ></i> Acciones</p></a></li>
+       {% if users =='Y'%}
+       <li class="{% if 'user' in router.getRewriteUri() %}active{% endif %}">
+         <a href="{{ url("user/list") }}" >
+         <p align="left"><i class="icon-user" ></i> Usuarios</p>
+         </a>
+       </li>
+       {% endif %}
+       {% if roles =='Y'%}
+        <li class="{% if 'role' in router.getRewriteUri()%}active{% endif %}">
+          <a href="{{ url("role/list") }}" >
+             <p align="left"><i class="icon-shield" ></i> Roles<p>
+          </a>
+        </li>
+       {% endif %}
+       {% if action =='Y'%}
+        <li class="{% if 'action' in router.getRewriteUri()%}active{% endif %}">
+          <a href="{{ url("action/list") }}" >
+            <p align="left"><i class="icon-star" ></i> Acciones</p>
+          </a>
+        </li>
+      {% endif %}
     </ul>
   </li>
+  {% endif %}
 </ul>
+
 <!-- END SIDEBAR MENU -->
 </div>
 </div>
@@ -171,6 +254,7 @@
 
     {% block content %}
 <!--CONTENT-->
+
     {% endblock %}
 
 <!-- END PAGE CONTENT-->

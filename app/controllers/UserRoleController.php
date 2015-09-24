@@ -89,6 +89,7 @@ class UserRoleController extends ControllerBase
   public function listAction($userid)
   {
     $order=$this->set_grid_order();
+    var_dump($order);
     $grid_values =$this->set_grid_parameters('userrole/list/'.$userid);
     $query= $this->modelsManager->createBuilder()
              ->columns(array('ur.userid as userid','ur.roleid as roleid','u.username as username','r.role as role'))
@@ -104,6 +105,7 @@ class UserRoleController extends ControllerBase
     $this->view->userid =$userid;
     $user= User::findFirstByid($userid);
     $this->view->username =$user->username;
+    $this->view->listroute ='userrole/list/'.$userid;
   }
 
 
@@ -137,6 +139,7 @@ class UserRoleController extends ControllerBase
     $this->view->userid =$userid;
     $user= User::findFirstByid($userid);
     $this->view->username =$user->username;
+    $this->view->listroute ='userrole/search/'.$userid;
 
   }
 

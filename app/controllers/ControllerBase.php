@@ -2,6 +2,8 @@
 use Phalcon\Mvc\Controller;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Paginator\Adapter\Model as Paginator;
+use Phalcon\Mvc\Model\Query;
+
 defined('APP_PATH') || define('APP_PATH', realpath('..'));
 class ControllerBase extends Controller
 {
@@ -117,6 +119,52 @@ protected function getTranslation()
     $this->view->trans = $this->getTranslation();
     $this->view->currenturl = $this->url->get($urlpath);
   }
+
+//USER DATA FUNCTIONS -----------------------------------------------------------------------------------------------------------------
+ public function get_user_actions($userid)
+ {
+   $entity = $this->modelsManager->executeQuery("select a.action as action ,r.role as role  from ActionRole  ar
+   inner join Action a on (ar.actionid =a.id) inner join Role r on (r.id =ar.roleid) Where ar.roleid in (
+   select distinct ur.roleid as roleid from UserRole ur where ur.userid =:userid:)",array('userid'=>$userid));
+
+   return $entity;
+ }
+
+public function check_user_actions($userid,$create_action_name,$edit_action_name,$view_action_name,$delete_action_name)
+{
+  $permission =array();
+  $permission['create'] ='N';
+  $permission['edit']  ='N';
+  $permission['view'] ='N';
+  $permission['delete']='N';
+  $actions = $this->get_user_actions($userid);
+  foreach ($actions as $item)
+  {
+   if ($item->action == $create_action_name)
+   {
+    $permission['create'] ='Y';
+   }
+   if ($item->action == $edit_action_name)
+   {
+   $permission['edit'] ='Y';
+   }
+   if ($item->action == $view_action_name)
+   {
+   $permission['view'] ='Y';
+   }
+  if ($item->action == $delete_action_name)
+  {
+   $permission['delete'] ='Y';
+  }
+ }
+ return $permission;
+ }
+
+
+
+
+//END USER DATA FUNCTIONS -------------------------------------------------------------------------------------------------------------
+
 // CRUD FUNCTIONS ---------------------------------------------------------------------------------------------------------------------
 
 
