@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-09-2015 a las 23:15:11
+-- Tiempo de generación: 25-09-2015 a las 23:26:08
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -43,7 +43,28 @@ CREATE TABLE IF NOT EXISTS `action` (
   `action` varchar(45) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+
+--
+-- Volcado de datos para la tabla `action`
+--
+
+INSERT INTO `action` (`id`, `action`, `description`) VALUES
+(1, 'Manage Addresses', 'Permite la administración de direcciones'),
+(3, 'Manage Security', 'Permite manejar la seguridad del sistema'),
+(4, 'Manage Users', 'Permite administrar Usuarios'),
+(5, 'Manage Roles', 'Permite administrar Roles'),
+(6, 'Manage Actions', 'Permite administrar Acciones'),
+(7, 'Create User', 'Permite agregar usuarios'),
+(8, 'Delete User', 'Permite eliminar usuarios'),
+(9, 'Edit User', 'Permite editar usuarios'),
+(10, 'Change User Password', 'Permite cambiar las contraseñas de los usuarios'),
+(11, 'Manage User Role', 'Permite asociar roles a los usuarios'),
+(12, 'Manage Languages', 'Permite ver los idiomas'),
+(13, 'Create Language', 'Permite agreagar un nuevo idioma'),
+(14, 'Edit Language', 'Permite editar un idioma'),
+(15, 'Delete Language', 'Permite eliminar un idioma'),
+(16, 'Manage Translations', 'Permite manejar las opciones de idiomas y traducciones');
 
 -- --------------------------------------------------------
 
@@ -57,6 +78,33 @@ CREATE TABLE IF NOT EXISTS `action_role` (
   PRIMARY KEY (`actionid`,`roleid`),
   KEY `fk_action_role_role1_idx` (`roleid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `action_role`
+--
+
+INSERT INTO `action_role` (`actionid`, `roleid`) VALUES
+(1, 1),
+(3, 1),
+(4, 1),
+(5, 1),
+(6, 1),
+(7, 1),
+(8, 1),
+(9, 1),
+(10, 1),
+(11, 1),
+(12, 1),
+(13, 1),
+(16, 1),
+(1, 2),
+(3, 2),
+(4, 2),
+(7, 2),
+(8, 2),
+(9, 2),
+(10, 2),
+(11, 2);
 
 -- --------------------------------------------------------
 
@@ -132,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `city` (
   PRIMARY KEY (`id`),
   KEY `fk_city_country1_idx` (`countryid`),
   KEY `fk_city_state1_idx` (`stateid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `city`
@@ -187,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `country` (
   `code` varchar(4) DEFAULT NULL,
   `country` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=252 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=251 ;
 
 --
 -- Volcado de datos para la tabla `country`
@@ -448,6 +496,19 @@ INSERT INTO `country` (`id`, `code`, `country`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `language`
+--
+
+CREATE TABLE IF NOT EXISTS `language` (
+  `code` varchar(10) NOT NULL,
+  `language` varchar(60) DEFAULT NULL,
+  `flag` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `neighborhood`
 --
 
@@ -459,14 +520,15 @@ CREATE TABLE IF NOT EXISTS `neighborhood` (
   PRIMARY KEY (`id`),
   KEY `fk_neighborhood_township1_idx` (`townshipid`),
   KEY `fk_neighborhood_city1_idx` (`cityid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `neighborhood`
 --
 
 INSERT INTO `neighborhood` (`id`, `cityid`, `townshipid`, `neighborhood`) VALUES
-(1, 1, 1, 'Chanis');
+(1, 1, 1, 'Chanis'),
+(2, 1, 1, 'test');
 
 -- --------------------------------------------------------
 
@@ -492,7 +554,15 @@ CREATE TABLE IF NOT EXISTS `role` (
   `role` varchar(45) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `role`
+--
+
+INSERT INTO `role` (`id`, `role`, `description`) VALUES
+(1, 'Administrator', 'Administrador del sistema'),
+(2, 'Standard User', 'Standard User');
 
 -- --------------------------------------------------------
 
@@ -580,7 +650,7 @@ CREATE TABLE IF NOT EXISTS `township` (
   `township` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_township_city1_idx` (`cityid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
 -- Volcado de datos para la tabla `township`
@@ -593,9 +663,7 @@ INSERT INTO `township` (`id`, `cityid`, `township`) VALUES
 (6, 1, 'Juan Diaz'),
 (7, 1, 'Tocumen'),
 (8, 2, 'Usaquen2'),
-(9, 1, 'sasasa'),
-(15, 1, 'testr'),
-(17, 2, 'test');
+(9, 1, 'sasasa');
 
 -- --------------------------------------------------------
 
@@ -621,28 +689,21 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `password` longtext,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39 ;
 
 --
 -- Volcado de datos para la tabla `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `email`, `password`) VALUES
-(1, 'andres3333', 'andresfranco2@cableonda.net', 'password4'),
-(2, 'pedro', 'pedro@hotmail.com', '$2a$08$aI7XSAM01l47eUQBCxNLTeDMeH7qGyVDsMQ1gn48865o3YAnQykGO'),
-(3, 'pablo', 'pablo@hotmail.com', 'password'),
-(4, 'as', 'andresfranco@cableonda.net', ''),
-(5, '', 'pedro@hotmail.com', ''),
-(6, 'test', 'afranco@adrtec.com', 'sdsd'),
-(7, 'assa', 'afranco@adrtec.com', 'ssdds'),
-(8, 'sdsd', 'andresfranco@cableonda.net', 'asas'),
-(9, 'aass', 'andresfranco@cableonda.net', 's'),
-(13, 'sas', 'andresfranco@cableonda.net', 'ss'),
-(14, 'sassss', 'andresfranco@cableonda.net', 'asssss'),
-(15, 'assddf', 'andresfranco@cableonda.net', 'asssssfffff'),
-(16, 'asass', 'afranco@adrtec.com', 'asassa'),
-(17, 'prueba', 'prueba@prueba.com', 'prueba123');
+INSERT INTO `user` (`id`, `username`, `email`, `password`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(30, 'admin', 'andresfranco@cableonda.net', '$2a$08$GYhoUJZxQha4xYSX4WbapebHRBYhT.biiqsia63QICJhS8NMepN1W', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(37, 'test2', 'andresfranco@cableonda.net', '$2a$08$13NjHo7VHfGd7DRkPCCoW.8a.hWjDUTcBJXNCL3OC2o61aeRcJr8y', 'admin', 'admin', '2015-09-16 22:45:49', '2015-09-16 22:45:49'),
+(38, 'test5', 'andresfranco@cableonda.net', '$2a$08$RbaMD9e6TZ1d6U9qljY1WeFROKpfYrV6sqMD8OeSc.92A5HurGqii', 'admin', 'admin', '2015-09-16 23:04:10', '2015-09-16 23:04:10');
 
 -- --------------------------------------------------------
 
@@ -657,6 +718,14 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   KEY `fk_user_role_user1_idx` (`userid`),
   KEY `fk_user_role_role1_idx` (`roleid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `user_role`
+--
+
+INSERT INTO `user_role` (`userid`, `roleid`) VALUES
+(30, 1),
+(37, 2);
 
 -- --------------------------------------------------------
 

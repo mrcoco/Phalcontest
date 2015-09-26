@@ -147,6 +147,8 @@
 {% set users ='N' %}
 {% set action ='N' %}
 {% set roles ='N' %}
+{% set translation ='N' %}
+{% set languages ='N' %}
 {# END MENU OPTIONS SECURITY#}
 {% for item in actions %}
 {#Chek menu options#}
@@ -165,6 +167,12 @@
 {% if item.action =='Manage Roles' %}
  {% set roles ='Y' %}
 {% endif %}
+{% if item.action =='Manage Translations' %}
+ {% set translation ='Y' %}
+{% endif %}
+{% if item.action =='Manage Languages' %}
+ {% set languages ='Y' %}
+{% endif %}
 {% endfor %}
 <ul class="page-sidebar-menu page-sidebar-menu-closed" data-slide-speed="200" data-auto-scroll="true" data-keep-expanded="false">
    {% if address =='Y'%}
@@ -177,15 +185,46 @@
     {% endfor %}">
     <a href="" style="padding-left:20px;">
     <span class="arrow "></span>
-    <p align="left"><b><i class="fa fa-home"></i> Direcciones</b></p>
+    <p align="left"><b><i class="fa fa-home"></i>{{'Direcciones'|t}}</b></p>
     </a>
     <ul class="sub-menu">
-        <li class="{% if 'country' in router.getRewriteUri() %}active{% endif %}"> <a href="{{ url("country/list") }}" ><p align="left"><i class="icon-flag" ></i> Paises</p></a></li>
-        <li class="{% if 'state' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("state/list") }}" ><p align="left"><i class="icon-flag" ></i> Estados<p></a></li>
-        <li class="{% if 'city' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("city/list") }}" ><p align="left"><i class="icon-flag" ></i> Ciudades</p></a></li>
-        <li class="{% if 'township' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("township/list") }}" ><p align="left"><i class="icon-flag" ></i> Sectores</p></a></li>
-        <li class="{% if 'neighborhood' in router.getRewriteUri()%}active{% endif %}"> <a href="{{ url("neighborhood/list") }}" ><p align="left"><i class="icon-flag"></i> Barrios</p></a></li>
-        <li> <a href="{{ url("index/list") }}"><p align="left"><i class="icon-flag"></i> Direcciones</p></a></li>
+        <li class="{% if 'country' in router.getRewriteUri() %}active{% endif %}">
+          <a href="{{ url("country/list") }}" ><p align="left"><i class="icon-flag" >
+          </i>{{'Paises'|t}}</p>
+          </a>
+        </li>
+        <li class="{% if 'state' in router.getRewriteUri()%}active{% endif %}">
+          <a href="{{ url("state/list") }}" >
+            <p align="left">
+            <i class="icon-flag" >
+            </i>{{'Estados'|t}}</p>
+          </a>
+        </li>
+        <li class="{% if 'city' in router.getRewriteUri()%}active{% endif %}">
+          <a href="{{ url("city/list") }}" >
+            <p align="left">
+              <i class="icon-flag" ></i>
+              {{'Ciudades'|t}}</p>
+          </a>
+        </li>
+        <li class="{% if 'township' in router.getRewriteUri()%}active{% endif %}">
+          <a href="{{ url("township/list") }}" >
+            <p align="left"><i class="icon-flag" ></i>
+              {{'Sectores'|t}}</p>
+            </a>
+          </li>
+        <li class="{% if 'neighborhood' in router.getRewriteUri()%}active{% endif %}">
+          <a href="{{ url("neighborhood/list") }}" >
+            <p align="left"><i class="icon-flag"></i>
+               {{'Barrios'|t}}</p>
+             </a>
+           </li>
+        <li>
+        <a href="{{ url("index/list") }}">
+          <p align="left"><i class="icon-flag"></i>
+          {{'Direcciones'|t}}</p>
+        </a>
+        </li>
     </ul>
   </li>
   {% endif %}
@@ -199,33 +238,63 @@
     {% endfor %}">
     <a href="" style="padding-left:20px;">
     <span class="arrow "></span>
-    <p align="left"><b><i class="fa fa-lock"></i> Seguridad</b></p>
+    <p align="left"><b><i class="fa fa-lock"></i>{{'Seguridad'|t}}</b></p>
     </a>
     <ul class="sub-menu">
        {% if users =='Y'%}
        <li class="{% if 'user' in router.getRewriteUri() %}active{% endif %}">
          <a href="{{ url("user/list") }}" >
-         <p align="left"><i class="icon-user" ></i> Usuarios</p>
+         <p align="left"><i class="icon-user" ></i>{{'Usuarios'|t}}</p>
          </a>
        </li>
        {% endif %}
        {% if roles =='Y'%}
         <li class="{% if 'role' in router.getRewriteUri()%}active{% endif %}">
           <a href="{{ url("role/list") }}" >
-             <p align="left"><i class="icon-shield" ></i> Roles<p>
+             <p align="left"><i class="icon-shield" ></i>{{'Roles'|t}}<p>
           </a>
         </li>
        {% endif %}
        {% if action =='Y'%}
         <li class="{% if 'action' in router.getRewriteUri()%}active{% endif %}">
           <a href="{{ url("action/list") }}" >
-            <p align="left"><i class="icon-star" ></i> Acciones</p>
+            <p align="left"><i class="icon-star" ></i>{{'Acciones'|t}}</p>
           </a>
         </li>
       {% endif %}
     </ul>
   </li>
   {% endif %}
+  {% if translation =='Y'%}
+ <li class="{% for key,name in ['language','translation'] %}
+   {% if name  in router.getRewriteUri() %}
+       active open
+   {% else %}
+   start
+   {% endif%}
+   {% endfor %}">
+   <a href="" style="padding-left:20px;">
+   <span class="arrow "></span>
+   <p align="left"><b><i class="fa fa-lock"></i>{{'Traducciones'|t}}</b></p>
+   </a>
+   <ul class="sub-menu">
+      {% if languages =='Y'%}
+      <li class="{% if 'language' in router.getRewriteUri() %}active{% endif %}">
+        <a href="{{ url("language/list") }}" >
+        <p align="left"><i class="icon-user" ></i>{{'Idiomas'|t}}</p>
+        </a>
+      </li>
+      {% endif %}
+      {% if translation =='Y'%}
+       <li class="{% if 'translate' in router.getRewriteUri()%}active{% endif %}">
+         <a href="{{ url("translation/list") }}" >
+            <p align="left"><i class="icon-shield" ></i>{{'Traducciones'|t}}<p>
+         </a>
+       </li>
+      {% endif %}
+   </ul>
+ </li>
+ {% endif %}
 </ul>
 
 <!-- END SIDEBAR MENU -->

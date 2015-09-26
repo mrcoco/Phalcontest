@@ -126,6 +126,12 @@ class UserController extends ControllerBase
              ->execute();
     $this->set_grid_values($query,$grid_values);
 
+    $this->check_all_permissions($userid);
+
+}
+
+  public function check_all_permissions($userid)
+  {
     $this->view->permissions =$this->check_user_actions(
     $userid
     ,'Create User'
@@ -137,7 +143,9 @@ class UserController extends ControllerBase
     ,'Change User Password'
     ,'Manage User Role');
 
-}
+
+  }
+
 
   public function check_user_special_actions($userid,$change_password_action,$add_user_role)
   {
@@ -188,6 +196,7 @@ class UserController extends ControllerBase
              ->getQuery()
              ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($userid);
 
   }
 

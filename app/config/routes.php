@@ -43,6 +43,7 @@ $router->addResource('Role', '/role');
 $router->addResource('Action', '/action');
 $router->addResource('UserRole', '/userrole');
 $router->addResource('ActionRole', '/actionrole');
+$router->addResource('Language', '/language');
 
 
 return $router;
