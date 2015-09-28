@@ -154,8 +154,7 @@ class Language extends \Phalcon\Mvc\Model
               )
           )
       );
-      if(!$this->getId())
-      {
+      
       $this->validate(
           new PresenceOf(
               array(
@@ -164,7 +163,7 @@ class Language extends \Phalcon\Mvc\Model
               )
           )
       );
-     }
+     
         $this->validate(
             new PresenceOf(
                 array(

@@ -186,7 +186,7 @@ class LanguageController extends ControllerBase
     ,'');
   }
 
-  public function set_Language_entity($id,$entityname,$errormessage,$controller,$action,$mode)
+  public function set_Language_entity($code,$entityname,$errormessage,$controller,$action,$mode)
   {
         if ($mode =='create')
         {
@@ -195,7 +195,13 @@ class LanguageController extends ControllerBase
         else
         {
 
-         $entity = $entityname::findFirstBycode($id);
+         $entity = $this->modelsManager->createBuilder()
+            ->columns(array('l.code as code','l.language as language','l.flag as flag'))
+            ->from(array('l' => 'Language'))
+             ->Where('l.code LIKE :code:', array('code' => '%' . $code. '%'))
+             ->getQuery()
+             ->execute();
+         
          if ($mode='edit' and !$entity)
          {
            return $this->dispatcher->forward(array(
@@ -219,7 +225,7 @@ class LanguageController extends ControllerBase
  }
  public function execute_language_action($entity,$controller,$action,$params,$redirect_route,$mode)
  {
- $form_action =$entity->save();
+ $form_action = $entity->save();
   if ($mode =='delete')
   {
     $form_action = $entity->delete();
@@ -308,7 +314,7 @@ class LanguageController extends ControllerBase
     $this->execute_entity_action(
     $entity
     ,$this->crud_params['controller']
-    ,'edit',array($entity->id)
+    ,'edit',array($entity->code)
     ,$this->crud_params['action_list'],'update');
   }
 

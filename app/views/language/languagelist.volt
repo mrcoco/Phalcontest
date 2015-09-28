@@ -89,18 +89,24 @@
 		{% for entity in page.items %}
 			<tr>
 			{% for index,item in headercolumns %}
-				<td width ="40%">{{ entity.readAttribute(item['column_name'])}}</td>
+                            {% if item['column_name'] =='flag' %} 
+                                <td width ="10%"><img src ="{{static_url('metronic/assets/global/img/flags/'~ entity.readAttribute(item['column_name']))}}"></img></td>
+                                {% else %}
+                                <td width ="20%">{{ entity.readAttribute(item['column_name'])}}</td>
+                            {% endif %}     
+                            
+				
 			{% endfor %}
 
 			<td width ="2%">
 				{% if permissions['edit']=='Y' %}
-				{{link_to(editroute~entity.id,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}
+				{{link_to(editroute~entity.code,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}
 				{% endif %}
 			</td>
 
 			<td width ="2%">
 				{% if permissions['delete']=='Y' %}
-				{{link_to(showroute~entity.id,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}
+				{{link_to(showroute~entity.code,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}
 				{% endif %}
 			</td>
 			</tr>
