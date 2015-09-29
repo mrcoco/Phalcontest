@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-09-2015 a las 23:26:08
+-- Tiempo de generación: 28-09-2015 a las 20:30:31
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `action` (
   `action` varchar(45) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
 -- Volcado de datos para la tabla `action`
@@ -64,7 +64,10 @@ INSERT INTO `action` (`id`, `action`, `description`) VALUES
 (13, 'Create Language', 'Permite agreagar un nuevo idioma'),
 (14, 'Edit Language', 'Permite editar un idioma'),
 (15, 'Delete Language', 'Permite eliminar un idioma'),
-(16, 'Manage Translations', 'Permite manejar las opciones de idiomas y traducciones');
+(16, 'Manage Translations', 'Permite manejar las opciones de idiomas y traducciones'),
+(18, 'Create Translation', 'Permite crear traducciones'),
+(19, 'Edit Translation', 'Permite editar traducciones'),
+(20, 'Delete Translation', 'Permite eliminar traducciones');
 
 -- --------------------------------------------------------
 
@@ -96,7 +99,12 @@ INSERT INTO `action_role` (`actionid`, `roleid`) VALUES
 (11, 1),
 (12, 1),
 (13, 1),
+(14, 1),
+(15, 1),
 (16, 1),
+(18, 1),
+(19, 1),
+(20, 1),
 (1, 2),
 (3, 2),
 (4, 2),
@@ -503,8 +511,20 @@ CREATE TABLE IF NOT EXISTS `language` (
   `code` varchar(10) NOT NULL,
   `language` varchar(60) DEFAULT NULL,
   `flag` varchar(45) DEFAULT NULL,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL,
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `language`
+--
+
+INSERT INTO `language` (`code`, `language`, `flag`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+('en', 'Ingles', 'us.png', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+('es', 'Español', 'es.png', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01');
 
 -- --------------------------------------------------------
 
@@ -681,6 +701,74 @@ CREATE TABLE IF NOT EXISTS `townshipview` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `translation`
+--
+
+CREATE TABLE IF NOT EXISTS `translation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `languagecode` varchar(10) NOT NULL,
+  `translatekey` varchar(50) DEFAULT NULL,
+  `value` varchar(2000) DEFAULT NULL,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_translation_language1_idx` (`languagecode`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=48 ;
+
+--
+-- Volcado de datos para la tabla `translation`
+--
+
+INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(1, 'en', 'Español', 'Spanish', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(2, 'es', 'English', 'Ingles', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(3, 'en', 'Ingles', 'English', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(4, 'en', 'Seleccione un idioma', 'Select a language', 'admin', 'admin', '2015-09-28 23:14:26', '2015-09-28 23:14:26'),
+(6, 'en', 'translation.required.key', 'You must enter a key', 'admin', 'admin', '2015-09-28 23:18:35', '2015-09-28 23:18:35'),
+(7, 'es', 'translation.required.key', 'Debe ingresar una llave', 'admin', 'admin', '2015-09-28 23:19:30', '2015-09-28 23:19:30'),
+(8, 'en', 'translation.required.value', 'You must enter a value', 'admin', 'admin', '2015-09-28 23:21:12', '2015-09-28 23:21:12'),
+(9, 'es', 'translation.required.value', 'Debe ingresar un valor', 'admin', 'admin', '2015-09-28 23:21:31', '2015-09-28 23:21:31'),
+(10, 'en', 'translation.required.language', 'You must select a language', 'admin', 'admin', '2015-09-28 23:24:47', '2015-09-28 23:24:47'),
+(11, 'es', 'translation.required.language', 'Debe seleccionar un idioma', 'admin', 'admin', '2015-09-28 23:25:06', '2015-09-28 23:25:06'),
+(12, 'en', 'translation.key.exist', 'The key for this language already exist', 'admin', 'admin', '2015-09-29 01:58:20', '2015-09-29 01:58:20'),
+(13, 'es', 'translation.key.exist', 'Ya existe esa llave para el idioma seleccionado', 'admin', 'admin', '2015-09-29 01:59:17', '2015-09-29 01:59:17'),
+(15, 'en', 'Traducciones', 'Translations', 'admin', 'admin', '2015-09-29 02:01:00', '2015-09-29 02:01:00'),
+(16, 'en', 'Idioma', 'Language', 'admin', 'admin', '2015-09-29 02:04:13', '2015-09-29 02:04:13'),
+(17, 'en', 'Valor', 'Value', 'admin', 'admin', '2015-09-29 02:04:27', '2015-09-29 02:04:27'),
+(18, 'en', 'Llave', 'Key', 'admin', 'admin', '2015-09-29 02:04:39', '2015-09-29 02:04:39'),
+(19, 'en', 'Buscar', 'Search', 'admin', 'admin', '2015-09-29 02:07:13', '2015-09-29 02:07:13'),
+(20, 'en', 'Primero', 'First', 'admin', 'admin', '2015-09-29 02:07:50', '2015-09-29 02:07:50'),
+(21, 'en', 'Anterior', 'Back', 'admin', 'admin', '2015-09-29 02:08:08', '2015-09-29 02:08:08'),
+(22, 'en', 'Siguiente', 'Next', 'admin', 'admin', '2015-09-29 02:08:25', '2015-09-29 02:08:25'),
+(23, 'en', 'Ultimo', 'Last', 'admin', 'admin', '2015-09-29 02:08:44', '2015-09-29 02:08:44'),
+(24, 'en', 'Página', 'Page', 'admin', 'admin', '2015-09-29 02:09:04', '2015-09-29 02:09:04'),
+(25, 'en', 'de', 'of', 'admin', 'admin', '2015-09-29 02:09:18', '2015-09-29 02:09:18'),
+(26, 'en', 'No se encontraron Traducciones', 'Not found translations', 'admin', 'admin', '2015-09-29 02:10:11', '2015-09-29 02:10:11'),
+(27, 'en', 'Perfil', 'Profile', 'admin', 'admin', '2015-09-29 02:23:54', '2015-09-29 02:23:54'),
+(28, 'en', 'logout.text', 'Logout', 'admin', 'admin', '2015-09-29 02:24:48', '2015-09-29 02:24:48'),
+(29, 'es', 'logout.text', 'Salir', 'admin', 'admin', '2015-09-29 02:30:05', '2015-09-29 02:30:05'),
+(30, 'en', 'Direcciones', 'Addresses', 'admin', 'admin', '2015-09-29 02:30:54', '2015-09-29 02:30:54'),
+(31, 'en', 'Seguridad', 'Security', 'admin', 'admin', '2015-09-29 02:31:08', '2015-09-29 02:31:08'),
+(32, 'en', 'Paises', 'Countries', 'admin', 'admin', '2015-09-29 02:31:26', '2015-09-29 02:31:26'),
+(33, 'en', 'Estados', 'States', 'admin', 'admin', '2015-09-29 02:31:39', '2015-09-29 02:31:39'),
+(34, 'en', 'Ciudades', 'Cities', 'admin', 'admin', '2015-09-29 02:32:06', '2015-09-29 02:32:06'),
+(35, 'en', 'Sectores', 'Townships', 'admin', 'admin', '2015-09-29 02:32:30', '2015-09-29 02:32:30'),
+(36, 'en', 'Barrios', 'Neigborhoods', 'admin', 'admin', '2015-09-29 02:32:58', '2015-09-29 02:32:58'),
+(37, 'en', 'Usuarios', 'Users', 'admin', 'admin', '2015-09-29 02:33:17', '2015-09-29 02:33:17'),
+(38, 'en', 'Acciones', 'Actions', 'admin', 'admin', '2015-09-29 02:33:37', '2015-09-29 02:33:37'),
+(39, 'en', 'Idiomas', 'Languages', 'admin', 'admin', '2015-09-29 02:33:55', '2015-09-29 02:33:55'),
+(40, 'en', 'Nueva Traducción', 'New Translation', 'admin', 'admin', '2015-09-29 02:35:21', '2015-09-29 02:35:21'),
+(41, 'en', 'Guardar', 'Save', 'admin', 'admin', '2015-09-29 02:35:36', '2015-09-29 02:35:36'),
+(42, 'en', 'Cancelar', 'Cancel', 'admin', 'admin', '2015-09-29 02:35:50', '2015-09-29 02:35:50'),
+(43, 'en', 'Editar Traducción', 'Edit Translation', 'admin', 'admin', '2015-09-29 02:36:42', '2015-09-29 02:36:42'),
+(45, 'en', 'Esta seguro que desea eliminar esta traducción?', 'Are you sure you want to delete this translation?', 'admin', 'admin', '2015-09-29 02:39:04', '2015-09-29 02:39:04'),
+(46, 'en', 'Eliminar', 'Delete', 'admin', 'admin', '2015-09-29 02:40:09', '2015-09-29 02:40:09');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `user`
 --
 
@@ -694,7 +782,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=40 ;
 
 --
 -- Volcado de datos para la tabla `user`
@@ -703,7 +791,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`id`, `username`, `email`, `password`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
 (30, 'admin', 'andresfranco@cableonda.net', '$2a$08$GYhoUJZxQha4xYSX4WbapebHRBYhT.biiqsia63QICJhS8NMepN1W', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
 (37, 'test2', 'andresfranco@cableonda.net', '$2a$08$13NjHo7VHfGd7DRkPCCoW.8a.hWjDUTcBJXNCL3OC2o61aeRcJr8y', 'admin', 'admin', '2015-09-16 22:45:49', '2015-09-16 22:45:49'),
-(38, 'test5', 'andresfranco@cableonda.net', '$2a$08$RbaMD9e6TZ1d6U9qljY1WeFROKpfYrV6sqMD8OeSc.92A5HurGqii', 'admin', 'admin', '2015-09-16 23:04:10', '2015-09-16 23:04:10');
+(38, 'test5', 'andresfranco@cableonda.net', '$2a$08$RbaMD9e6TZ1d6U9qljY1WeFROKpfYrV6sqMD8OeSc.92A5HurGqii', 'admin', 'admin', '2015-09-16 23:04:10', '2015-09-16 23:04:10'),
+(39, 'test99as', 'andresfranco@cableonda.net', '$2a$08$f6fK6GRyZwgPCLMienjls.0npOUESpFXSPGvprrSmxULBP5niTT8G', 'admin', 'admin', '2015-09-29 03:21:01', '2015-09-28 20:28:00');
 
 -- --------------------------------------------------------
 
@@ -820,6 +909,12 @@ ALTER TABLE `tower`
 --
 ALTER TABLE `township`
   ADD CONSTRAINT `fk_township_city1` FOREIGN KEY (`cityid`) REFERENCES `city` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `translation`
+--
+ALTER TABLE `translation`
+  ADD CONSTRAINT `fk_translation_language1` FOREIGN KEY (`languagecode`) REFERENCES `language` (`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `user_role`

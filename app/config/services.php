@@ -96,19 +96,24 @@ $di->set('translate', function() use ($config,$language) {
   $request = new Request();
   //echo "language". $dispatcher->getParam('language');
 
-
+$translation = Translation::findBylanguagecode($language)->toArray();
+$messages =array();
+foreach($translation as $item)
+{
+ $messages[$item['translatekey']] =$item['value'];
+}
   //$language = $dispatcher->getParam('language');
   //echo "lenguage".$language."<br>";
 //$language =$request->getBestLanguage();
 
   // Check if we have a translation file for that lang
-  if (file_exists(APP_PATH ."/app/messages/" . $language . ".php")) {
+/*  if (file_exists(APP_PATH ."/app/messages/" . $language . ".php")) {
      require APP_PATH ."/app/messages/" . $language . ".php";
   } else {
      // fallback to some default
      require APP_PATH ."/app/messages/es.php";
   }
-
+*/
     //require $config->application->messagesDir."es.php";
 
     return new NativeArray(array(

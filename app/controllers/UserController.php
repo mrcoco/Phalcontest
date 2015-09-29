@@ -309,7 +309,7 @@ class UserController extends ControllerBase
     ,'update');
 
     $this->set_post_values($entity);
-
+    $this->audit_fields($entity,'edit');
     $this->execute_entity_action(
     $entity
     ,$this->crud_params['controller']

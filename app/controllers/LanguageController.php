@@ -64,6 +64,7 @@ class LanguageController extends ControllerBase
 
     public function set_post_values($entity)
     {
+
       $entity->setCode($this->request->getPost("code"));
       $entity->setLanguage($this->request->getPost("language"));
       $entity->setFlag($this->request->getPost("flag"));
@@ -195,13 +196,8 @@ class LanguageController extends ControllerBase
         else
         {
 
-         $entity = $this->modelsManager->createBuilder()
-            ->columns(array('l.code as code','l.language as language','l.flag as flag'))
-            ->from(array('l' => 'Language'))
-             ->Where('l.code LIKE :code:', array('code' => '%' . $code. '%'))
-             ->getQuery()
-             ->execute();
-         
+         $entity = Language::findByCode($code)->getFirst();
+
          if ($mode='edit' and !$entity)
          {
            return $this->dispatcher->forward(array(
@@ -249,7 +245,7 @@ class LanguageController extends ControllerBase
   */
   public function editAction($id)
   {
-    $entity =$this->set_entity(
+    $entity =$this->set_Language_entity(
     $id
     ,$this->crud_params['entityname']
     ,$this->crud_params['not_found_message']
@@ -259,7 +255,6 @@ class LanguageController extends ControllerBase
 
     $this->get_assets();
     $this->set_tags('edit',$entity);
-    $this->view->id = $entity->id;
 
     $this->set_form_routes(
     $this->crud_params['save_route'].$id
@@ -288,7 +283,7 @@ class LanguageController extends ControllerBase
     ,'create');
 
     $this->set_post_values($entity);
-
+    $this->audit_fields($entity,'create');
 
     $this->execute_language_action($entity
     ,$this->crud_params['controller']
@@ -310,8 +305,8 @@ class LanguageController extends ControllerBase
     ,'update');
 
     $this->set_post_values($entity);
-
-    $this->execute_entity_action(
+    $this->audit_fields($entity,'edit');
+    $this->execute_language_action(
     $entity
     ,$this->crud_params['controller']
     ,'edit',array($entity->code)

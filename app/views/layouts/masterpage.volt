@@ -1,6 +1,6 @@
 {{globalobj.checkuser(session.get('userid'))}}
 {%set actions = globalobj.get_user_actions(session.get('userid')) %}
-
+{%set languages = globalobj. get_languages() %}
 
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -60,18 +60,14 @@
     <li class="dropdown dropdown-language">
              {#Default language spanish#}
 
-             {% set flag ='es.png' %}
-             {% set languagename ='Spanish' %}
-            {% if session.get('language')=='en'%}
-                {% set flag ='us.png' %}
-                {% set languagename ='English' %}
-               {% else %}
-               {% if session.get('language')=='es'%}
-               {% set flag ='es.png' %}
-               {% set languagename ='Spanish' %}
-               {% endif %}
-           {% endif %}
-
+           {% set flag ='es.png' %}
+           {% set languagename ='Spanish' %}
+           {% for item in languages %}
+             {% if session.get('language')== item.code %}
+                 {% set flag = item.flag %}
+                 {% set languagename = item.language %}
+             {% endif %}
+          {% endfor %}
           <a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="javascript:;">
 					<img src="{{static_url('metronic/assets/global/img/flags/'~flag)}}" alt="">
 					<span class="langname">
@@ -79,14 +75,12 @@
 					<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu dropdown-menu-default">
+            {% for item in languages %}
 						<li>
-							<a href="{{ url('setlang')~'/es'}}">
-							<img src="{{static_url('metronic/assets/global/img/flags/es.png')}}" alt=""> {{'Spanish'|t}} </a>
+							<a href="{{ url('setlang')~'/'~item.code}}">
+							<img src="{{static_url('metronic/assets/global/img/flags/'~item.flag)}}" alt=""> {{item.language|t}} </a>
 						</li>
-            <li>
-							<a href="{{ url('setlang')~'/en'}}">
-							<img src="{{static_url('metronic/assets/global/img/flags/us.png')}}" alt="">{{'English'|t}} </a>
-						</li>
+            {% endfor %}
 					</ul>
 				</li>
     <li class="dropdown dropdown-user">
@@ -98,15 +92,13 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-default">
         <li>
-                <a href="extra_profile.html">
-                <i class="icon-user"></i>{{ 'Perfil'}}</a>
+        <a href="extra_profile.html">
+        <i class="icon-user"></i>{{'Perfil'|t}}</a>
         </li>
-
         <li class="divider">
         </li>
         <li>
-                {{ link_to("login/logout",'<i class="icon-logout"></i> Salir')}}
-
+          <a href="{{url(login/logout)}}"><i class="icon-logout"></i>{{'logout.text'|t}}</a>
         </li>
         </ul>
     </li>

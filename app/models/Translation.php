@@ -1,28 +1,34 @@
 <?php
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
-
-class Language extends \Phalcon\Mvc\Model
+class Translation extends \Phalcon\Mvc\Model
 {
 
     /**
      *
-     * @var string
+     * @var integer
      */
-    protected $code;
+    protected $id;
 
     /**
      *
      * @var string
      */
-    protected $language;
+    protected $languagecode;
 
     /**
      *
      * @var string
      */
-    protected $flag;
+    protected $translatekey;
 
+    /**
+     *
+     * @var string
+     */
+    protected $value;
+
+    /**
     /**
     /**
      *
@@ -53,41 +59,53 @@ class Language extends \Phalcon\Mvc\Model
 
     /**
     /**
-    /**
-     * Method to set the value of field code
+     * Method to set the value of field id
      *
-     * @param string $code
+     * @param integer $id
      * @return $this
      */
-    public function setCode($code)
+    public function setId($id)
     {
-        $this->code = $code;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Method to set the value of field language
+     * Method to set the value of field languagecode
      *
-     * @param string $language
+     * @param string $languagecode
      * @return $this
      */
-    public function setLanguage($language)
+    public function setLanguagecode($languagecode)
     {
-        $this->language = $language;
+        $this->languagecode = $languagecode;
 
         return $this;
     }
 
     /**
-     * Method to set the value of field flag
+     * Method to set the value of field key
      *
-     * @param string $flag
+     * @param string $translatekey
      * @return $this
      */
-    public function setFlag($flag)
+    public function setTranslatekey($translatekey)
     {
-        $this->flag = $flag;
+        $this->translatekey = $translatekey;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field value
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
 
         return $this;
     }
@@ -142,43 +160,43 @@ class Language extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Returns the value of field code
+     * Returns the value of field id
      *
-     * @return string
+     * @return integer
      */
-    public function getCode()
+    public function getId()
     {
-        return $this->code;
+        return $this->id;
     }
 
     /**
-     * Returns the value of field language
+     * Returns the value of field languagecode
      *
      * @return string
      */
-    public function getLanguage()
+    public function getLanguagecode()
     {
-        return $this->language;
+        return $this->languagecode;
     }
 
     /**
-     * Returns the value of field flag
+     * Returns the value of field key
      *
      * @return string
      */
-    public function getFlag()
+    public function getTranslatekey()
     {
-        return $this->flag;
+        return $this->translatekey;
     }
 
     /**
-     * Returns table name mapped in the model.
+     * Returns the value of field value
      *
      * @return string
      */
-    public function getSource()
+    public function getValue()
     {
-        return 'language';
+        return $this->value;
     }
 
     /**
@@ -218,11 +236,30 @@ class Language extends \Phalcon\Mvc\Model
         return $this->modifydate;
     }
 
+
+    /**
+     * Initialize method for model.
+     */
+    public function initialize()
+    {
+        $this->belongsTo('languagecode', 'Language', 'code', array('alias' => 'Language'));
+    }
+
+    /**
+     * Returns table name mapped in the model.
+     *
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'translation';
+    }
+
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Language[]
+     * @return Translation[]
      */
     public static function find($parameters = null)
     {
@@ -233,7 +270,7 @@ class Language extends \Phalcon\Mvc\Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Language
+     * @return Translation
      */
     public static function findFirst($parameters = null)
     {
@@ -249,9 +286,10 @@ class Language extends \Phalcon\Mvc\Model
     public function columnMap()
     {
         return array(
-            'code' => 'code',
-            'language' => 'language',
-            'flag' => 'flag',
+            'id' => 'id',
+            'languagecode' => 'languagecode',
+            'translatekey' => 'translatekey',
+            'value' => 'value',
             'createuser'=>'createuser',
             'modifyuser'=>'modifyuser',
             'createdate'=>'createdate',
@@ -268,8 +306,7 @@ class Language extends \Phalcon\Mvc\Model
       $this->validate(
           new PresenceOf(
               array(
-                  'field'    => 'code',
-                  'message'  => $this->di->get('translate')->_('language.code.required')
+                  'field'    => 'languagecode'
 
               )
           )
@@ -278,8 +315,8 @@ class Language extends \Phalcon\Mvc\Model
       $this->validate(
           new PresenceOf(
               array(
-                  'field'    => 'language',
-                  'message'  => $this->di->get('translate')->_('language.required')
+                  'field'    => 'translatekey'
+
               )
           )
       );
@@ -287,21 +324,17 @@ class Language extends \Phalcon\Mvc\Model
         $this->validate(
             new PresenceOf(
                 array(
-                    'field'    => 'flag',
-                    'message'=> $this->di->get('translate')->_('flag.required')
+                    'field'    => 'value'
+
                 )
             )
         );
 
         $this->validate(new Uniqueness(array(
-           'field' => 'code',
-           'message'=>$this->di->get('translate')->_('language.code.unique')
+           'field' => array('languagecode', 'translatekey')
+
        )));
 
-       $this->validate(new Uniqueness(array(
-          'field' => 'language',
-          'message'=>$this->di->get('translate')->_('language.unique')
-      )));
         if ($this->validationHasFailed() == true) {
             return false;
         }
@@ -309,5 +342,47 @@ class Language extends \Phalcon\Mvc\Model
         return true;
     }
 
+    public function getMessages()
+   {
+       $messages = array();
+       $txtmessage ="";
+       foreach (parent::getMessages() as $message) {
+           switch ($message->getType()) {
+               case 'PresenceOf':
+                   switch ($message->getField()) {
+                    case 'languagecode':
+                     $txtmessage = $this->di->get('translate')->_('translation.required.language');
+                    break;
+                    case 'key':
+                     $txtmessage = $this->di->get('translate')->_('translation.required.key');
+                    break;
+                    case 'value':
+                     $txtmessage = $this->di->get('translate')->_('translation.required.value');
+                    break;
+                   }
+                    $messages[] =$txtmessage;
+                   break;
+              case 'Unique':
+
+                   if (is_array($message->getField()))
+                   {
+                     $field =implode("-", $message->getField());
+                   }
+                   else {
+                     $field =$message->getField();
+                   }
+
+                   switch ($field) {
+                    case 'languagecode-translatekey':
+                       $txtmessage =$this->di->get('translate')->_('translation.key.exist');
+                  break;
+                }
+                $messages[] =$txtmessage;
+               break;
+           }
+       }
+
+       return $messages;
+   }
 
 }

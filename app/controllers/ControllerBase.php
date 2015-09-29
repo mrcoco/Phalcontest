@@ -120,6 +120,11 @@ protected function getTranslation()
     $this->view->currenturl = $this->url->get($urlpath);
   }
 
+ public function get_languages()
+ {
+   $entity = Language::find();
+   return $entity;
+ }
 //USER DATA FUNCTIONS -----------------------------------------------------------------------------------------------------------------
  public function get_user_actions($userid)
  {
@@ -333,10 +338,15 @@ public function bind_search_values($search_values)
      {
       $entity->setCreateuser($this->session->get('username'));
       $entity->setCreatedate(date('Y-m-d H:i:s'));
+      $entity->setModifyuser($this->session->get('username'));
+      $entity->setModifydate(date('Y-m-d H:i:s'));
+     }
+     else {
+       $entity->setModifyuser($this->session->get('username'));
+       $entity->setModifydate(date('Y-m-d H:i:s'));
      }
 
-     $entity->setModifyuser($this->session->get('username'));
-     $entity->setModifydate(date('Y-m-d H:i:s'));
+
    }
 
 
