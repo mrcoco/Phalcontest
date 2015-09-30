@@ -150,7 +150,7 @@ class UserRoleController extends ControllerBase
     ->collection('validatejs')
     ->addJs('js/jqueryvalidate/jquery.validate.js')
     ->addJs('js/jqueryvalidate/additional-methods.min.js')
-    ->addJs('js/validateuserrole/validate_country.js');
+    ->addJs('js/validateuserrole/validate_user_role.js');
   }
 
 
@@ -160,12 +160,12 @@ class UserRoleController extends ControllerBase
   public function newAction($userid)
   {
     $user= User::findFirstByid($userid);
-
+    $this->view->username =$user->username;
     $this->get_assets();
     $this->set_form_routes(
     $this->crud_params['create_route'].'/'.$userid
     ,$this->crud_params['route_list'].'/'.$userid
-    ,$this->crud_params['new_title'].' '.$user->username
+    ,$this->crud_params['new_title']
     ,$this->crud_params['add_edit_view']
     ,'new'
     ,null
@@ -207,7 +207,7 @@ class UserRoleController extends ControllerBase
   }
 
   /**
-  * @Route("/create/{userid}", methods={"POST"}, name="userrolecreate")
+  * @Route("/create/{userid}", methods={"POST","GET"}, name="userrolecreate")
   */
   public function createAction($userid)
   {
@@ -220,6 +220,7 @@ class UserRoleController extends ControllerBase
     ,'create');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'create');
     $entity->SetUserid($userid);
 
     $form_action =$entity->save();
@@ -257,6 +258,7 @@ class UserRoleController extends ControllerBase
     ,'update');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'edit');
 
     $this->execute_entity_action(
     $entity

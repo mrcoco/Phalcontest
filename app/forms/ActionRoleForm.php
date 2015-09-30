@@ -18,7 +18,7 @@ class ActionRoleForm extends Form
 
     $action = new Select('actionid',Action::find(), array(
       'using' => array('id','action')
-     ,'useEmpty' => TRUE,'emptyText' => 'Seleccione una Acción'));
+     ,'useEmpty' => TRUE,'emptyText' => $this->di->get('translate')->_('Seleccione una Acción')));
      $action->setLabel('Acción');
      $this->add($action);
 

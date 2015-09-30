@@ -18,7 +18,7 @@ class UserRoleForm extends Form
 
     $role = new Select('roleid',Role::find(), array(
       'using' => array('id','role')
-     ,'useEmpty' => TRUE,'emptyText' => 'Seleccione un Rol'));
+     ,'useEmpty' => TRUE,'emptyText' => $this->di->get('translate')->_('Seleccione un Rol')));
      $role->setLabel('Rol');
      $this->add($role);
 

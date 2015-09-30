@@ -15,7 +15,7 @@ $(function() {
         // Specify the validation error messages
         messages: {
             action:{
-                required:"Debe ingresar una acción"
+                required:validatemessages.action
 
             }
 

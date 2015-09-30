@@ -348,7 +348,7 @@ class UserController extends ControllerBase
   }
 
   /**
-  * @Route("/delete/{id}", methods={"POST"}, name="userdelete")
+  * @Route("/delete/{id}", methods={"POST","GET"}, name="userdelete")
   */
   public function deleteAction($id)
   {

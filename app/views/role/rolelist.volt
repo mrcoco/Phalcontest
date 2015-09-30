@@ -1,7 +1,7 @@
 {% extends "layouts/masterpage.volt" %}
 {% block pagetitle %}
 	<h3 class="page-title" align ="left">
-	{{title}}
+	{{title|t}}
 	</h3>
 	<hr/>
 {% endblock %}
@@ -15,7 +15,7 @@
 	<div class="form-group col-md-10" style="padding-left:0;">
 	{% for index,item in searchcolumns %}
 	<div class="col-md-5">
-	<label>{{item['title']}}</label>
+	<label>{{item['title']|t}}</label>
 	{{ text_field(item['name'], "size" : item['size'],"class":"form-control","placeholder":"") }}
 	</div>
 	{% endfor %}
@@ -24,7 +24,7 @@
 	<div class="row">
 	<div class="form-group col-md-8">
 	<div class="col-md-1" align ="left" style="padding-left:0;">
-	{{ submit_button("Buscar","class":"btn blue") }}
+	{{ submit_button("Buscar"|t,"class":"btn blue") }}
 	</div>
 	</div>
 	</div>
@@ -32,9 +32,10 @@
 	</div>
   <!-- END GRID SEARCH-->
 
+	{% if permissions['create']=='Y' %}
 	 <!-- NEW ITEM ICON-->
 	<div align="left">{{ link_to(newroute,'<i class="fa fa-plus"></i>','class':'btn btn-icon-only blue')}}</div>
-
+  {% endif %}
 	<br>
 	{% if noitems ==""%}
 	<table class="table table-bordered table-striped table-condensed flip-content">
@@ -43,7 +44,7 @@
 	<!-- GRID HEADER-->
 	{% for index,item in headercolumns %}
 	<th style="background-color:#eee;">
-	<span>{{item['title']}}</span>
+	<span>{{item['title']|t}}</span>
 	<div class="btn-group pull-right">
 	<button aria-expanded="false" type="button" class="btn btn-fit-height gray dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
 	{% if order =='asc' %}
@@ -90,9 +91,21 @@
 			{% for index,item in headercolumns %}
 				<td width ="40%">{{ entity.readAttribute(item['column_name'])}}</td>
 			{% endfor %}
-			<td width ="2%">{{link_to('actionrole/list/'~entity.id,'<i class="fa fa-shield"></i>','class':'btn btn-icon-only blue')}}</td>
-			<td width ="2%">{{link_to(editroute~entity.id,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}</td>
-			<td width ="2%">{{link_to(showroute~entity.id,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}</td>
+			<td width ="2%">
+				{% if special_permission['add_role_action']=='Y' %}
+				{{link_to('actionrole/list/'~entity.id,'<i class="fa fa-shield"></i>','class':'btn btn-icon-only blue')}}
+				{% endif %}
+			</td>
+			<td width ="2%">
+				{% if permissions['edit']=='Y' %}
+				{{link_to(editroute~entity.id,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}
+				{% endif %}
+			</td>
+			<td width ="2%">
+				{% if permissions['delete']=='Y' %}
+				{{link_to(showroute~entity.id,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}
+				{% endif %}
+			</td>
 			</tr>
 		{% endfor %}
 		{% endif %}
@@ -100,11 +113,11 @@
 	<!--END GRID BODY -->
 		</table>
 		<!--END GRID PAGINATION -->
-		<div align="left">{{ 'Página '~ page.current ~" de "~page.total_pages }}</div>
+		<div align="left">{{ 'Página'|t~' '~ page.current ~' '~'de'|t ~' '~page.total_pages }}</div>
 		<div align ="left">
 		<ul class="pagination">
-		<li>{{ link_to(listroute,'<i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i>Primero') }}</li>
-		<li>{{ link_to(listroute~"?page="~page.before, '<i class="fa fa-angle-left"></i>Anterior') }}</li>
+		<li>{{ link_to(listroute,'<i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i>'~'Primero'|t) }}</li>
+		<li>{{ link_to(listroute~"?page="~page.before, '<i class="fa fa-angle-left"></i>'~'Anterior'|t) }}</li>
 		{% for i in 1..page.total_pages %}
 		{% if page.current == i %}
 		{% set classitem ='active' %}
@@ -113,8 +126,8 @@
 		{% endif %}
 		<li class="{{classitem}}">{{ link_to(listroute~"?page="~i, i) }}</li>
 		{% endfor %}
-		<li>{{ link_to(listroute~"?page="~page.next, 'Siguiente <i class="fa fa-angle-right"></i>') }}</li>
-		<li>{{ link_to(listroute~"?page="~page.last, 'Ultimo <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i>') }}</li>
+		<li>{{ link_to(listroute~"?page="~page.next, 'Siguiente'|t~'<i class="fa fa-angle-right"></i>') }}</li>
+		<li>{{ link_to(listroute~"?page="~page.last, 'Ultimo'|t~'<i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i>') }}</li>
 		</ul>
 		</div>
     <!--END GRID PAGINATION -->

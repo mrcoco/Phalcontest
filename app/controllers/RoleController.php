@@ -101,9 +101,38 @@ class RoleController extends ControllerBase
              ->getQuery()
              ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
+  public function check_all_permissions($userid)
+  {
+    $this->view->permissions =$this->check_user_actions(
+    $userid
+    ,'Create Role'
+    ,'Edit Role'
+    ,'Manage Role'
+    ,'Delete Role');
+    $this->view->special_permission =$this->check_role_special_actions(
+    $userid
+    ,'Manage Role Actions');
+  }
+
+  public function check_role_special_actions($userid,$add_role_action)
+  {
+    $special_permission =array();
+    $special_permission['add_role_action'] ='N';
+    $actions = $this->get_user_actions($userid);
+    foreach ($actions as $item)
+    {
+     if ($item->action ==$add_role_action)
+     {
+      $special_permission['add_role_action'] ='Y';
+     }
+
+    }
+     return $special_permission;
+  }
 
 
   /**
@@ -131,6 +160,7 @@ class RoleController extends ControllerBase
              ->getQuery()
              ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
@@ -196,7 +226,7 @@ class RoleController extends ControllerBase
   }
 
   /**
-  * @Route("/create", methods={"POST"}, name="rolecreate")
+  * @Route("/create", methods={"POST","GET"}, name="rolecreate")
   */
   public function createAction()
   {
@@ -209,6 +239,7 @@ class RoleController extends ControllerBase
     ,'create');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'create');
 
     $this->execute_entity_action($entity
     ,$this->crud_params['controller']
@@ -230,6 +261,7 @@ class RoleController extends ControllerBase
     ,'update');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'edit');
 
     $this->execute_entity_action(
     $entity
@@ -269,7 +301,7 @@ class RoleController extends ControllerBase
   }
 
   /**
-  * @Route("/delete/{id}", methods={"POST"}, name="roledelete")
+  * @Route("/delete/{id}", methods={"POST","GET"}, name="roledelete")
   */
   public function deleteAction($id)
   {

@@ -15,7 +15,7 @@ class ActionRoleController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'actionrole/list';
         $this->crud_params['entityname']         = 'actionrole';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada actionrole';
+        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada Actionrole';
         $this->crud_params['controller']         = 'ActionRole';
         $this->crud_params['action_list']        = 'actionrolelist';
         $this->crud_params['form_name']          = 'ActionRoleForm';
@@ -25,8 +25,8 @@ class ActionRoleController extends ControllerBase
         $this->crud_params['delete_route']       = 'actionrole/delete/';
         $this->crud_params['add_edit_view']      = 'action_role/addedit';
         $this->crud_params['show_view']          = 'action_role/show';
-        $this->crud_params['new_title']          = 'Nuevo Acción del Rol';
-        $this->crud_params['edit_title']         = 'Editar Acción del Rol';
+        $this->crud_params['new_title']          = 'Nueva acción del rol';
+        $this->crud_params['edit_title']         = 'Editar acción del rol';
         $this->crud_params['form_columns']       = array(
 
         array('name' => 'actionid','label'=>'Acción'
@@ -150,7 +150,7 @@ class ActionRoleController extends ControllerBase
     ->collection('validatejs')
     ->addJs('js/jqueryvalidate/jquery.validate.js')
     ->addJs('js/jqueryvalidate/additional-methods.min.js')
-    ->addJs('js/validateactionrole/validate_country.js');
+    ->addJs('js/validateactionrole/validate_action_role.js');
   }
 
 
@@ -160,12 +160,12 @@ class ActionRoleController extends ControllerBase
   public function newAction($roleid)
   {
     $role= Role::findFirstByid($roleid);
-
+    $this->view->role = $role->role;
     $this->get_assets();
     $this->set_form_routes(
     $this->crud_params['create_route'].'/'.$roleid
     ,$this->crud_params['route_list'].'/'.$roleid
-    ,$this->crud_params['new_title'].' '.$role->role
+    ,$this->crud_params['new_title']
     ,$this->crud_params['add_edit_view']
     ,'new'
     ,null
@@ -207,7 +207,7 @@ class ActionRoleController extends ControllerBase
   }
 
   /**
-  * @Route("/create/{roleid}", methods={"POST"}, name="actionrolecreate")
+  * @Route("/create/{roleid}", methods={"POST","GET"}, name="actionrolecreate")
   */
   public function createAction($roleid)
   {
@@ -220,6 +220,7 @@ class ActionRoleController extends ControllerBase
     ,'create');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'create');
     $entity->SetRoleid($roleid);
 
     $form_action =$entity->save();
@@ -257,7 +258,7 @@ class ActionRoleController extends ControllerBase
     ,'update');
 
     $this->set_post_values($entity);
-
+    $this->audit_fields($entity,'edit');
     $this->execute_entity_action(
     $entity
     ,$this->crud_params['controller']

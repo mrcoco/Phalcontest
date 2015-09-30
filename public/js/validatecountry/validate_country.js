@@ -2,7 +2,7 @@ $(function() {
 
     // Setup form validation on the #register-form element
     $("#appform").validate({
-      errorClass: "has-error", 
+      errorClass: "has-error",
       errorPlacement: function(error, element) {
         //Custom position: first name
         if (element.attr("name") == "code" ) {
@@ -29,11 +29,11 @@ $(function() {
         // Specify the validation error messages
         messages: {
             code:{
-                required:"Debe ingresar un código de País"
+                required:validatemessages.code
 
             },
              country:{
-                required:"Debe ingresar un País"
+                required:validatemessages.country
 
             }
 

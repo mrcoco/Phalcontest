@@ -5,7 +5,7 @@ $(function() {
          errorClass:'has-error',
         // Specify the validation rules
         rules: {
-            role:{
+            actionid:{
                 required:true
 
             }
@@ -14,8 +14,8 @@ $(function() {
         },
         // Specify the validation error messages
         messages: {
-            role:{
-                required:validatemessages.role
+            actionid:{
+                required:""
 
             }
 

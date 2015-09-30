@@ -101,10 +101,20 @@ class CountryController extends ControllerBase
              ->getQuery()
              ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
+  public function check_all_permissions($userid)
+  {
+    $this->view->permissions =$this->check_user_actions(
+    $userid
+    ,'Create Country'
+    ,'Edit Country'
+    ,'Manage Country'
+    ,'Delete Country');
 
+  }
 
   /**
   * @Route("/search", methods={"GET","POST"}, name="Countrysearch")
@@ -131,6 +141,7 @@ class CountryController extends ControllerBase
              ->getQuery()
              ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
@@ -209,6 +220,7 @@ class CountryController extends ControllerBase
     ,'create');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'create');
 
     $this->execute_entity_action($entity
     ,$this->crud_params['controller']
@@ -230,6 +242,7 @@ class CountryController extends ControllerBase
     ,'update');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'edit');
 
     $this->execute_entity_action(
     $entity

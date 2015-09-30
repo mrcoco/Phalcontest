@@ -83,6 +83,9 @@ class User extends Phalcon\Mvc\Model
     {
          $this->skipAttributesOnCreate(array('confirm_password'));
          $this->skipAttributesOnUpdate(array('confirm_password'));
+         $this->hasMany('id', 'UserRole', 'userid', array('alias' => 'UserRole',"foreignKey" => array(
+                     "message" => "user.constraintviolation"
+                 )));
     }
     /**
      * Method to set the value of field username
@@ -280,9 +283,7 @@ class User extends Phalcon\Mvc\Model
       $this->validate(
           new PresenceOf(
               array(
-                  'field'    => 'username',
-                  'message'  => $this->di->get('translate')->_('username.required')
-
+                  'field'    => 'username'
               )
           )
       );
@@ -291,8 +292,7 @@ class User extends Phalcon\Mvc\Model
       $this->validate(
           new PresenceOf(
               array(
-                  'field'    => 'password',
-                  'message'  => $this->di->get('translate')->_('pass.required')
+                  'field'    => 'password'
               )
           )
       );
@@ -300,15 +300,15 @@ class User extends Phalcon\Mvc\Model
         $this->validate(
             new Email(
                 array(
-                    'field'    => 'email',
-                    'message'=> $this->di->get('translate')->_('email.valid')
+                    'field'    => 'email'
+
                 )
             )
         );
 
         $this->validate(new Uniqueness(array(
-           'field' => 'username',
-           'message'=>$this->di->get('translate')->_('username.unique')
+           'field' => 'username'
+
        )));
 
         if ($this->validationHasFailed() == true) {
@@ -317,6 +317,66 @@ class User extends Phalcon\Mvc\Model
 
         return true;
     }
+
+    public function getMessages()
+   {
+     $messages = array();
+     $txtmessage ="";
+     foreach (parent::getMessages() as $message) {
+         switch ($message->getType()) {
+             case 'PresenceOf':
+                 switch ($message->getField()) {
+                  case 'username':
+                   $txtmessage = $this->di->get('translate')->_('username.required');
+                  break;
+                  case 'password':
+                   $txtmessage = $this->di->get('translate')->_('pass.required');
+                  break;
+                 }
+                  $messages[] =$txtmessage;
+                 break;
+            case 'Email':
+
+              switch ($message->getField()) {
+               case 'email':
+                $txtmessage = $this->di->get('translate')->_('email.valid');
+               break;
+              }
+               $messages[] =$txtmessage;
+
+            break;
+            case 'Unique':
+
+                 if (is_array($message->getField()))
+                 {
+                   $field =implode("-", $message->getField());
+                 }
+                 else {
+                   $field =$message->getField();
+                 }
+
+                 switch ($field) {
+                  case 'username':
+                     $txtmessage =$this->di->get('translate')->_('username.unique');
+                break;
+              }
+              $messages[] =$txtmessage;
+             break;
+             case 'ConstraintViolation':
+            $txtmessage =$this->di->get('translate')->_('user.constraintviolation');
+             $messages[] =$txtmessage;
+             break;
+             case 'confirm_password':
+             $txtmessage =$this->di->get('translate')->_('user.equal.confirm_password');
+              $messages[] =$txtmessage;
+            break;
+         }
+     }
+
+     return $messages;
+ }
+
+
 
     /**
      * Returns table name mapped in the model.
@@ -363,7 +423,7 @@ class User extends Phalcon\Mvc\Model
         ];
         $validator = new Phalcon\Validation();
         $validator->add('password', new \Phalcon\Validation\Validator\Confirmation(array(
-            'message' => 'El password y la confirmación de password deben ser iguales',
+            'message' => $this->di->get('translate')->_('user.equal.confirm_password'),
             'with' => 'confirm_password'
         )));
 
