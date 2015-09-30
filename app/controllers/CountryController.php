@@ -15,18 +15,18 @@ class CountryController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'country/list';
         $this->crud_params['entityname']         = 'Country';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada Country';
+        $this->crud_params['not_found_message']  = 'country.entity.notfound';
         $this->crud_params['controller']         = 'Country';
         $this->crud_params['action_list']        = 'countrylist';
         $this->crud_params['form_name']          = 'CountryForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar este País?';
+        $this->crud_params['delete_message']     = 'country.delete.question';
         $this->crud_params['create_route']       = 'country/create';
         $this->crud_params['save_route']         = 'country/save/';
         $this->crud_params['delete_route']       = 'country/delete/';
         $this->crud_params['add_edit_view']      = 'country/addedit';
         $this->crud_params['show_view']          = 'country/show';
-        $this->crud_params['new_title']          = 'Nuevo País';
-        $this->crud_params['edit_title']         = 'Editar País';
+        $this->crud_params['new_title']          = 'country.title.new';
+        $this->crud_params['edit_title']         = 'country.title.edit';
         $this->crud_params['form_columns']       = array(
         array('name' => 'code','label'=>'Código'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
@@ -73,8 +73,8 @@ class CountryController extends ControllerBase
     ,'view_name'=>'country/countrylist'
     ,'numberPage'=>1
     ,'pagelimit'=>10
-    ,'noitems_message'=>'No se encontraron Paises'
-    ,'title' =>'Paises'
+    ,'noitems_message'=>'country.notfound'
+    ,'title' =>'country.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'code','title' => 'Código','class'=>''),
       array('column_name'=>'country','title' => 'País','class'=>''))
@@ -207,7 +207,7 @@ class CountryController extends ControllerBase
   }
 
   /**
-  * @Route("/create", methods={"POST"}, name="Countrycreate")
+  * @Route("/create", methods={"POST","GET"}, name="Countrycreate")
   */
   public function createAction()
   {
@@ -282,7 +282,7 @@ class CountryController extends ControllerBase
   }
 
   /**
-  * @Route("/delete/{id}", methods={"POST"}, name="Countrydelete")
+  * @Route("/delete/{id}", methods={"POST","GET"}, name="Countrydelete")
   */
   public function deleteAction($id)
   {

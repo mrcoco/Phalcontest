@@ -15,18 +15,18 @@ class ActionController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'action/list';
         $this->crud_params['entityname']         = 'action';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada action';
+        $this->crud_params['not_found_message']  = 'action.entity.notfound';
         $this->crud_params['controller']         = 'Action';
         $this->crud_params['action_list']        = 'actionlist';
         $this->crud_params['form_name']          = 'ActionForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar esta acción?';
+        $this->crud_params['delete_message']     = 'action.delete.question';
         $this->crud_params['create_route']       = 'action/create';
         $this->crud_params['save_route']         = 'action/save/';
         $this->crud_params['delete_route']       = 'action/delete/';
         $this->crud_params['add_edit_view']      = 'action/addedit';
         $this->crud_params['show_view']          = 'action/show';
-        $this->crud_params['new_title']          = 'Nueva Acción';
-        $this->crud_params['edit_title']         = 'Editar Acción';
+        $this->crud_params['new_title']          = 'action.title.new';
+        $this->crud_params['edit_title']         = 'action.title.edit';
         $this->crud_params['form_columns']       = array(
         array('name' => 'action','label'=>'Acción'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
@@ -73,8 +73,8 @@ class ActionController extends ControllerBase
     ,'view_name'=>'action/actionlist'
     ,'numberPage'=>1
     ,'pagelimit'=>10
-    ,'noitems_message'=>'No se encontraron acciones'
-    ,'title' =>'Acciones'
+    ,'noitems_message'=>'action.notfound'
+    ,'title' =>'action.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'action','title' => 'Acción','class'=>''),
       array('column_name'=>'description','title' => 'Descripción','class'=>''))

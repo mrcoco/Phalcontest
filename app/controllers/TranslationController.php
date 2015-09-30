@@ -15,18 +15,18 @@ class TranslationController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'translation/list';
         $this->crud_params['entityname']         = 'Translation';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada Translation';
+        $this->crud_params['not_found_message']  = 'translation.entity.notfound';
         $this->crud_params['controller']         = 'Translation';
         $this->crud_params['action_list']        = 'translationlist';
         $this->crud_params['form_name']          = 'TranslationForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar esta traducción?';
+        $this->crud_params['delete_message']     = 'translation.delete.question';
         $this->crud_params['create_route']       = 'translation/create';
         $this->crud_params['save_route']         = 'translation/save/';
         $this->crud_params['delete_route']       = 'translation/delete/';
         $this->crud_params['add_edit_view']      = 'translation/addedit';
         $this->crud_params['show_view']          = 'translation/show';
-        $this->crud_params['new_title']          = 'Nueva Traducción';
-        $this->crud_params['edit_title']         = 'Editar Traducción';
+        $this->crud_params['new_title']          = 'translation.title.new';
+        $this->crud_params['edit_title']         = 'translation.title.edit';
         $this->crud_params['form_columns']       = array(
         array('name' => 'languagecode','label'=>'Idioma'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
@@ -81,8 +81,8 @@ class TranslationController extends ControllerBase
     ,'view_name'=>'translation/translationlist'
     ,'numberPage'=>1
     ,'pagelimit'=>10
-    ,'noitems_message'=>'No se encontraron Traducciones'
-    ,'title' =>'Traducciones'
+    ,'noitems_message'=>'translation.notfound'
+    ,'title' =>'translation.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'language','title' => 'Idioma','class'=>''),
       array('column_name'=>'translatekey','title' => 'Llave','class'=>''),

@@ -15,18 +15,18 @@ class RoleController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'role/list';
         $this->crud_params['entityname']         = 'Role';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada Role';
+        $this->crud_params['not_found_message']  = 'role.entity.notfound';
         $this->crud_params['controller']         = 'Role';
         $this->crud_params['action_list']        = 'rolelist';
         $this->crud_params['form_name']          = 'RoleForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar este Rol?';
+        $this->crud_params['delete_message']     = 'role.delete.question';
         $this->crud_params['create_route']       = 'role/create';
         $this->crud_params['save_route']         = 'role/save/';
         $this->crud_params['delete_route']       = 'role/delete/';
         $this->crud_params['add_edit_view']      = 'role/addedit';
         $this->crud_params['show_view']          = 'role/show';
-        $this->crud_params['new_title']          = 'Nuevo Rol';
-        $this->crud_params['edit_title']         = 'Editar Rol';
+        $this->crud_params['new_title']          = 'role.title.new';
+        $this->crud_params['edit_title']         = 'role.title.edit';
         $this->crud_params['form_columns']       = array(
         array('name' => 'role','label'=>'Rol'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
@@ -41,9 +41,9 @@ class RoleController extends ControllerBase
         ,'div_row_class'=>'row cells1'
         ,'label_error'=>'')
         );
-        $this->crud_params['save_button_name']       ='Guardar';
-        $this->crud_params['cancel_button_name']     ='Cancelar';
-        $this->crud_params['delete_button_name']     ='Eliminar';
+        $this->crud_params['save_button_name']       ='button.save';
+        $this->crud_params['cancel_button_name']     ='button.cancel';
+        $this->crud_params['delete_button_name']     ='button.delete';
     }
 
     public function set_tags($mode,$entity_object)
@@ -73,8 +73,8 @@ class RoleController extends ControllerBase
     ,'view_name'=>'role/rolelist'
     ,'numberPage'=>1
     ,'pagelimit'=>10
-    ,'noitems_message'=>'No se encontraron Roles'
-    ,'title' =>'Roles'
+    ,'noitems_message'=>'role.notfound'
+    ,'title' =>'role.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'role','title' => 'Rol','class'=>''),
       array('column_name'=>'description','title' => 'Descripción','class'=>''))

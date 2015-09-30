@@ -141,7 +141,7 @@
 	{% else %}
 	  <!--NO ITEMS VALIDATION -->
 		<div class="alert alert-warning alert-dismissable">
-		<strong><i class="glyphicon glyphicon-warning-sign"></i> {{noitems}}</strong>
+		<strong><i class="glyphicon glyphicon-warning-sign"></i> {{noitems|t}}</strong>
 		</div>
 	{% endif %}
 {% endblock %}

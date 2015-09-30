@@ -216,7 +216,9 @@ class Country extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Address', 'countryid', array('alias' => 'Address'));
+        $this->hasMany('id', 'Address', 'countryid', array('alias' => 'Address',"foreignKey" => array(
+                    "message" => "country.constraintviolation"
+                )));
         $this->hasMany('id', 'City', 'countryid', array('alias' => 'City',"foreignKey" => array(
                     "message" => "No se Puede eliminar,Existe una ciudad que tien ese pais asociado")));
         $this->hasMany('id', 'State', 'countryid', array('alias' => 'State',"foreignKey" => array(
@@ -324,10 +326,10 @@ class Country extends \Phalcon\Mvc\Model
                case 'PresenceOf':
                    switch ($message->getField()) {
                     case 'code':
-                     $txtmessage = 'Debe Ingresar un código de País';
+                     $txtmessage = $this->di->get('translate')->_('country.code.required');
                     break;
                     case 'country':
-                     $txtmessage = 'Debe ingresar un País';
+                     $txtmessage = $this->di->get('translate')->_('country.required');
                     break;
 
                    }
@@ -345,17 +347,17 @@ class Country extends \Phalcon\Mvc\Model
 
               switch ($field) {
                 case 'code':
-                   $txtmessage ='Ya Existe un país con ese código';
+                   $txtmessage =$this->di->get('translate')->_('country.code.exist');
                 break;
                case 'code-country':
-                  $txtmessage ='Ya Existe un país con el código y nombre ingresados';
+                  $txtmessage =$this->di->get('translate')->_('country.name.code.exist');
                break;
 
            }
            $messages[] =$txtmessage;
           break;
           case 'ConstraintViolation':
-               $txtmessage ='No se puede eliminar este país por que tiene registros asociados';
+               $txtmessage =$this->di->get('translate')->_('country.constraintviolation');
                $messages[] =$txtmessage;
                break;
        }

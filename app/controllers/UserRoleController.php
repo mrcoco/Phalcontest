@@ -15,18 +15,18 @@ class UserRoleController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'userrole/list';
         $this->crud_params['entityname']         = 'UserRole';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada UserRole';
+        $this->crud_params['not_found_message']  = 'userrole.entity.notfound';
         $this->crud_params['controller']         = 'UserRole';
         $this->crud_params['action_list']        = 'userrolelist';
         $this->crud_params['form_name']          = 'UserRoleForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea quitar ese rol?';
+        $this->crud_params['delete_message']     = 'userrole.delete.question';
         $this->crud_params['create_route']       = 'userrole/create';
         $this->crud_params['save_route']         = 'userrole/save/';
         $this->crud_params['delete_route']       = 'userrole/delete/';
         $this->crud_params['add_edit_view']      = 'user_role/addedit';
         $this->crud_params['show_view']          = 'user_role/show';
-        $this->crud_params['new_title']          = 'Nuevo Rol del usuario';
-        $this->crud_params['edit_title']         = 'Editar Rol del Usuario';
+        $this->crud_params['new_title']          = 'userrole.title.new';
+        $this->crud_params['edit_title']         = 'userrole.title.edit';
         $this->crud_params['form_columns']       = array(
 
         array('name' => 'roleid','label'=>'Rol'
@@ -71,8 +71,8 @@ class UserRoleController extends ControllerBase
     ,'view_name'=>'user_role/userrolelist'
     ,'numberPage'=>1
     ,'pagelimit'=>10
-    ,'noitems_message'=>'No se encontraron roles asociados al usuario'
-    ,'title' =>'Roles del Usuario'
+    ,'noitems_message'=>'userrole.notfound'
+    ,'title' =>'userrole.list.title'
     ,'header_columns'=>array(
       array('column_name'=>'role','title' => 'Rol','class'=>''))
     ,'search_columns'=>array(

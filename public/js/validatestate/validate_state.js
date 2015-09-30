@@ -30,7 +30,7 @@ $(function() {
 
             },
              state:{
-                required:"Debe ingresar un estado"
+                required:validatemessages.state
 
             }
 

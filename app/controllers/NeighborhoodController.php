@@ -15,18 +15,18 @@ class NeighborhoodController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'neighborhood/list';
         $this->crud_params['entityname']         = 'Neighborhood';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada Country';
+        $this->crud_params['not_found_message']  = 'neighborhood.entity.notfound';
         $this->crud_params['controller']         = 'Neighborhood';
         $this->crud_params['action_list']        = 'neighborhoodlist';
         $this->crud_params['form_name']          = 'NeighborhoodForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar este Barrio?';
+        $this->crud_params['delete_message']     = 'neighborhood.delete.question';
         $this->crud_params['create_route']       = 'neighborhood/create';
         $this->crud_params['save_route']         = 'neighborhood/save/';
         $this->crud_params['delete_route']       = 'neighborhood/delete/';
         $this->crud_params['add_edit_view']      = 'neighborhood/addedit';
         $this->crud_params['show_view']          = 'neighborhood/show';
-        $this->crud_params['new_title']          = 'Nuevo Barrio';
-        $this->crud_params['edit_title']         = 'Editar Barrio';
+        $this->crud_params['new_title']          = 'neighborhood.title.new';
+        $this->crud_params['edit_title']         = 'neighborhood.title.edit';
         $this->crud_params['form_columns']       = array(
           array('name' => 'country','label'=>'País'
           ,'required'=>''
@@ -96,8 +96,8 @@ class NeighborhoodController extends ControllerBase
     ,'view_name'=>'neighborhood/neighborhoodlist'
     ,'numberPage'=>1
     ,'pagelimit'=>10
-    ,'noitems_message'=>'No se encontraron Barrios'
-    ,'title' =>'Barrios'
+    ,'noitems_message'=>'neighborhood.notfound'
+    ,'title' =>'neighborhood.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'country','title' => 'País','class'=>''),
       array('column_name' => 'state','title' => 'Estado','class'=>''),
@@ -134,9 +134,20 @@ class NeighborhoodController extends ControllerBase
                  ->getQuery()
                  ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
+  public function check_all_permissions($userid)
+  {
+    $this->view->permissions =$this->check_user_actions(
+    $userid
+    ,'Create Neighborhood'
+    ,'Edit Neighborhood'
+    ,'Manage Neighborhood'
+    ,'Delete Neighborhood');
+
+  }
 
 
   /**
@@ -170,6 +181,7 @@ class NeighborhoodController extends ControllerBase
                  ->getQuery()
                  ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
@@ -250,6 +262,7 @@ class NeighborhoodController extends ControllerBase
     ,'create');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'create');
 
     $this->execute_entity_action($entity
     ,$this->crud_params['controller']
@@ -271,6 +284,7 @@ class NeighborhoodController extends ControllerBase
     ,'update');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'edit');
 
     $this->execute_entity_action(
     $entity

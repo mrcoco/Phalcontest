@@ -14,18 +14,18 @@ class CityController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'city/list';
         $this->crud_params['entityname']         = 'City';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada City';
+        $this->crud_params['not_found_message']  = 'city.entity.notfound';
         $this->crud_params['controller']         = 'City';
         $this->crud_params['action_list']        = 'citylist';
         $this->crud_params['form_name']          = 'CityForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar esta Ciudad?';
+        $this->crud_params['delete_message']     = 'city.delete.question';
         $this->crud_params['create_route']       = 'city/create';
         $this->crud_params['save_route']         = 'city/save/';
         $this->crud_params['delete_route']       = 'city/delete/';
         $this->crud_params['add_edit_view']      = 'city/addedit';
         $this->crud_params['show_view']          = 'city/show';
-        $this->crud_params['new_title']          = 'Nueva Ciudad';
-        $this->crud_params['edit_title']         = 'Editar Ciudad';
+        $this->crud_params['new_title']          = 'city.title.new';
+        $this->crud_params['edit_title']         = 'city.title.edit';
         $this->crud_params['form_columns']       = array(
         array('name' => 'countryid','label'=>'País'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
@@ -80,8 +80,8 @@ class CityController extends ControllerBase
     ,'view_name'=>'city/citylist'
     ,'numberPage'=>1
     ,'pagelimit'=>5
-    ,'noitems_message'=>'No se encontraron Ciudades'
-    ,'title' =>'Ciudades'
+    ,'noitems_message'=>'city.notfound'
+    ,'title' =>'city.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'country','title' => 'País','class'=>''),
       array('column_name' => 'state','title' => 'Estado','class'=>''),
@@ -111,10 +111,20 @@ class CityController extends ControllerBase
                 ->getQuery()
                 ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
+  public function check_all_permissions($userid)
+  {
+    $this->view->permissions =$this->check_user_actions(
+    $userid
+    ,'Create City'
+    ,'Edit City'
+    ,'Manage City'
+    ,'Delete City');
 
+  }
 
   /**
   * @Route("/search", methods={"GET","POST"}, name="Citysearch")
@@ -146,6 +156,7 @@ class CityController extends ControllerBase
                 ->getQuery()
                 ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
@@ -213,7 +224,7 @@ public function get_assets()
   }
 
   /**
-  * @Route("/create", methods={"POST"}, name="Citycreate")
+  * @Route("/create", methods={"POST","GET"}, name="Citycreate")
   */
   public function createAction()
   {
@@ -226,6 +237,7 @@ public function get_assets()
     ,'create');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'create');
 
     $this->execute_entity_action($entity
     ,$this->crud_params['controller']
@@ -247,6 +259,7 @@ public function get_assets()
     ,'update');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'edit');
 
     $this->execute_entity_action(
     $entity

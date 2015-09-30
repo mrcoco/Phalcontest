@@ -1,7 +1,7 @@
 {% extends "layouts/masterpage.volt" %}
 {% block pagetitle %}
 	<h3 class="page-title" align ="left">
-	{{title|t}} {{username}} <div align="right"><a href ="{{url('user/list')}}" class="btn btn blue">{{'Usuarios'|t}} <i class="fa fa-arrow-right "></i> </a></div>
+	{{title|t}} <b>{{username}}</b> <div align="right"><a href ="{{url('user/list')}}" class="btn btn blue">{{'userrole.button.title'|t}} <i class="fa fa-arrow-right "></i> </a></div>
 	</h3>
 	<hr/>
 {% endblock %}
@@ -118,7 +118,7 @@
 	{% else %}
 		<!--NO ITEMS VALIDATION -->
 		<div class="alert alert-warning alert-dismissable">
-		<strong><i class="glyphicon glyphicon-warning-sign"></i> {{noitems}}</strong>
+		<strong><i class="glyphicon glyphicon-warning-sign"></i> {{noitems|t}}</strong>
 		</div>
 	{% endif %}
 {% endblock %}

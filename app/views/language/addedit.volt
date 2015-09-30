@@ -17,7 +17,7 @@ code:'{{"language.code.required"|t}}'
 <div class="portlet box blue">
 	<div class="portlet-title">
 	<div class="caption">
-	{{title}}
+	{{title|t}}
 	</div>
 	</div>
 	<div class="portlet-body form">

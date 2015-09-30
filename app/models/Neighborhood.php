@@ -31,6 +31,39 @@ class Neighborhood extends \Phalcon\Mvc\Model
     protected $cityid;
 
     /**
+     *
+     * @var string
+     */
+    protected $createuser;
+
+    /**
+    /**
+     *
+     * @var string
+     */
+    protected $modifyuser;
+
+    /**
+    /**
+     *
+     * @var datetime
+     */
+    protected $createdate;
+
+    /**
+    /**
+     *
+     * @var datetime
+     */
+    protected $modifydate;
+
+    /**
+
+
+    /**
+
+
+    /**
      * Method to set the value of field id
      *
      * @param integer $id
@@ -83,6 +116,56 @@ class Neighborhood extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Method to set the value of field createuser
+     *
+     * @param string $createuser
+     * @return $this
+     */
+    public function setCreateuser($createuser)
+    {
+        $this->createuser = $createuser;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field modifyuser
+     *
+     * @param string $modifyuser
+     * @return $this
+     */
+    public function setModifyuser($modifyuser)
+    {
+        $this->modifyuser = $modifyuser;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field createdate
+     *
+     * @param datetime $createdate
+     * @return $this
+     */
+    public function setCreatedate($createdate)
+    {
+        $this->createdate = $createdate;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field modifydate
+     *
+     * @param datetime $modifydate
+     * @return $this
+     */
+    public function setModifydate($modifydate)
+    {
+        $this->modifydate = $modifydate;
+
+        return $this;
+    }
+
+
+    /**
      * Returns the value of field id
      *
      * @return integer
@@ -123,11 +206,50 @@ class Neighborhood extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Returns the value of field createuser
+     *
+     * @return string
+     */
+    public function getCreateuser()
+    {
+        return $this->createuser;
+    }
+    /**
+     * Returns the value of field modifyuser
+     *
+     * @return string
+     */
+    public function getModifyuser()
+    {
+        return $this->modifyuser;
+    }
+    /**
+     * Returns the value of field createdate
+     *
+     * @return datetime
+     */
+    public function getCreatedate()
+    {
+        return $this->createdate;
+    }
+    /**
+     * Returns the value of field modifydate
+     *
+     * @return datetime
+     */
+    public function getModifydate()
+    {
+        return $this->modifydate;
+    }
+
+    /**
      * Initialize method for model.
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Address', 'neighborhoodid', array('alias' => 'Address'));
+        $this->hasMany('id', 'Address', 'neighborhoodid', array('alias' => 'Address',"foreignKey" => array(
+                    "message" => "neighborhood.constraintviolation"
+                )));
         $this->belongsTo('cityid', 'City', 'id', array('alias' => 'City'));
         $this->belongsTo('townshipid', 'Township', 'id', array('alias' => 'Township'));
     }
@@ -176,7 +298,11 @@ class Neighborhood extends \Phalcon\Mvc\Model
             'id' => 'id',
             'neighborhood' => 'neighborhood',
             'townshipid' => 'townshipid',
-            'cityid' => 'cityid'
+            'cityid' => 'cityid',
+            'createuser'=>'createuser',
+            'modifyuser'=>'modifyuser',
+            'createdate'=>'createdate',
+            'modifydate'=>'modifydate'
         );
     }
     /**
@@ -232,13 +358,13 @@ class Neighborhood extends \Phalcon\Mvc\Model
                case 'PresenceOf':
                    switch ($message->getField()) {
                     case 'cityid':
-                     $txtmessage = 'Debe seleccionar una ciudad';
+                     $txtmessage = $this->di->get('translate')->_('city.select.required');
                     break;
                     case 'townshipid':
-                     $txtmessage = 'Debe ingresar un sector';
+                     $txtmessage = $this->di->get('translate')->_('neighborhood.township.required');
                     break;
                     case 'neighborhood':
-                     $txtmessage = 'Debe ingresar un barrio';
+                     $txtmessage = $this->di->get('translate')->_('neighborhood.required');
                     break;
                    }
                     $messages[] =$txtmessage;
@@ -255,11 +381,15 @@ class Neighborhood extends \Phalcon\Mvc\Model
 
               switch ($field) {
                case 'townshipid-neighborhood':
-                  $txtmessage ='Ya Existe un barrio con ese nombre para el sector seleccionado';
+                  $txtmessage =$this->di->get('translate')->_('neighborhood.township.exist');
              break;
            }
            $messages[] =$txtmessage;
           break;
+          case 'ConstraintViolation':
+              $txtmessage =$this->di->get('translate')->_('neighborhood.constraintviolation');
+              $messages[] =$txtmessage;
+              break;
        }
 
        return $messages;

@@ -15,18 +15,18 @@ class StateController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'state/list';
         $this->crud_params['entityname']         = 'State';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada State';
+        $this->crud_params['not_found_message']  = 'state.entity.notfound';
         $this->crud_params['controller']         = 'State';
         $this->crud_params['action_list']        = 'statelist';
         $this->crud_params['form_name']          = 'StateForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar este Estado?';
+        $this->crud_params['delete_message']     = 'state.delete.question';
         $this->crud_params['create_route']       = 'state/create';
         $this->crud_params['save_route']         = 'state/save/';
         $this->crud_params['delete_route']       = 'state/delete/';
         $this->crud_params['add_edit_view']      = 'state/addedit';
         $this->crud_params['show_view']          = 'state/show';
-        $this->crud_params['new_title']          = 'Nuevo Estado';
-        $this->crud_params['edit_title']         = 'Editar Estado';
+        $this->crud_params['new_title']          = 'state.title.new';
+        $this->crud_params['edit_title']         = 'state.title.edit';
         $this->crud_params['form_columns']       = array(
         array('name' => 'countryid','label'=>'País'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
@@ -73,8 +73,8 @@ class StateController extends ControllerBase
     ,'view_name'=>'state/statelist'
     ,'numberPage'=>1
     ,'pagelimit'=>5
-    ,'noitems_message'=>'No se encontraron Estados'
-    ,'title' =>'Estados'
+    ,'noitems_message'=>'state.notfound'
+    ,'title' =>'state.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'country','title' => 'País','class'=>''),
       array('column_name'=>'state','title' => 'Estado','class'=>''))
@@ -102,9 +102,20 @@ class StateController extends ControllerBase
                    ->getQuery()
                    ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
+  public function check_all_permissions($userid)
+  {
+    $this->view->permissions =$this->check_user_actions(
+    $userid
+    ,'Create State'
+    ,'Edit State'
+    ,'Manage State'
+    ,'Delete State');
+
+  }
 
 
   /**
@@ -133,6 +144,7 @@ class StateController extends ControllerBase
                    ->getQuery()
                    ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
@@ -198,7 +210,7 @@ class StateController extends ControllerBase
   }
 
   /**
-  * @Route("/create", methods={"POST"}, name="statecreate")
+  * @Route("/create", methods={"POST","GET"}, name="statecreate")
   */
   public function createAction()
   {
@@ -211,6 +223,7 @@ class StateController extends ControllerBase
     ,'create');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'create');
 
     $this->execute_entity_action($entity
     ,$this->crud_params['controller']
@@ -232,6 +245,7 @@ class StateController extends ControllerBase
     ,'update');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'edit');
 
     $this->execute_entity_action(
     $entity
@@ -271,7 +285,7 @@ class StateController extends ControllerBase
   }
 
   /**
-  * @Route("/delete/{id}", methods={"POST"}, name="statedelete")
+  * @Route("/delete/{id}", methods={"POST","GET"}, name="statedelete")
   */
   public function deleteAction($id)
   {

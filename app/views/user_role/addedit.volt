@@ -11,7 +11,7 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 	<div class="caption">
-	{{title|t}}{{' '}}{{username}}
+	{{title|t}}{{' '}}<b>{{username}}</b>
 	</div>
 	</div>
 	<div class="portlet-body form">

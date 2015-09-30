@@ -44,10 +44,7 @@ class TownshipForm extends Form
   $state->setDefault($statevalue);
   $state ->setLabel('Estado');
   $this->add($state);
-  //añadimos un botón de tipo submit
-$submit = $this->add(new Submit('Guardar', array(
-  'class' => 'btn btn-success'
-)));
+
 
 
   }

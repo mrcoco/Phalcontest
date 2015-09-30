@@ -15,18 +15,18 @@ class ActionRoleController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'actionrole/list';
         $this->crud_params['entityname']         = 'actionrole';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada Actionrole';
+        $this->crud_params['not_found_message']  = 'actionrole.entity.notfound';
         $this->crud_params['controller']         = 'ActionRole';
         $this->crud_params['action_list']        = 'actionrolelist';
         $this->crud_params['form_name']          = 'ActionRoleForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea quitar esta acción?';
+        $this->crud_params['delete_message']     = 'actionrole.delete.question';
         $this->crud_params['create_route']       = 'actionrole/create';
         $this->crud_params['save_route']         = 'actionrole/save/';
         $this->crud_params['delete_route']       = 'actionrole/delete/';
         $this->crud_params['add_edit_view']      = 'action_role/addedit';
         $this->crud_params['show_view']          = 'action_role/show';
-        $this->crud_params['new_title']          = 'Nueva acción del rol';
-        $this->crud_params['edit_title']         = 'Editar acción del rol';
+        $this->crud_params['new_title']          = 'actionrole.title.new';
+        $this->crud_params['edit_title']         = 'actionrole.title.edit';
         $this->crud_params['form_columns']       = array(
 
         array('name' => 'actionid','label'=>'Acción'
@@ -71,8 +71,8 @@ class ActionRoleController extends ControllerBase
     ,'view_name'=>'actionrole/actionrolelist'
     ,'numberPage'=>1
     ,'pagelimit'=>10
-    ,'noitems_message'=>'No se encontraron acciones asociadas al rol'
-    ,'title' =>'Acciones del Rol'
+    ,'noitems_message'=>'actionrole.notfound'
+    ,'title' =>'actionrole.list.title'
     ,'header_columns'=>array(
       array('column_name'=>'action','title' => 'Action','class'=>''))
     ,'search_columns'=>array(

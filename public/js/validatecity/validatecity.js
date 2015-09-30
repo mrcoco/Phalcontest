@@ -2,7 +2,7 @@ $(function() {
 
     // Setup form validation on the #register-form element
     $("#appform").validate({
-      errorClass: "has-error", 
+      errorClass: "has-error",
       errorPlacement: function(error, element) {
         //Custom position: first name
         if (element.attr("name") == "city" ) {
@@ -38,7 +38,7 @@ $(function() {
 
             },
             city:{
-                required:"Debe ingresar una ciudad"
+                required:validatemessages.city
 
             }
 

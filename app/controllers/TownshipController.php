@@ -15,18 +15,18 @@ class TownshipController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'township/list';
         $this->crud_params['entityname']         = 'Township';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada Country';
+        $this->crud_params['not_found_message']  = 'township.entity.notfound';
         $this->crud_params['controller']         = 'Township';
         $this->crud_params['action_list']        = 'townshiplist';
         $this->crud_params['form_name']          = 'TownshipForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar este Sector?';
+        $this->crud_params['delete_message']     = 'township.delete.question';
         $this->crud_params['create_route']       = 'township/create';
         $this->crud_params['save_route']         = 'township/save/';
         $this->crud_params['delete_route']       = 'township/delete/';
         $this->crud_params['add_edit_view']      = 'township/addedit';
         $this->crud_params['show_view']          = 'township/show';
-        $this->crud_params['new_title']          = 'Nuevo Sector';
-        $this->crud_params['edit_title']         = 'Editar Sector';
+        $this->crud_params['new_title']          = 'township.title.new';
+        $this->crud_params['edit_title']         = 'township.title.edit';
         $this->crud_params['form_columns']       = array(
         array('name' => 'country','label'=>'País'
         ,'required'=>''
@@ -89,8 +89,8 @@ class TownshipController extends ControllerBase
     ,'view_name'=>'township/townshiplist'
     ,'numberPage'=>1
     ,'pagelimit'=>10
-    ,'noitems_message'=>'No se encontraron Sectores'
-    ,'title' =>'Sectores'
+    ,'noitems_message'=>'township.notfound'
+    ,'title' =>'township.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'country','title' => 'País','class'=>''),
       array('column_name'=>'state','title' => 'Estado','class'=>''),
@@ -123,9 +123,20 @@ class TownshipController extends ControllerBase
                  ->getQuery()
                  ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
+  public function check_all_permissions($userid)
+  {
+    $this->view->permissions =$this->check_user_actions(
+    $userid
+    ,'Create Township'
+    ,'Edit Township'
+    ,'Manage Township'
+    ,'Delete Township');
+
+  }
 
 
   /**
@@ -160,6 +171,7 @@ class TownshipController extends ControllerBase
                  ->getQuery()
                  ->execute();
     $this->set_grid_values($query,$grid_values);
+    $this->check_all_permissions($this->session->get('userid'));
 
   }
 
@@ -239,6 +251,7 @@ class TownshipController extends ControllerBase
     ,'create');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'create');
 
     $this->execute_entity_action($entity
     ,$this->crud_params['controller']
@@ -260,6 +273,7 @@ class TownshipController extends ControllerBase
     ,'update');
 
     $this->set_post_values($entity);
+    $this->audit_fields($entity,'edit');
 
     $this->execute_entity_action(
     $entity

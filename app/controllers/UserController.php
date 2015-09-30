@@ -13,18 +13,18 @@ class UserController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'user/list';
         $this->crud_params['entityname']         = 'User';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada User';
+        $this->crud_params['not_found_message']  = 'user.entity.notfound';
         $this->crud_params['controller']         = 'User';
         $this->crud_params['action_list']        = 'userlist';
         $this->crud_params['form_name']          = 'UserForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar este Usuario?';
+        $this->crud_params['delete_message']     = 'user.delete.question';
         $this->crud_params['create_route']       = 'user/create';
         $this->crud_params['save_route']         = 'user/save/';
         $this->crud_params['delete_route']       = 'user/delete/';
         $this->crud_params['add_edit_view']      = 'user/addedit';
         $this->crud_params['show_view']          = 'user/show';
-        $this->crud_params['new_title']          = 'Nuevo Usuario';
-        $this->crud_params['edit_title']         = 'Editar Usuario';
+        $this->crud_params['new_title']          = 'user.title.new';
+        $this->crud_params['edit_title']         = 'user.title.edit';
         $this->crud_params['form_columns']       = array(
         array('name' => 'username','label'=>'User Name'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
@@ -51,9 +51,9 @@ class UserController extends ControllerBase
         ,'div_row_class'=>'row cells1'
         ,'label_error'=>'<span id ="usernameerror" name ="codeerror" class="has-error"></span>')
         );
-        $this->crud_params['save_button_name']       ='Guardar';
-        $this->crud_params['cancel_button_name']     ='Cancelar';
-        $this->crud_params['delete_button_name']     ='Eliminar';
+        $this->crud_params['save_button_name']       ='button.save';
+        $this->crud_params['cancel_button_name']     ='button.cancel';
+        $this->crud_params['delete_button_name']     ='button.delete';
     }
 
     public function set_tags($mode,$entity_object)
@@ -96,8 +96,8 @@ class UserController extends ControllerBase
     ,'view_name'=>'user/userlist'
     ,'numberPage'=>1
     ,'pagelimit'=>10
-    ,'noitems_message'=>'No se encontraron Usuarios'
-    ,'title' =>'Usuarios'
+    ,'noitems_message'=>'user.notfound'
+    ,'title' =>'user.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'username','title' => 'User Name','class'=>''),
       array('column_name'=>'email','title' => 'E-Mail','class'=>''))
@@ -115,7 +115,6 @@ class UserController extends ControllerBase
   */
   public function listAction()
   {
-    $userid = $this->session->get('userid');
     $order=$this->set_grid_order();
     $grid_values =$this->set_grid_parameters('user/list');
     $query= $this->modelsManager->createBuilder()
@@ -126,7 +125,7 @@ class UserController extends ControllerBase
              ->execute();
     $this->set_grid_values($query,$grid_values);
 
-    $this->check_all_permissions($userid);
+    $this->check_all_permissions( $this->session->get('userid'));
 
 }
 
@@ -196,7 +195,7 @@ class UserController extends ControllerBase
              ->getQuery()
              ->execute();
     $this->set_grid_values($query,$grid_values);
-    $this->check_all_permissions($userid);
+    $this->check_all_permissions( $this->session->get('userid'));
 
   }
 

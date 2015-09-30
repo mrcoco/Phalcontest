@@ -15,18 +15,18 @@ class LanguageController extends ControllerBase
     {
         $this->crud_params['route_list']         = 'language/list';
         $this->crud_params['entityname']         = 'Language';
-        $this->crud_params['not_found_message']  = 'No se encontro una entidad llamada Language';
+        $this->crud_params['not_found_message']  = 'language.entity.notfound';
         $this->crud_params['controller']         = 'Language';
         $this->crud_params['action_list']        = 'languagelist';
         $this->crud_params['form_name']          = 'LanguageForm';
-        $this->crud_params['delete_message']     = 'Esta seguro que desea eliminar este idioma?';
+        $this->crud_params['delete_message']     = 'language.delete.question';
         $this->crud_params['create_route']       = 'language/create';
         $this->crud_params['save_route']         = 'language/save/';
         $this->crud_params['delete_route']       = 'language/delete/';
         $this->crud_params['add_edit_view']      = 'language/addedit';
         $this->crud_params['show_view']          = 'language/show';
-        $this->crud_params['new_title']          = 'Nuevo idioma';
-        $this->crud_params['edit_title']         = 'Editar idioma';
+        $this->crud_params['new_title']          = 'language.title.new';
+        $this->crud_params['edit_title']         = 'language.title.edit';
         $this->crud_params['form_columns']       = array(
         array('name' => 'code','label'=>'Código'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
@@ -82,8 +82,8 @@ class LanguageController extends ControllerBase
     ,'view_name'=>'language/languagelist'
     ,'numberPage'=>1
     ,'pagelimit'=>10
-    ,'noitems_message'=>'No se encontraron Idiomas'
-    ,'title' =>'Idiomas'
+    ,'noitems_message'=>'language.notfound'
+    ,'title' =>'language.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'code','title' => 'Código','class'=>''),
       array('column_name'=>'language','title' => 'Idioma','class'=>''),
@@ -270,7 +270,7 @@ class LanguageController extends ControllerBase
   }
 
   /**
-  * @Route("/create", methods={"POST"}, name="languagecreate")
+  * @Route("/create", methods={"POST","GET"}, name="languagecreate")
   */
   public function createAction()
   {
@@ -344,7 +344,7 @@ class LanguageController extends ControllerBase
   }
 
   /**
-  * @Route("/delete/{id}", methods={"POST"}, name="languagedelete")
+  * @Route("/delete/{id}", methods={"POST","GET"}, name="languagedelete")
   */
   public function deleteAction($id)
   {

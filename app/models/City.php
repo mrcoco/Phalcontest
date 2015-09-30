@@ -33,6 +33,39 @@ class City extends \Phalcon\Mvc\Model
     protected $stateid;
 
     /**
+     *
+     * @var string
+     */
+    protected $createuser;
+
+    /**
+    /**
+     *
+     * @var string
+     */
+    protected $modifyuser;
+
+    /**
+    /**
+     *
+     * @var datetime
+     */
+    protected $createdate;
+
+    /**
+    /**
+     *
+     * @var datetime
+     */
+    protected $modifydate;
+
+    /**
+
+
+    /**
+
+
+    /**
      * Method to set the value of field id
      *
      * @param integer $id
@@ -85,6 +118,56 @@ class City extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Method to set the value of field createuser
+     *
+     * @param string $createuser
+     * @return $this
+     */
+    public function setCreateuser($createuser)
+    {
+        $this->createuser = $createuser;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field modifyuser
+     *
+     * @param string $modifyuser
+     * @return $this
+     */
+    public function setModifyuser($modifyuser)
+    {
+        $this->modifyuser = $modifyuser;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field createdate
+     *
+     * @param datetime $createdate
+     * @return $this
+     */
+    public function setCreatedate($createdate)
+    {
+        $this->createdate = $createdate;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field modifydate
+     *
+     * @param datetime $modifydate
+     * @return $this
+     */
+    public function setModifydate($modifydate)
+    {
+        $this->modifydate = $modifydate;
+
+        return $this;
+    }
+
+
+    /**
      * Returns the value of field id
      *
      * @return integer
@@ -125,11 +208,50 @@ class City extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Returns the value of field createuser
+     *
+     * @return string
+     */
+    public function getCreateuser()
+    {
+        return $this->createuser;
+    }
+    /**
+     * Returns the value of field modifyuser
+     *
+     * @return string
+     */
+    public function getModifyuser()
+    {
+        return $this->modifyuser;
+    }
+    /**
+     * Returns the value of field createdate
+     *
+     * @return datetime
+     */
+    public function getCreatedate()
+    {
+        return $this->createdate;
+    }
+    /**
+     * Returns the value of field modifydate
+     *
+     * @return datetime
+     */
+    public function getModifydate()
+    {
+        return $this->modifydate;
+    }
+
+    /**
      * Initialize method for model.
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Address', 'cityid', array('alias' => 'Address'));
+        $this->hasMany('id', 'Address', 'cityid', array('alias' => 'Address',"foreignKey" => array(
+                    "message" => "city.constraintviolation"
+                )));
         $this->hasMany('id', 'Neighborhood', 'cityid', array('alias' => 'Neighborhood',"foreignKey" => array(
                     "message" => "No se Puede eliminar,existe un barrio que tiene esta ciudad asociada"
                 )));
@@ -184,7 +306,11 @@ class City extends \Phalcon\Mvc\Model
             'id' => 'id',
             'city' => 'city',
             'countryid' => 'countryid',
-            'stateid' => 'stateid'
+            'stateid' => 'stateid',
+            'createuser'=>'createuser',
+            'modifyuser'=>'modifyuser',
+            'createdate'=>'createdate',
+            'modifydate'=>'modifydate'
         );
     }
     /**
@@ -240,13 +366,13 @@ class City extends \Phalcon\Mvc\Model
                case 'PresenceOf':
                    switch ($message->getField()) {
                     case 'countryid':
-                     $txtmessage = 'Debe seleccionar un país';
+                     $txtmessage = $this->di->get('translate')->_('city.country.required');
                     break;
                     case 'stateid':
-                     $txtmessage = 'Debe seleccionar un estado';
+                     $txtmessage = $this->di->get('translate')->_('city.state.required');
                     break;
                     case 'city':
-                     $txtmessage = 'Debe ingresar una ciudad';
+                     $txtmessage = $this->di->get('translate')->_('city.required');
                     break;
                    }
                     $messages[] =$txtmessage;
@@ -263,15 +389,15 @@ class City extends \Phalcon\Mvc\Model
 
                    switch ($field) {
                     case 'countryid-stateid-city':
-                       $txtmessage ='Ya existe una ciudad con ese nombre para el país y estado seleccionados ';
+                       $txtmessage =$this->di->get('translate')->_('city.country.city.exist');
                   break;
                 }
                 $messages[] =$txtmessage;
                break;
                case 'ConstraintViolation':
-               $txtmessage ='No se puede eliminar esta ciudad por que tiene registros asociados';
-               $messages[] =$txtmessage;    
-               break;   
+               $txtmessage =$this->di->get('translate')->_('city.constraintviolation');
+               $messages[] =$txtmessage;
+               break;
            }
        }
 
