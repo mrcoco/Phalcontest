@@ -3,7 +3,7 @@ $(function() {
     // Setup form validation on the #register-form element
     $("#appform").validate({
 
-      errorClass: "has-error", 
+      errorClass: "has-error",
       errorPlacement: function(error, element) {
         //Custom position: first name
         if (element.attr("name") == "neighborhood" ) {
@@ -38,7 +38,7 @@ $(function() {
 
             },
             neighborhood:{
-               required:"Debe ingresar un barrio"
+               required:validatemessages.neighborhood
 
            }
 

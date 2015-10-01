@@ -11,7 +11,7 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 	<div class="caption">
-	{{title}}
+	{{title|t}}
 	</div>
 	</div>
 	<div class="portlet-body form">
@@ -23,14 +23,14 @@
 	{% if errorvar is not empty %}
 	<div class="alert alert-danger">
 	<button data-close="alert" class="close"></button>
-	{{ content() }}
+	{{ content()|t }}
 	</div>
 	{% endif %}
 		<!-- LOAD FORM CONTROLS-->
 	{% for index,item in formcolumns %}
 		<div class="form-group">
 		<label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
-		{{item['label']}}
+		{{item['label']|t}}
 		</label>
 		<div class="col-md-4">
 		{{ form.render(item['name'],["class":"form-control",'disabled':'""']) }}
@@ -42,8 +42,8 @@
 	<div class="form-actions">
 	<div class="row">
 	<div class="col-md-offset-2 col-md-4">
-    <button class="btn red">{{delete_button_name}}</button>
-		{{ link_to(routelist,cancel_button_name,"class":"btn grey-cascade") }}
+    <button class="btn red">{{delete_button_name|t}}</button>
+		{{ link_to(routelist,cancel_button_name|t,"class":"btn grey-cascade") }}
 	</div>
 	</div>
 	</div>

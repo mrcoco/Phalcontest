@@ -238,7 +238,7 @@ class TownshipController extends ControllerBase
   }
 
   /**
-  * @Route("/create", methods={"POST"}, name="townshipcreate")
+  * @Route("/create", methods={"POST","GET"}, name="townshipcreate")
   */
   public function createAction()
   {
@@ -313,7 +313,7 @@ class TownshipController extends ControllerBase
   }
 
   /**
-  * @Route("/delete/{id}", methods={"POST"}, name="townshipdelete")
+  * @Route("/delete/{id}", methods={"POST","GET"}, name="townshipdelete")
   */
   public function deleteAction($id)
   {

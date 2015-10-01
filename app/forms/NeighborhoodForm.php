@@ -31,7 +31,7 @@ class NeighborhoodForm extends Form
                         "bind"      =>  array("cityid"=>$entity->cityid)
                     )), array(
                         "useEmpty" => true,
-                        "emptyText" => 'Seleccione un Sector2',
+                        "emptyText" => 'Seleccione un Sector',
                         'using' => array('id', 'township'))
                 );
     $township->setLabel('Sector');
@@ -48,8 +48,11 @@ class NeighborhoodForm extends Form
   $city ="";
   if (isset($entity))
  {
-   $countryvalue=$entity->getCity()->getCountry()->getCountry();
-   $statevalue=$entity->getCity()->getState()->getState();
+   if($entity->getCity())
+   {
+    $countryvalue=$entity->getCity()->getCountry()->getCountry();
+    $statevalue=$entity->getCity()->getState()->getState();
+   }
  }
   $country = new Text('country');
   $country ->setLabel('País');

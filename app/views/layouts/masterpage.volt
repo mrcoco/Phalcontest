@@ -98,7 +98,7 @@
         <li class="divider">
         </li>
         <li>
-          <a href="{{url(login/logout)}}"><i class="icon-logout"></i>{{'logout.text'|t}}</a>
+          <a href="{{url('login/logout')}}"><i class="icon-logout"></i>{{'logout.text'|t}}</a>
         </li>
         </ul>
     </li>

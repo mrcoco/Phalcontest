@@ -91,6 +91,12 @@ $di->setShared('session', function () {
 });
 
 $language =  $di->get("session")->get("language");
+//Set default language
+if (!$language)
+{
+  $language ='es';
+}
+
 $di->set('translate', function() use ($config,$language) {
   // Ask browser what is the best language
   $request = new Request();

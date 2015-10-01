@@ -32,8 +32,11 @@ class TownshipForm extends Form
   $city ="";
   if (isset($entity))
  {
+   if($entity->getCity())
+   {
    $countryvalue=$entity->getCity()->getCountry()->getCountry();
    $statevalue=$entity->getCity()->getState()->getState();
+   }
  }
   $country = new Text('country');
   $country ->setLabel('País');
