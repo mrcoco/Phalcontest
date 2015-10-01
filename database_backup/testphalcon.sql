@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-09-2015 a las 16:21:18
+-- Tiempo de generación: 01-10-2015 a las 16:27:33
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `city` (
   PRIMARY KEY (`id`),
   KEY `fk_city_country1_idx` (`countryid`),
   KEY `fk_city_state1_idx` (`stateid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `city`
@@ -316,7 +316,7 @@ CREATE TABLE IF NOT EXISTS `country` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=252 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=251 ;
 
 --
 -- Volcado de datos para la tabla `country`
@@ -617,7 +617,7 @@ CREATE TABLE IF NOT EXISTS `neighborhood` (
   PRIMARY KEY (`id`),
   KEY `fk_neighborhood_township1_idx` (`townshipid`),
   KEY `fk_neighborhood_city1_idx` (`cityid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `neighborhood`
@@ -759,7 +759,7 @@ CREATE TABLE IF NOT EXISTS `township` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_township_city1_idx` (`cityid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- Volcado de datos para la tabla `township`
@@ -804,7 +804,7 @@ CREATE TABLE IF NOT EXISTS `translation` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_translation_language1_idx` (`languagecode`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=280 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=305 ;
 
 --
 -- Volcado de datos para la tabla `translation`
@@ -1084,7 +1084,32 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 (276, 'en', 'township.city.township.exist', 'Already exist a township with this name for the selected city', 'admin', 'admin', '2015-09-30 16:09:15', '2015-09-30 16:09:15'),
 (277, 'es', 'township.city.township.exist', 'Ya existe un sector con ese nombre para la ciudad seleccionada', 'admin', 'admin', '2015-09-30 16:10:55', '2015-09-30 16:10:55'),
 (278, 'en', 'township.constraintviolation', 'You can not delete this township, there are data associated', 'admin', 'admin', '2015-09-30 16:11:36', '2015-09-30 16:11:36'),
-(279, 'es', 'township.constraintviolation', 'No se puede eliminar el sector ya que tiene otros datos asociados', 'admin', 'admin', '2015-09-30 16:11:53', '2015-09-30 16:11:53');
+(279, 'es', 'township.constraintviolation', 'No se puede eliminar el sector ya que tiene otros datos asociados', 'admin', 'admin', '2015-09-30 16:11:53', '2015-09-30 16:11:53'),
+(280, 'en', 'neighborhood.entity.notfound', 'Entity Neighborhood not found', 'admin', 'admin', '2015-10-01 14:22:17', '2015-10-01 14:22:17'),
+(281, 'es', 'neighborhood.entity.notfound', 'No se encontro la entidad Neighborhood', 'admin', 'admin', '2015-10-01 14:22:59', '2015-10-01 14:22:59'),
+(282, 'en', 'neighborhood.delete.question', 'Are you sure you want to delete this neighborhood ?', 'admin', 'admin', '2015-10-01 14:23:56', '2015-10-01 14:23:56'),
+(283, 'es', 'neighborhood.delete.question', '¿ Esta seguro que desea eliminar este barrio ?', 'admin', 'admin', '2015-10-01 14:24:24', '2015-10-01 14:24:24'),
+(284, 'en', 'neighborhood.list.title', 'Neighborhoods', 'admin', 'admin', '2015-10-01 14:24:51', '2015-10-01 14:24:51'),
+(285, 'es', 'neighborhood.list.title', 'Barrios', 'admin', 'admin', '2015-10-01 14:25:05', '2015-10-01 14:25:05'),
+(286, 'en', 'neighborhood.title.new', 'New Neighborhood', 'admin', 'admin', '2015-10-01 14:26:06', '2015-10-01 14:26:06'),
+(287, 'es', 'neighborhood.title.new', 'Nuevo Barrio', 'admin', 'admin', '2015-10-01 14:26:23', '2015-10-01 14:26:23'),
+(288, 'en', 'neighborhood.title.edit', 'Edit Neighborhood', 'admin', 'admin', '2015-10-01 14:26:43', '2015-10-01 14:26:43'),
+(289, 'es', 'neighborhood.title.edit', 'Editar Barrio', 'admin', 'admin', '2015-10-01 14:27:01', '2015-10-01 14:27:01'),
+(290, 'en', 'neighborhood.notfound', 'Neighborhood not found', 'admin', 'admin', '2015-10-01 14:27:34', '2015-10-01 14:27:34'),
+(291, 'es', 'neighborhood.notfound', 'No se encontraron barrios', 'admin', 'admin', '2015-10-01 14:27:59', '2015-10-01 14:27:59'),
+(292, 'en', 'neighborhood.township.required', 'You must to select a township', 'admin', 'admin', '2015-10-01 14:28:58', '2015-10-01 14:28:58'),
+(293, 'es', 'neighborhood.township.required', 'Debe ingresar un sector', 'admin', 'admin', '2015-10-01 14:29:40', '2015-10-01 14:29:40'),
+(294, 'en', 'neighborhood.required', 'You must to enter a neighborhood', 'admin', 'admin', '2015-10-01 14:30:12', '2015-10-01 14:30:12'),
+(295, 'es', 'neighborhood.required', 'Debe ingresar un barrio', 'admin', 'admin', '2015-10-01 14:30:33', '2015-10-01 14:30:33'),
+(296, 'en', 'neighborhood.township.exist', 'Already exist this neighborhood for the selected township', 'admin', 'admin', '2015-10-01 14:35:45', '2015-10-01 14:35:45'),
+(297, 'es', 'neighborhood.township.exist', 'Ya existe ese barrio para el sector seleccionado', 'admin', 'admin', '2015-10-01 14:36:27', '2015-10-01 14:36:27'),
+(298, 'en', 'neighborhood.constraintviolation', 'You can not delete this neighborhood, there are data associated', 'admin', 'admin', '2015-10-01 14:37:34', '2015-10-01 14:37:34'),
+(299, 'es', 'neighborhood.constraintviolation', 'No se puede eliminar el barrio ya que tiene otros datos asociados', 'admin', 'admin', '2015-10-01 14:37:59', '2015-10-01 14:37:59'),
+(300, 'en', 'Ciudad', 'City', 'admin', 'admin', '2015-10-01 15:09:36', '2015-10-01 15:09:36'),
+(301, 'en', 'Sector', 'Township', 'admin', 'admin', '2015-10-01 15:09:53', '2015-10-01 15:09:53'),
+(302, 'en', 'Barrio', 'Neighborhood', 'admin', 'admin', '2015-10-01 15:10:10', '2015-10-01 15:10:10'),
+(303, 'en', 'actionrole.title.new', 'New Role Action', 'admin', 'admin', '2015-10-01 16:24:35', '2015-10-01 16:24:35'),
+(304, 'es', 'actionrole.title.new', 'Nueva accion del rol', 'admin', 'admin', '2015-10-01 16:24:54', '2015-10-01 16:24:54');
 
 -- --------------------------------------------------------
 

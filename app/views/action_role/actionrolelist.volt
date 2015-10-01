@@ -1,7 +1,7 @@
 {% extends "layouts/masterpage.volt" %}
 {% block pagetitle %}
 	<h3 class="page-title" align ="left">
-	{{title|t}} <b>{{role}}</b> <div align="right"><a href ="{{url('role/list')}}" class="btn btn blue">{{'actionrole.button.title'}} <i class="fa fa-arrow-right "></i> </a></div>
+	{{title|t}} <b>{{role}}</b> <div align="right"><a href ="{{url('role/list')}}" class="btn btn blue">{{'actionrole.button.title'|t}} <i class="fa fa-arrow-right "></i> </a></div>
 	</h3>
 	<hr/>
 {% endblock %}
