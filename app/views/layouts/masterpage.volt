@@ -212,7 +212,7 @@
              </a>
            </li>
         <li>
-        <a href="{{ url("index/list") }}">
+        <a href="{{ url("address/list") }}">
           <p align="left"><i class="icon-flag"></i>
           {{'Direcciones'|t}}</p>
         </a>

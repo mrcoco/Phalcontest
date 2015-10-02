@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-10-2015 a las 16:27:33
+-- Tiempo de generación: 02-10-2015 a las 16:30:22
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `action` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=44 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=47 ;
 
 --
 -- Volcado de datos para la tabla `action`
@@ -93,7 +93,10 @@ INSERT INTO `action` (`id`, `action`, `description`, `createuser`, `modifyuser`,
 (40, 'Delete Township', 'Permite eliminar sectores', 'admin', 'admin', '2015-09-30 15:11:49', '2015-09-30 15:11:49'),
 (41, 'Create Neighborhood', 'Permite crear barrios', 'admin', 'admin', '2015-09-30 15:13:01', '2015-09-30 15:18:23'),
 (42, 'Edit Neighborhood', 'Permite editar barrios ', 'admin', 'admin', '2015-09-30 15:13:31', '2015-09-30 15:18:44'),
-(43, 'Delete Neighborhood', 'Permite eliminar barrios', 'admin', 'admin', '2015-09-30 15:14:48', '2015-09-30 15:19:25');
+(43, 'Delete Neighborhood', 'Permite eliminar barrios', 'admin', 'admin', '2015-09-30 15:14:48', '2015-09-30 15:19:25'),
+(44, 'Create Address', 'Permite crear direcciones', 'admin', 'admin', '2015-10-02 14:22:45', '2015-10-02 14:22:45'),
+(45, 'Edit Address', 'Permite editar direcciones', 'admin', 'admin', '2015-10-02 14:23:19', '2015-10-02 14:23:19'),
+(46, 'Delete Address', 'Permite eliminar direcciones', 'admin', 'admin', '2015-10-02 14:23:44', '2015-10-02 14:23:44');
 
 -- --------------------------------------------------------
 
@@ -165,7 +168,10 @@ INSERT INTO `action_role` (`actionid`, `roleid`, `createuser`, `modifyuser`, `cr
 (40, 1, 'admin', 'admin', '2015-09-30 15:12:23', '2015-09-30 15:12:23'),
 (41, 1, 'admin', 'admin', '2015-09-30 15:15:38', '2015-09-30 15:15:38'),
 (42, 1, 'admin', 'admin', '2015-09-30 15:15:49', '2015-09-30 15:15:49'),
-(43, 1, 'admin', 'admin', '2015-09-30 15:16:00', '2015-09-30 15:16:00');
+(43, 1, 'admin', 'admin', '2015-09-30 15:16:00', '2015-09-30 15:16:00'),
+(44, 1, 'admin', 'admin', '2015-10-02 14:24:19', '2015-10-02 14:24:19'),
+(45, 1, 'admin', 'admin', '2015-10-02 14:24:31', '2015-10-02 14:24:31'),
+(46, 1, 'admin', 'admin', '2015-10-02 14:25:08', '2015-10-02 14:25:08');
 
 -- --------------------------------------------------------
 
@@ -249,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `city` (
   PRIMARY KEY (`id`),
   KEY `fk_city_country1_idx` (`countryid`),
   KEY `fk_city_state1_idx` (`stateid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `city`
@@ -617,7 +623,7 @@ CREATE TABLE IF NOT EXISTS `neighborhood` (
   PRIMARY KEY (`id`),
   KEY `fk_neighborhood_township1_idx` (`townshipid`),
   KEY `fk_neighborhood_city1_idx` (`cityid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `neighborhood`
@@ -759,7 +765,7 @@ CREATE TABLE IF NOT EXISTS `township` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_township_city1_idx` (`cityid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
 -- Volcado de datos para la tabla `township`
@@ -769,7 +775,6 @@ INSERT INTO `township` (`id`, `cityid`, `township`, `createuser`, `modifyuser`, 
 (1, 1, 'Juan Diaz', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
 (4, 2, 'Norte', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
 (5, 1, 'San Francisco2', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(6, 1, 'Juan Diaz', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
 (7, 1, 'Tocumen', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
 (8, 2, 'Usaquen2', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
 (9, 1, 'sasasa', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01');
@@ -804,7 +809,7 @@ CREATE TABLE IF NOT EXISTS `translation` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_translation_language1_idx` (`languagecode`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=305 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=331 ;
 
 --
 -- Volcado de datos para la tabla `translation`
@@ -1109,7 +1114,33 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 (301, 'en', 'Sector', 'Township', 'admin', 'admin', '2015-10-01 15:09:53', '2015-10-01 15:09:53'),
 (302, 'en', 'Barrio', 'Neighborhood', 'admin', 'admin', '2015-10-01 15:10:10', '2015-10-01 15:10:10'),
 (303, 'en', 'actionrole.title.new', 'New Role Action', 'admin', 'admin', '2015-10-01 16:24:35', '2015-10-01 16:24:35'),
-(304, 'es', 'actionrole.title.new', 'Nueva accion del rol', 'admin', 'admin', '2015-10-01 16:24:54', '2015-10-01 16:24:54');
+(304, 'es', 'actionrole.title.new', 'Nueva accion del rol', 'admin', 'admin', '2015-10-01 16:24:54', '2015-10-01 16:24:54'),
+(305, 'en', 'address.entity.notfound', 'Entity Address not found', 'admin', 'admin', '2015-10-02 13:46:30', '2015-10-02 13:46:30'),
+(306, 'es', 'address.entity.notfound', 'No se encontro la entidad Address', 'admin', 'admin', '2015-10-02 13:46:52', '2015-10-02 13:46:52'),
+(307, 'en', 'address.delete.question', 'Are you sure you want to delete this address ?', 'admin', 'admin', '2015-10-02 13:47:54', '2015-10-02 13:47:54'),
+(308, 'es', 'address.delete.question', 'Esta seguro que desea eliminar esta dirección ?', 'admin', 'admin', '2015-10-02 13:51:08', '2015-10-02 13:51:08'),
+(309, 'en', 'address.list.title', 'Addresses', 'admin', 'admin', '2015-10-02 13:54:10', '2015-10-02 13:54:10'),
+(310, 'es', 'address.list.title', 'Direcciones', 'admin', 'admin', '2015-10-02 13:54:45', '2015-10-02 13:54:45'),
+(311, 'en', 'address.title.new', 'New Address', 'admin', 'admin', '2015-10-02 13:55:13', '2015-10-02 13:55:13'),
+(312, 'es', 'address.title.new', 'Nueva Dirección', 'admin', 'admin', '2015-10-02 13:55:53', '2015-10-02 13:55:53'),
+(313, 'en', 'address.title.edit', 'Edit Address', 'admin', 'admin', '2015-10-02 13:57:01', '2015-10-02 13:57:01'),
+(314, 'es', 'address.title.edit', 'Editar Dirección', 'admin', 'admin', '2015-10-02 13:58:29', '2015-10-02 13:58:29'),
+(315, 'en', 'address.notfound', 'Not found address', 'admin', 'admin', '2015-10-02 14:01:30', '2015-10-02 14:01:30'),
+(316, 'es', 'address.notfound', 'No se encontraron direcciones', 'admin', 'admin', '2015-10-02 14:07:30', '2015-10-02 14:07:30'),
+(317, 'en', 'address.country.required', 'You must to select a country', 'admin', 'admin', '2015-10-02 14:08:38', '2015-10-02 14:08:38'),
+(318, 'es', 'address.country.required', 'Debe seleccionar un país', 'admin', 'admin', '2015-10-02 14:09:18', '2015-10-02 14:09:18'),
+(319, 'en', 'address.state.required', 'You must to select a state', 'admin', 'admin', '2015-10-02 14:09:47', '2015-10-02 14:09:47'),
+(320, 'es', 'address.state.required', 'Debe seleccionar un estado', 'admin', 'admin', '2015-10-02 14:10:07', '2015-10-02 14:10:07'),
+(321, 'en', 'address.city.required', 'You must to select a city', 'admin', 'admin', '2015-10-02 14:11:27', '2015-10-02 14:11:27'),
+(322, 'es', 'address.city.required', 'Debe seleccionar una ciudad', 'admin', 'admin', '2015-10-02 14:11:47', '2015-10-02 14:11:47'),
+(323, 'en', 'address.neighborhood.required', 'You must select a neighborhood', 'admin', 'admin', '2015-10-02 14:12:31', '2015-10-02 14:12:31'),
+(324, 'es', 'address.neighborhood.required', 'Debe seleccionar un barrio', 'admin', 'admin', '2015-10-02 14:12:58', '2015-10-02 14:12:58'),
+(325, 'en', 'address.required', 'You must enter an address', 'admin', 'admin', '2015-10-02 14:14:33', '2015-10-02 14:14:33'),
+(326, 'es', 'address.required', 'Debe ingresar una dirección', 'admin', 'admin', '2015-10-02 14:14:54', '2015-10-02 14:33:56'),
+(327, 'en', 'complete_address.exist', 'Already exist this address', 'admin', 'admin', '2015-10-02 14:15:47', '2015-10-02 14:15:47'),
+(328, 'es', 'complete_address.exist', 'Ya existe esa dirección', 'admin', 'admin', '2015-10-02 14:17:22', '2015-10-02 14:17:22'),
+(329, 'en', 'address.constraintviolation', 'You can not delete this address, there are data associated', 'admin', 'admin', '2015-10-02 14:17:56', '2015-10-02 14:17:56'),
+(330, 'es', 'address.constraintviolation', 'No se puede eliminar la dirección ya que tiene otros datos asociados', 'admin', 'admin', '2015-10-02 14:18:32', '2015-10-02 14:18:32');
 
 -- --------------------------------------------------------
 

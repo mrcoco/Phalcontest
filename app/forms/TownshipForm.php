@@ -18,7 +18,7 @@ class TownshipForm extends Form
 
   $city = new Select('cityid',City::find(), array(
     'using' => array('id','city')
-,'useEmpty' => TRUE,'emptyText' => 'Seleccione una Ciudad'));
+,'useEmpty' => TRUE,'emptyText' =>  $this->di->get('translate')->_('Seleccione una Ciudad')));
    $city->setLabel('Ciudad');
    $this->add($city);
 

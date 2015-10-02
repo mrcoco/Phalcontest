@@ -1,5 +1,6 @@
 <?php
-
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 class Address extends \Phalcon\Mvc\Model
 {
 
@@ -14,6 +15,12 @@ class Address extends \Phalcon\Mvc\Model
      * @var integer
      */
     protected $countryid;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $stateid;
 
     /**
      *
@@ -35,12 +42,6 @@ class Address extends \Phalcon\Mvc\Model
 
     /**
      *
-     * @var integer
-     */
-    protected $stateid;
-
-    /**
-     *
      * @var string
      */
     protected $description;
@@ -50,6 +51,30 @@ class Address extends \Phalcon\Mvc\Model
      * @var string
      */
     protected $address;
+
+    /**
+     *
+     * @var string
+     */
+    protected $createuser;
+
+    /**
+     *
+     * @var string
+     */
+    protected $modifyuser;
+
+    /**
+     *
+     * @var string
+     */
+    protected $createdate;
+
+    /**
+     *
+     * @var string
+     */
+    protected $modifydate;
 
     /**
      * Method to set the value of field id
@@ -73,6 +98,19 @@ class Address extends \Phalcon\Mvc\Model
     public function setCountryid($countryid)
     {
         $this->countryid = $countryid;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field stateid
+     *
+     * @param integer $stateid
+     * @return $this
+     */
+    public function setStateid($stateid)
+    {
+        $this->stateid = $stateid;
 
         return $this;
     }
@@ -117,19 +155,6 @@ class Address extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Method to set the value of field stateid
-     *
-     * @param integer $stateid
-     * @return $this
-     */
-    public function setStateid($stateid)
-    {
-        $this->stateid = $stateid;
-
-        return $this;
-    }
-
-    /**
      * Method to set the value of field description
      *
      * @param string $description
@@ -156,6 +181,58 @@ class Address extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Method to set the value of field createuser
+     *
+     * @param string $createuser
+     * @return $this
+     */
+    public function setCreateuser($createuser)
+    {
+        $this->createuser = $createuser;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field modifyuser
+     *
+     * @param string $modifyuser
+     * @return $this
+     */
+    public function setModifyuser($modifyuser)
+    {
+        $this->modifyuser = $modifyuser;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field createdate
+     *
+     * @param string $createdate
+     * @return $this
+     */
+    public function setCreatedate($createdate)
+    {
+        $this->createdate = $createdate;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field modifydate
+     *
+     * @param string $modifydate
+     * @return $this
+     */
+    public function setModifydate($modifydate)
+    {
+        $this->modifydate = $modifydate;
+
+        return $this;
+    }
+
+    /**
      * Returns the value of field id
      *
      * @return integer
@@ -173,6 +250,16 @@ class Address extends \Phalcon\Mvc\Model
     public function getCountryid()
     {
         return $this->countryid;
+    }
+
+    /**
+     * Returns the value of field stateid
+     *
+     * @return integer
+     */
+    public function getStateid()
+    {
+        return $this->stateid;
     }
 
     /**
@@ -206,16 +293,6 @@ class Address extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Returns the value of field stateid
-     *
-     * @return integer
-     */
-    public function getStateid()
-    {
-        return $this->stateid;
-    }
-
-    /**
      * Returns the value of field description
      *
      * @return string
@@ -236,11 +313,53 @@ class Address extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Returns the value of field createuser
+     *
+     * @return string
+     */
+    public function getCreateuser()
+    {
+        return $this->createuser;
+    }
+
+    /**
+     * Returns the value of field modifyuser
+     *
+     * @return string
+     */
+    public function getModifyuser()
+    {
+        return $this->modifyuser;
+    }
+
+    /**
+     * Returns the value of field createdate
+     *
+     * @return string
+     */
+    public function getCreatedate()
+    {
+        return $this->createdate;
+    }
+
+    /**
+     * Returns the value of field modifydate
+     *
+     * @return string
+     */
+    public function getModifydate()
+    {
+        return $this->modifydate;
+    }
+
+    /**
      * Initialize method for model.
      */
     public function initialize()
     {
-        $this->hasMany('id', 'CompanyAddress', 'addressid', array('alias' => 'CompanyAddress'));
+        $this->hasMany('id', 'CompanyAddress', 'addressid', array('alias' => 'CompanyAddress',"foreignKey" => array(
+                    "message" => "address.constraintviolation"
+                )));
         $this->belongsTo('cityid', 'City', 'id', array('alias' => 'City'));
         $this->belongsTo('countryid', 'Country', 'id', array('alias' => 'Country'));
         $this->belongsTo('neighborhoodid', 'Neighborhood', 'id', array('alias' => 'Neighborhood'));
@@ -299,5 +418,119 @@ class Address extends \Phalcon\Mvc\Model
     {
         return 'address';
     }
+
+    /**
+     * Validations and business logic
+     *
+     * @return boolean
+     */
+    public function validation()
+    {
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'countryid'
+
+              )
+          )
+      );
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'stateid'
+
+              )
+          )
+      );
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'cityid'
+              )
+          )
+      );
+
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'neighborhoodid'
+              )
+          )
+      );
+
+      $this->validate(
+          new PresenceOf(
+              array(
+                  'field'    => 'address'
+              )
+          )
+      );
+
+      $this->validate(new Uniqueness(array(
+         'field' => array('countryid', 'stateid','cityid','townshipid','neighborhoodid','address')
+
+
+     )));
+
+
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+
+        return true;
+    }
+    public function getMessages()
+   {
+       $messages = array();
+       $txtmessage ="";
+       foreach (parent::getMessages() as $message) {
+           switch ($message->getType()) {
+               case 'PresenceOf':
+                   switch ($message->getField()) {
+                    case 'countryid':
+                     $txtmessage = $this->di->get('translate')->_('address.country.required');
+                    break;
+                    case 'stateid':
+                     $txtmessage = $this->di->get('translate')->_('address.state.required');
+                    break;
+                    case 'cityid':
+                     $txtmessage = $this->di->get('translate')->_('address.city.required');
+                    break;
+                    case 'neighborhoodid':
+                     $txtmessage = $this->di->get('translate')->_('address.neighborhood.required');
+                    break;
+                    case 'address':
+                     $txtmessage = $this->di->get('translate')->_('address.required');
+                    break;
+                   }
+                    $messages[] =$txtmessage;
+                   break;
+              case 'Unique':
+
+                   if (is_array($message->getField()))
+                   {
+                     $field =implode("-", $message->getField());
+                   }
+                   else {
+                     $field =$message->getField();
+                   }
+
+                   switch ($field) {
+                    case 'countryid-stateid-cityid-townshipid-neighborhoodid-address':
+                       $txtmessage =$this->di->get('translate')->_('complete_address.exist');
+                  break;
+                }
+                $messages[] =$txtmessage;
+               break;
+               case 'ConstraintViolation':
+               $txtmessage =$this->di->get('translate')->_('address.constraintviolation');
+               $messages[] =$txtmessage;
+               break;
+           }
+       }
+
+       return $messages;
+   }
+
 
 }

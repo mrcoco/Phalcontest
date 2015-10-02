@@ -18,7 +18,7 @@ class StateForm extends Form
 
   $country = new Select('countryid',Country::find(), array(
     'using' => array('id','country')
-,'useEmpty' => TRUE,'emptyText' => 'Seleccione un País'));
+,'useEmpty' => TRUE,'emptyText' =>  $this->di->get('translate')->_('Seleccione un País'));
    $country->setLabel('Pais');
    $this->add($country);
 

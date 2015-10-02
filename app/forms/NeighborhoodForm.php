@@ -31,14 +31,14 @@ class NeighborhoodForm extends Form
                         "bind"      =>  array("cityid"=>$entity->cityid)
                     )), array(
                         "useEmpty" => true,
-                        "emptyText" => 'Seleccione un Sector',
+                        "emptyText" =>  $this->di->get('translate')->_('Seleccione un Sector'),
                         'using' => array('id', 'township'))
                 );
     $township->setLabel('Sector');
     $this->add($township);
   }
   else {
-    $township= new Select('townshipid',array(),array('useEmpty'=>TRUE,'emptyText'=>'Seleccione un Sector'));
+    $township= new Select('townshipid',array(),array('useEmpty'=>TRUE,'emptyText'=> $this->di->get('translate')->_('Seleccione un Sector')));
     $township->setLabel('Sector');
     $this->add($township);
   }

@@ -30,14 +30,14 @@ class CityForm extends Form
                         "bind"      =>  array("id"=>$entity->stateid,"countryid"=>$entity->countryid)
                     )), array(
                         "useEmpty" => true,
-                        "emptyText" => 'Seleccione un Estado',
+                        "emptyText" => $this->di->get('translate')->_('Seleccione un Estado'),
                         'using' => array('id', 'state'))
                 );
     $state->setLabel('Estado');
     $this->add($state);
   }
   else {
-    $state = new Select('stateid',array(),array('useEmpty'=>TRUE,'emptyText'=>'Seleccione un Estado'));
+    $state = new Select('stateid',array(),array('useEmpty'=>TRUE,'emptyText'=>$this->di->get('translate')->_('Seleccione un Estado')));
     $state->setLabel('Estado');
     $this->add($state);
   }
