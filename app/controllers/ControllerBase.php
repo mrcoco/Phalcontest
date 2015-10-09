@@ -92,6 +92,14 @@ public function checkuser($userid)
 
 }
 
+public function get_upload_files_path()
+{
+  define('SEP', DIRECTORY_SEPARATOR);
+  $realpath = realpath('..');
+  $path =  $realpath.SEP.'public'.SEP.'files'.SEP;
+  return $path;
+}
+
 protected function getTranslation()
   {
 

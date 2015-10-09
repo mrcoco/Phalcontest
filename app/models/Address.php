@@ -405,7 +405,11 @@ class Address extends \Phalcon\Mvc\Model
             'neighborhoodid' => 'neighborhoodid',
             'stateid' => 'stateid',
             'description' => 'description',
-            'address' => 'address'
+            'address' => 'address',
+            'createuser'=>'createuser',
+            'modifyuser'=>'modifyuser',
+            'createdate'=>'createdate',
+            'modifydate'=>'modifydate'
         );
     }
 

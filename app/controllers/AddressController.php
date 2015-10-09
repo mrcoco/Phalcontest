@@ -28,10 +28,10 @@ class AddressController extends ControllerBase
         $this->crud_params['edit_title']         = 'address.title.edit';
         $this->crud_params['form_columns']       = array(
         array('name' => 'countryid','label'=>'País'
-        ,'required'=>''
+        ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'label_error'=>''),
         array('name' => 'stateid','label'=>'Estado'
-        ,'required'=>''
+        ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'label_error'=>''),
         array('name' => 'cityid','label'=>'Ciudad'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
@@ -58,7 +58,7 @@ class AddressController extends ControllerBase
     {
       if($entity_object)
       {
-      $this->tag->setDefault("addressid", $entity_object->getCountryid());
+      $this->tag->setDefault("countryid", $entity_object->getCountryid());
       $this->tag->setDefault("stateid", $entity_object->getStateid());
       $this->tag->setDefault("cityid", $entity_object->getCityid());
       $this->tag->setDefault("townshipid", $entity_object->getTownshipid());
@@ -71,7 +71,7 @@ class AddressController extends ControllerBase
    }
    private function set_post_values($entity)
    {
-   $entity->setCountryid($this->request->getPost("addressid"));
+   $entity->setCountryid($this->request->getPost("countryid"));
    $entity->setStateid($this->request->getPost("stateid"));
    $entity->setCityid($this->request->getPost("cityid"));
    $entity->setTownshipid($this->request->getPost("townshipid"));
@@ -117,7 +117,7 @@ class AddressController extends ControllerBase
 
 
   /**
-  * @Route("/list", methods={"GET","POST"}, name="neighborhoodlist")
+  * @Route("/list", methods={"GET","POST"}, name="addresslist")
   */
   public function listAction()
   {
@@ -213,9 +213,6 @@ class AddressController extends ControllerBase
         ->addJs('js/jqueryvalidate/jquery.validate.js')
         ->addJs('js/jqueryvalidate/additional-methods.min.js')
         ->addJs('js/validateaddress/validate_address.js')
-        //->addJs('js/validateaddress/get_state_data.js')
-      //  ->addJs('js/validateaddress/get_city_data.js')
-        //->addJs('js/validateaddress/get_township_data.js')
         ->addJs('js/validateaddress/get_address_data.js');
   }
 

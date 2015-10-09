@@ -25,6 +25,9 @@ class AddressForm extends Form
 
   if (isset($entity))
   {
+   if ($entity->getCountryid())
+   {
+
     $state = new Select('stateid', State::find(array(
                         "columns"   =>  array("id,state"),
                         "conditions"=>  "countryid =:countryid:",
@@ -35,6 +38,7 @@ class AddressForm extends Form
                         'using' => array('id','state'))
                 );
     $state->setLabel('Estado');
+    $this->add($state);
 
     $city = new Select('cityid', City::find(array(
                         "columns"   =>  array("id,city"),
@@ -45,7 +49,7 @@ class AddressForm extends Form
                         "emptyText" => $this->di->get('translate')->_('Seleccione una ciudad'),
                         'using' => array('id','city'))
                 );
-    $city>setLabel('Ciudad');
+    $city->setLabel('Ciudad');
 
     $this->add($city);
 
@@ -61,7 +65,7 @@ class AddressForm extends Form
     $township->setLabel('Sector');
     $this->add($township);
 
-    $neighborhood = new Select('townshipid', Neighborhood::find(array(
+    $neighborhood = new Select('neighborhoodid', Neighborhood::find(array(
                         "columns"   =>  array("id,neighborhood"),
                         "conditions"=>  "cityid =:cityid:",
                         "bind"      =>  array("cityid"=>$entity->cityid)
@@ -72,8 +76,26 @@ class AddressForm extends Form
                 );
     $neighborhood->setLabel('Barrio');
     $this->add($neighborhood);
+   }
+   else {
+     $this->set_empty_values();
+   }
   }
   else {
+     $this->set_empty_values();
+  }
+
+  $address = new Textarea('address',array("maxlength"=>"400"));
+  $address->setLabel('Dirección');
+  $this->add($address);
+
+  $description  = new Textarea('description',array("maxlength"=>"100"));
+  $description->setLabel('Descripción');
+  $this->add($description);
+  }
+
+  function set_empty_values()
+  {
     $state= new Select('stateid',array(),array('useEmpty'=>TRUE,'emptyText'=> $this->di->get('translate')->_('Seleccione un Estado')));
     $state->setLabel('state');
     $this->add($state);
@@ -89,15 +111,6 @@ class AddressForm extends Form
     $neighborhood= new Select('neighborhoodid',array(),array('useEmpty'=>TRUE,'emptyText'=>$this->di->get('translate')->_('Seleccione un Sector')));
     $neighborhood->setLabel('Barrio');
     $this->add($neighborhood);
-  }
-
-  $address = new Textarea('address',array("maxlength"=>"400"));
-  $address->setLabel('Dirección');
-  $this->add($address);
-
-  $description  = new Textarea('description',array("maxlength"=>"100"));
-  $description->setLabel('Descripción');
-  $this->add($description);
   }
 
 }

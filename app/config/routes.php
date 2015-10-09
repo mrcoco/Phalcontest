@@ -46,6 +46,7 @@ $router->addResource('ActionRole', '/actionrole');
 $router->addResource('Language', '/language');
 $router->addResource('Translation', '/translation');
 $router->addResource('Address', '/address');
+$router->addResource('File', '/file');
 
 
 return $router;
