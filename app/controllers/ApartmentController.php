@@ -14,12 +14,15 @@ use ApartmentForm as ApartmentForm;
 class ApartmentController extends ControllerBase
 {
 
+
+
   /**
   * @Route("/index", methods={"GET","POST"}, name="apartmentlist")
  */
     public function indexAction()
     {
         $this->persistent->parameters = null;
+
     }
 
     /**

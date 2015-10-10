@@ -1,4 +1,5 @@
 {% extends "layouts/masterpage.volt" %}
+
 {% block javascripts %}
 {{super() }}
 {{assets.outputJs('validate_forms_js')}}

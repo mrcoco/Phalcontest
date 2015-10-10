@@ -4,6 +4,7 @@ use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Validation;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 use  UploadHandler as  UploadHandler;
+use Phalcon\Paginator\Adapter\NativeArray as PaginatorArray;
 /**
  * @RoutePrefix("/file")
  */
@@ -108,30 +109,15 @@ public function get_assets()
     */
     public function list_filesAction()
     {
-      $realpath = realpath('..');
-       $path=$realpath.'\public\files';
+        $numberPage =1;
+        if ($this->request->isPost()) {
 
+        } else {
+            $numberPage = $this->request->getQuery("page", "int");
+        }
 
-      /*defined('APP_PATH') || define('APP_PATH', realpath('..'));
-       $fulldir = 'http://'.$_SERVER['HTTP_HOST'].$dir;
-       $json=file_get_contents($fulldir);
-
-       $obj = json_decode($json);
-
-         echo '<table border ="1px">';
-         echo '';
-        foreach($obj->files as $object) {
-          $extension =substr($object->name, strrpos($object->name, '.')+1);
-
-             echo '<tr><td>'.$object->name.'</td></tr>';
-
-
-
-          }
-            echo '</table>';
-      */
-     $file_names =array();
-     $dir = $this->file_params['upload_files_path'];
+      $file_names =array();
+      $dir = $this->file_params['upload_files_path'];
         if (is_dir($dir)) {
          if ($dh = opendir($dir)) {
                 $files=array();
@@ -152,13 +138,168 @@ public function get_assets()
        array('name' => 'type','title' => 'Type','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
        array('name' => 'size','title' => 'Size','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
      );
+
+
+        $paginator = new PaginatorArray(array(
+            "data" => $file_names,
+            "limit"=> 1,
+            "page" => $numberPage
+        ));
      $this->view->searchroute = 'file/search';
      $this->view->file_names = $file_names;
      $this->view->searchcolumns =$search_columns;
      $this->view->showroute ='file/show/';
      $this->view->title ='Archivos';
+     $this->view->listroute ='file/list';
+     $this->view->page = $paginator->getPaginate();
+
      $this->view->pick('files/filelist');
    }
 
+    public function set_grid_values()
+    {
+
+    }
+    /**
+     * @Route("/search", methods={"GET","POST"}, name="search")
+     */
+    public function search_filesAction()
+    {
+        $numberPage =1;
+        if ($this->request->isPost()) {
+
+            $name =$this->request->getPost("name");
+            $type =$this->request->getPost("type");
+            $size =$this->request->getPost("size");
+
+            $this->persistent->name=$name;
+            $this->persistent->type=$type;
+            $this->persistent->size=$size;
+
+        } else {
+            $numberPage = $this->request->getQuery("page", "int");
+        }
+        if($this->request->getPost("name"))
+        {
+            $this->persistent->name =$this->request->getPost("name");
+        }
+
+        $this->tag->setDefault("name",$this->persistent->name);
+        $this->tag->setDefault("type",$this->persistent->type);
+        $this->tag->setDefault("size",$this->persistent->size);
+
+
+
+        $file_names =array();
+        $dir = $this->file_params['upload_files_path'];
+        if (is_dir($dir))
+        {
+            if ($dh = opendir($dir)) {
+                $files=array();
+                while (($file = readdir($dh)) !== false) {
+                    if( $file == '.' || $file == '..' || $file =='thumbnail')continue;
+
+                     if (empty($name)==false or empty($type)==false or empty($size)==false)
+                     {
+
+                         if (empty($name)==false)
+                         {
+                           $name_value = is_numeric(strpos($file, $name));
+                         }
+                         else
+                         {
+                             $name_value = false;
+                         }
+
+                         if (empty($type)==false)
+                         {
+                             $type_value = is_numeric(strpos(pathinfo($file, PATHINFO_EXTENSION), $type));
+                         }
+                         else
+                         {
+                             $type_value = false;
+                         }
+
+                         if (empty($size)==false)
+                         {
+                             $size_value = is_numeric(strpos(strval($this->get_file_size($file)), $size));
+                         }
+                         else
+                         {
+                             $size_value = false;
+                         }
+
+                         if ( $name_value == true or $type_value == true or $size_value == true )
+                         {
+
+                             $files['name'] = $file;
+
+                             $files['type'] = pathinfo($file, PATHINFO_EXTENSION);
+                             $files['size'] = $this->get_file_size($file);
+                             $file_names[] = $files;
+                         }
+
+                     }
+                      else
+                      {
+                          $files['name'] = $file;
+
+                          $files['type'] = pathinfo($file, PATHINFO_EXTENSION);
+                          $files['size'] = $this->get_file_size($file);
+                          $file_names[] = $files;
+                      }
+
+
+
+
+                }
+                closedir($dh);
+            }
+        }
+
+
+
+
+        //var_dump('name: '.$name .' type: '.$type.' size: '.$size);
+
+        $search_columns= array(
+            array('name' => 'name','title' => 'File Name','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+            array('name' => 'type','title' => 'Type','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+            array('name' => 'size','title' => 'Size','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
+        );
+
+
+        $paginator = new PaginatorArray(array(
+            "data" => $file_names,
+            "limit"=> 1,
+            "page" => $numberPage
+        ));
+
+        if (count($file_names) == 0)
+        {
+            $no_items ="No se encontraron archivos";
+
+        }
+        else {
+            $no_items ="";
+        }
+        $this->view->noitems =$no_items;
+        $this->view->searchroute = 'file/search';
+        $this->view->file_names = $file_names;
+        $this->view->searchcolumns =$search_columns;
+        $this->view->showroute ='file/show/';
+        $this->view->title ='Archivos';
+        $this->view->listroute ='file/search';
+        $this->view->page = $paginator->getPaginate();
+
+        $this->view->pick('files/filelist');
+    }
+
+
+    public function get_file_size($file)
+    {
+        $size =round(filesize($this->file_params['upload_files_path'].$file)/1024/1024,3);
+        return $size;
+    }
 
 }

@@ -16,17 +16,7 @@
   |          Eduar Carvajal <eduar@phalconphp.com>                         |
   +------------------------------------------------------------------------+
 */
-/**
- * @const PTOOLS_IP Allowed IP for access.
- *        Phalcon Developers Tools can only be used in local machine, however
- *        you can set this to allow certain IP address.
- *
- *        For example:
- *          192.168.0.1 or SUBNET 192., 10.0.2., 86.84.124.
- */
-defined('PTOOLS_IP') || define('PTOOLS_IP', '192.168.');
-// ---------------------------- DO NOT EDIT BELOW ------------------------------
-/**
- * @const PTOOLSPATH The path to the Phalcon Developers Tools.
- */
-defined('PTOOLSPATH') || define('PTOOLSPATH', '/home/kolo/phalcon-devtools');
+use Phalcon\Web\Tools;
+require 'webtools.config.php';
+require PTOOLSPATH . '/scripts/Phalcon/Web/Tools.php';
+Tools::main(PTOOLSPATH, PTOOLS_IP);
