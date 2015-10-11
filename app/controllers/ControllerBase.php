@@ -5,6 +5,7 @@ use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Mvc\Model\Query;
 
 defined('APP_PATH') || define('APP_PATH', realpath('..'));
+define('SEP', DIRECTORY_SEPARATOR);
 class ControllerBase extends Controller
 {
 
@@ -82,6 +83,8 @@ public function initialize()
   ->addJs('metronic/assets/global/plugins/bootstrap-markdown/lib/markdown.js');
 
    $this->view->globalobj =$this;
+
+
 }
 public function checkuser($userid)
 {
@@ -94,10 +97,39 @@ public function checkuser($userid)
 
 public function get_upload_files_path()
 {
-  define('SEP', DIRECTORY_SEPARATOR);
-  $realpath = realpath('..');
-  $path =  $realpath.SEP.'public'.SEP.'files'.SEP;
+
+  $real_path = realpath('..');
+  $path =  $real_path.SEP.'public'.SEP.'files'.SEP;
   return $path;
+}
+
+
+public function get_thumbnail_path()
+{
+
+    $real_path = realpath('..');
+    $thumbnail_path =  $real_path.SEP.'public'.SEP.'files'.SEP.'thumbnail'.SEP;
+    return $thumbnail_path;
+}
+
+public function get_file_data($file_path,$file_name)
+{
+    $file_data =array();
+
+    $file_data['name'] = $file_name;
+    $file_data['path'] =$file_path.$file_name;
+    $file_data['extension'] = pathinfo($file_name, PATHINFO_EXTENSION);
+
+    $file_info = finfo_open(FILEINFO_MIME_TYPE);
+    $file_type = finfo_file($file_info,$file_path.$file_name);
+
+
+    $file_data['type'] =$file_type;
+
+    //size in MB
+    $file_data['size'] =round(filesize($file_path.$file_name)/1024/1024,3);
+    return($file_data);
+
 }
 
 protected function getTranslation()

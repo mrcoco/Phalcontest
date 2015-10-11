@@ -31,6 +31,7 @@ $(function () {
         )
     );
 
+
     if (window.location.hostname === 'blueimp.github.io') {
         // Demo settings:
         $('#fileupload').fileupload('option', {
@@ -41,7 +42,9 @@ $(function () {
             disableImageResize: /Android(?!.*Chrome)|Opera/
                 .test(window.navigator.userAgent),
             maxFileSize: 5000000,
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png|odt|zip)$/i,
+
+
         });
         // Upload server status check for browsers with CORS support:
         if ($.support.cors) {

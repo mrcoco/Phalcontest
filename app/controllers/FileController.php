@@ -15,6 +15,7 @@ class FileController extends ControllerBase
     {
 
         $this->file_params['upload_files_path']= $this->get_upload_files_path();
+        $this->file_params['thumbnail_path']= $this->get_thumbnail_path();
     }
 
 
@@ -43,6 +44,13 @@ public function get_assets()
       ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-validate.js')
       ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-ui.js')
       ->addJs('metronic/assets/admin/pages/scripts/form-fileupload.js');
+
+
+    }
+
+    public function get_modal_assets()
+    {
+        $this->assets->collection('delete_modal_js')->addJs('js/validate_files/delete_file_modal.js');
     }
 
     /**
@@ -120,13 +128,12 @@ public function get_assets()
       $dir = $this->file_params['upload_files_path'];
         if (is_dir($dir)) {
          if ($dh = opendir($dir)) {
-                $files=array();
+
              while (($file = readdir($dh)) !== false) {
                   if( $file == '.' || $file == '..' || $file =='thumbnail')continue;
-                  $files['name'] = $file;
-                  $files['type'] = pathinfo($file, PATHINFO_EXTENSION);
-                  $files['size'] = round(filesize($this->file_params['upload_files_path'].$file)/1024/1024,3);
-                  $file_names[]=$files;
+
+                  $file_data = $this->get_file_data($dir,$file);
+                  $file_names[]=$file_data;
 
              }
              closedir($dh);
@@ -142,9 +149,20 @@ public function get_assets()
 
         $paginator = new PaginatorArray(array(
             "data" => $file_names,
-            "limit"=> 1,
+            "limit"=> 10,
             "page" => $numberPage
         ));
+        if (count($file_names) == 0)
+        {
+            $no_items ="No se encontraron archivos";
+
+        }
+        else {
+            $no_items ="";
+        }
+
+     $this->get_modal_assets();
+     $this->view->noitems =$no_items;
      $this->view->searchroute = 'file/search';
      $this->view->file_names = $file_names;
      $this->view->searchcolumns =$search_columns;
@@ -156,10 +174,7 @@ public function get_assets()
      $this->view->pick('files/filelist');
    }
 
-    public function set_grid_values()
-    {
 
-    }
     /**
      * @Route("/search", methods={"GET","POST"}, name="search")
      */
@@ -195,10 +210,11 @@ public function get_assets()
         if (is_dir($dir))
         {
             if ($dh = opendir($dir)) {
-                $files=array();
+
                 while (($file = readdir($dh)) !== false) {
                     if( $file == '.' || $file == '..' || $file =='thumbnail')continue;
 
+                    $file_data = $this->get_file_data($dir,$file);
                      if (empty($name)==false or empty($type)==false or empty($size)==false)
                      {
 
@@ -212,8 +228,10 @@ public function get_assets()
                          }
 
                          if (empty($type)==false)
+
                          {
-                             $type_value = is_numeric(strpos(pathinfo($file, PATHINFO_EXTENSION), $type));
+                             var_dump(is_numeric(strpos( $file_data['type'], $type)));
+                             $type_value = is_numeric(strpos( $file_data['type'], $type));
                          }
                          else
                          {
@@ -232,21 +250,15 @@ public function get_assets()
                          if ( $name_value == true or $type_value == true or $size_value == true )
                          {
 
-                             $files['name'] = $file;
 
-                             $files['type'] = pathinfo($file, PATHINFO_EXTENSION);
-                             $files['size'] = $this->get_file_size($file);
-                             $file_names[] = $files;
+                             $file_names[]=$file_data;
                          }
 
                      }
                       else
                       {
-                          $files['name'] = $file;
 
-                          $files['type'] = pathinfo($file, PATHINFO_EXTENSION);
-                          $files['size'] = $this->get_file_size($file);
-                          $file_names[] = $files;
+                          $file_names[]=$file_data;
                       }
 
 
@@ -271,7 +283,7 @@ public function get_assets()
 
         $paginator = new PaginatorArray(array(
             "data" => $file_names,
-            "limit"=> 1,
+            "limit"=> 10,
             "page" => $numberPage
         ));
 
@@ -295,7 +307,37 @@ public function get_assets()
         $this->view->pick('files/filelist');
     }
 
+    /**
+     * @Route("/delete/{filename}", methods={"POST"}, name="delete")
+     */
+    public function delete_file_Action($filename)
+    {
+        $dir = $this->file_params['upload_files_path'];
+        if (is_dir($dir)) {
+            if ($dh = opendir($dir)) {
 
+                while (($file = readdir($dh)) !== false) {
+                  if ($file ==$filename)
+                  {
+                      unlink( $this->file_params['thumbnail_path'].$file);
+                      unlink( $this->file_params['upload_files_path'].$file);
+                      break;
+                  }
+
+                }
+                closedir($dh);
+            }
+        }
+    }
+
+    /**
+     * @Route("/image_gallery", methods={"GET"}, name="image_gallery")
+     */
+    public function image_gallery_Action()
+    {
+      $this->view->title ="Imágenes";
+      $this->view->pick('files/image_gallery');
+    }
     public function get_file_size($file)
     {
         $size =round(filesize($this->file_params['upload_files_path'].$file)/1024/1024,3);

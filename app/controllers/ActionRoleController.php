@@ -14,7 +14,7 @@ class ActionRoleController extends ControllerBase
   public function onConstruct()
     {
         $this->crud_params['route_list']         = 'actionrole/list';
-        $this->crud_params['entityname']         = 'actionrole';
+        $this->crud_params['entityname']         = 'ActionRole';
         $this->crud_params['not_found_message']  = 'actionrole.entity.notfound';
         $this->crud_params['controller']         = 'ActionRole';
         $this->crud_params['action_list']        = 'actionrolelist';

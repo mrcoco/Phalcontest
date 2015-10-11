@@ -72,7 +72,7 @@
 {% endfor %}
 <ul class="page-sidebar-menu page-sidebar-menu-closed" data-slide-speed="200" data-auto-scroll="true" data-keep-expanded="false">
    {% if address =='Y'%}
-  <li class="{% for key,name in ['country','state','city','township','neighborhood'] %}
+  <li class="{% for key,name in ['country','state','city','township','neighborhood','address'] %}
     {% if name  in router.getRewriteUri() %}
         active open
     {% else %}
@@ -126,7 +126,7 @@
            </li>
           {% endif %}
          {% if addresses =='Y'%}
-        <li>
+        <li class="{% if 'address' in router.getRewriteUri()%}active{% endif %}">
         <a href="{{ url("address/list") }}">
           <p align="left"><i class="icon-flag"></i>
           {{'Direcciones'|t}}</p>
@@ -204,7 +204,7 @@
  </li>
  {% endif %}
   {% if media =='Y'%}
- <li class="{% for key,name in ['media',files] %}
+ <li class="{% for key,name in ['media','file'] %}
    {% if name  in router.getRewriteUri() %}
        active open
    {% else %}
@@ -217,10 +217,15 @@
    </a>
    <ul class="sub-menu">
       {% if files =='Y'%}
-      <li class="{% if 'files' in router.getRewriteUri() %}active{% endif %}">
+      <li class="{% if 'set_files' in router.getRewriteUri() %}active{% endif %}">
         <a href="{{ url("file/set_files") }}" >
         <p align="left"><i class="fa fa-cloud-upload " ></i> {{'Upload Files'|t}}</p>
         </a>
+      </li>
+      <li class="{% if 'file/list' in router.getRewriteUri() %}active{% endif %}">
+          <a href="{{ url("file/list") }}" >
+              <p align="left"><i class="fa fa-file-archive-o  " ></i> {{'Manage Files'|t}}</p>
+          </a>
       </li>
       {% endif %}
    </ul>

@@ -17,10 +17,15 @@
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta content="" name="description"/>
 <meta content="" name="author"/>
+{% block pageheader %}
+
+{% endblock %}
 {% block head %}
+
 {{assets.outputCss('metroniccss')}}
 {{assets.outputJs('metronicjs')}}
  {% endblock %}
+
 
 <!-- END THEME STYLES -->
 

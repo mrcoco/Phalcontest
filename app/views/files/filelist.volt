@@ -5,9 +5,9 @@
 	</h3>
 	<hr/>
 {% endblock %}
-
+{% block pagebar %}
+{% endblock %}
 {% block content %}
- {{content()}}
 
  <!-- GRID SEARCH -->
 <div align="left" >
@@ -44,12 +44,13 @@
   </thead>
  <tbody>
  {% if page.items is defined %}
- {% for file_names in page.items %}
+ {% for index,file_names in page.items %}
   <tr>
  	<td width ="30%">{{ file_names['name']}}</td>
  	<td width ="30%">{{ file_names['type']}}</td>
 	<td width ="30%">{{ file_names['size']}}{{'MB'}}</td>
-	<td>{{link_to(showroute~file_names['name'],'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}</td>
+	<td><a id ="{{'deleteicon'~index}}" name="{{'deleteicon'~index}}" class="btn btn-icon-only red" data-toggle="modal" data-id="{{ file_names['name']}}" href="#basic">
+      <i class="fa fa-remove"></i> </a></td>
 	</tr>
  {% endfor %}
  {% endif %}
@@ -73,10 +74,36 @@
    <li>{{ link_to(listroute~"?page="~page.last, 'Ultimo'|t~'<i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i>') }}</li>
   </ul>
  </div>
+
+ <div style="display: none;" class="modal fade" id="basic" tabindex="-1" role="basic" aria-hidden="true">
+  <div class="modal-dialog">
+   <div class="modal-content">
+    <div class="modal-header">
+     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+     <h4 class="modal-title">Modal Title</h4>
+    </div>
+    <div class="modal-body">
+     {{'¿ Esta seguro que desea borrar este archivo ?'  }}
+     <input id="filename" type="hidden" name="filename" value="">
+    </div>
+
+    <div class="modal-footer">
+     <button id ="deletebutton" type="button" class="btn blue">{{ 'Eliminar'|t }}</button>
+     <button type="button" class="btn default" data-dismiss="modal">{{ 'Cerrar'|t }}</button>
+
+    </div>
+   </div>
+   <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+ </div>
+ <!--Scripts-->
+ {{assets.outputJs('delete_modal_js')}}
 {% else %}
  <!--NO ITEMS VALIDATION -->
  <div class="alert alert-warning alert-dismissable">
   <strong><i class="glyphicon glyphicon-warning-sign"></i> {{noitems|t}}</strong>
  </div>
 {% endif %}
+
 {% endblock %}

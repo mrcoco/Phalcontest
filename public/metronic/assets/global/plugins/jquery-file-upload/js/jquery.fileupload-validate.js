@@ -36,10 +36,10 @@
             // even if the previous action was rejected: 
             always: true,
             // Options taken from the global options map:
-            acceptFileTypes: '@',
-            maxFileSize: '@',
-            minFileSize: '@',
-            maxNumberOfFiles: '@',
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png|odt|zip|jar|deb)$/i,
+            maxFileSize: 10000000,
+            minFileSize: 0,
+            maxNumberOfFiles: 10,
             disabled: '@disableValidation'
         }
     );
@@ -49,17 +49,17 @@
     $.widget('blueimp.fileupload', $.blueimp.fileupload, {
 
         options: {
-            /*
+
             // The regular expression for allowed file types, matches
             // against either file type or file name:
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+
             // The maximum allowed file size in bytes:
-            maxFileSize: 10000000, // 10 MB
+            //maxFileSize: 10000000, // 10 MB
             // The minimum allowed file size in bytes:
-            minFileSize: undefined, // No minimal file size
+            // No minimal file size
             // The limit of files to be uploaded:
-            maxNumberOfFiles: 10,
-            */
+
+
 
             // Function returning the current number of files,
             // has to be overriden for maxNumberOfFiles validation:

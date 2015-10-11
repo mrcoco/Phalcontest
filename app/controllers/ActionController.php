@@ -14,7 +14,7 @@ class ActionController extends ControllerBase
   public function onConstruct()
     {
         $this->crud_params['route_list']         = 'action/list';
-        $this->crud_params['entityname']         = 'action';
+        $this->crud_params['entityname']         = 'Action';
         $this->crud_params['not_found_message']  = 'action.entity.notfound';
         $this->crud_params['controller']         = 'Action';
         $this->crud_params['action_list']        = 'actionlist';
