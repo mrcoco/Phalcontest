@@ -204,7 +204,7 @@
  </li>
  {% endif %}
   {% if media =='Y'%}
- <li class="{% for key,name in ['media','file'] %}
+ <li class="{% for key,name in ['media','file','gallery'] %}
    {% if name  in router.getRewriteUri() %}
        active open
    {% else %}
@@ -227,6 +227,11 @@
               <p align="left"><i class="fa fa-file-archive-o  " ></i> {{'Manage Files'|t}}</p>
           </a>
       </li>
+          <li class="{% if 'gallery' in router.getRewriteUri() %}active{% endif %}">
+              <a href="{{ url("gallery/list") }}" >
+                  <p align="left"><i class="fa fa-file-archive-o  " ></i> {{'Manage Galleries'|t}}</p>
+              </a>
+          </li>
       {% endif %}
    </ul>
  </li>

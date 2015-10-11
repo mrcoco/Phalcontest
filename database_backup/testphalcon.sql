@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.2.2
+-- version 4.2.12deb2
 -- http://www.phpmyadmin.net
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 02-10-2015 a las 16:30:22
--- Versión del servidor: 5.5.27
--- Versión de PHP: 5.4.7
+-- Host: localhost
+-- Generation Time: Oct 11, 2015 at 05:09 PM
+-- Server version: 5.6.25-0ubuntu0.15.04.1
+-- PHP Version: 5.6.4-4ubuntu6.3
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -17,12 +17,12 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de datos: `testphalcon`
+-- Database: `testphalcon`
 --
 
 DELIMITER $$
 --
--- Procedimientos
+-- Procedures
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `testprocedure`(IN companyid int(4),IN towerid int(4))
 BEGIN
@@ -35,22 +35,21 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `action`
+-- Table structure for table `action`
 --
 
 CREATE TABLE IF NOT EXISTS `action` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `action` varchar(45) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=47 ;
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `action`
+-- Dumping data for table `action`
 --
 
 INSERT INTO `action` (`id`, `action`, `description`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -96,12 +95,17 @@ INSERT INTO `action` (`id`, `action`, `description`, `createuser`, `modifyuser`,
 (43, 'Delete Neighborhood', 'Permite eliminar barrios', 'admin', 'admin', '2015-09-30 15:14:48', '2015-09-30 15:19:25'),
 (44, 'Create Address', 'Permite crear direcciones', 'admin', 'admin', '2015-10-02 14:22:45', '2015-10-02 14:22:45'),
 (45, 'Edit Address', 'Permite editar direcciones', 'admin', 'admin', '2015-10-02 14:23:19', '2015-10-02 14:23:19'),
-(46, 'Delete Address', 'Permite eliminar direcciones', 'admin', 'admin', '2015-10-02 14:23:44', '2015-10-02 14:23:44');
+(46, 'Delete Address', 'Permite eliminar direcciones', 'admin', 'admin', '2015-10-02 14:23:44', '2015-10-02 14:23:44'),
+(47, 'Manage Media', '', 'admin', 'admin', '2015-10-10 15:04:15', '2015-10-10 15:04:15'),
+(48, 'Manage Files', '', 'admin', 'admin', '2015-10-10 15:04:43', '2015-10-10 15:04:43'),
+(49, 'Create Gallery', '', 'admin', 'admin', '2015-10-11 16:56:44', '2015-10-11 16:56:44'),
+(50, 'Edit Gallery', '', 'admin', 'admin', '2015-10-11 16:56:52', '2015-10-11 16:56:52'),
+(51, 'Delete Gallery', '', 'admin', 'admin', '2015-10-11 16:57:01', '2015-10-11 16:57:01');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `action_role`
+-- Table structure for table `action_role`
 --
 
 CREATE TABLE IF NOT EXISTS `action_role` (
@@ -110,13 +114,11 @@ CREATE TABLE IF NOT EXISTS `action_role` (
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`actionid`,`roleid`),
-  KEY `fk_action_role_role1_idx` (`roleid`)
+  `modifydate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `action_role`
+-- Dumping data for table `action_role`
 --
 
 INSERT INTO `action_role` (`actionid`, `roleid`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -171,16 +173,21 @@ INSERT INTO `action_role` (`actionid`, `roleid`, `createuser`, `modifyuser`, `cr
 (43, 1, 'admin', 'admin', '2015-09-30 15:16:00', '2015-09-30 15:16:00'),
 (44, 1, 'admin', 'admin', '2015-10-02 14:24:19', '2015-10-02 14:24:19'),
 (45, 1, 'admin', 'admin', '2015-10-02 14:24:31', '2015-10-02 14:24:31'),
-(46, 1, 'admin', 'admin', '2015-10-02 14:25:08', '2015-10-02 14:25:08');
+(46, 1, 'admin', 'admin', '2015-10-02 14:25:08', '2015-10-02 14:25:08'),
+(47, 1, 'admin', 'admin', '2015-10-10 15:05:20', '2015-10-10 15:05:20'),
+(48, 1, 'admin', 'admin', '2015-10-10 15:05:27', '2015-10-10 15:05:27'),
+(49, 1, 'admin', 'admin', '2015-10-11 16:57:24', '2015-10-11 16:57:24'),
+(50, 1, 'admin', 'admin', '2015-10-11 16:57:30', '2015-10-11 16:57:30'),
+(51, 1, 'admin', 'admin', '2015-10-11 16:57:37', '2015-10-11 16:57:37');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `address`
+-- Table structure for table `address`
 --
 
 CREATE TABLE IF NOT EXISTS `address` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `countryid` int(11) NOT NULL,
   `stateid` int(11) NOT NULL,
   `cityid` int(11) NOT NULL,
@@ -191,33 +198,24 @@ CREATE TABLE IF NOT EXISTS `address` (
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_address_country1_idx` (`countryid`),
-  KEY `fk_address_city1_idx` (`cityid`),
-  KEY `fk_address_township1_idx` (`townshipid`),
-  KEY `fk_address_neighborhood1_idx` (`neighborhoodid`),
-  KEY `fk_address_state1_idx` (`stateid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `apartment`
+-- Table structure for table `apartment`
 --
 
 CREATE TABLE IF NOT EXISTS `apartment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `companyid` int(11) NOT NULL,
   `towerid` int(11) NOT NULL,
-  `name` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_apartment_tower1_idx` (`towerid`),
-  KEY `fk_apartment_company1_idx` (`companyid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+  `name` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `apartment`
+-- Dumping data for table `apartment`
 --
 
 INSERT INTO `apartment` (`id`, `companyid`, `towerid`, `name`) VALUES
@@ -229,7 +227,7 @@ INSERT INTO `apartment` (`id`, `companyid`, `towerid`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `apartmentlist`
+-- Stand-in structure for view `apartmentlist`
 --
 CREATE TABLE IF NOT EXISTS `apartmentlist` (
 `id` int(11)
@@ -240,25 +238,22 @@ CREATE TABLE IF NOT EXISTS `apartmentlist` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `city`
+-- Table structure for table `city`
 --
 
 CREATE TABLE IF NOT EXISTS `city` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `stateid` int(11) NOT NULL,
   `countryid` int(11) NOT NULL,
   `city` varchar(100) DEFAULT NULL,
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_city_country1_idx` (`countryid`),
-  KEY `fk_city_state1_idx` (`stateid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `city`
+-- Dumping data for table `city`
 --
 
 INSERT INTO `city` (`id`, `stateid`, `countryid`, `city`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -268,21 +263,20 @@ INSERT INTO `city` (`id`, `stateid`, `countryid`, `city`, `createuser`, `modifyu
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `company`
+-- Table structure for table `company`
 --
 
 CREATE TABLE IF NOT EXISTS `company` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `name` varchar(45) DEFAULT NULL,
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `company`
+-- Dumping data for table `company`
 --
 
 INSERT INTO `company` (`id`, `name`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -293,7 +287,7 @@ INSERT INTO `company` (`id`, `name`, `createuser`, `modifyuser`, `createdate`, `
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `company_address`
+-- Table structure for table `company_address`
 --
 
 CREATE TABLE IF NOT EXISTS `company_address` (
@@ -302,30 +296,27 @@ CREATE TABLE IF NOT EXISTS `company_address` (
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`companyid`,`addressid`),
-  KEY `fk_company_address_address1_idx` (`addressid`)
+  `modifydate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `country`
+-- Table structure for table `country`
 --
 
 CREATE TABLE IF NOT EXISTS `country` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `code` varchar(4) DEFAULT NULL,
   `country` varchar(100) DEFAULT NULL,
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=251 ;
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=251 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `country`
+-- Dumping data for table `country`
 --
 
 INSERT INTO `country` (`id`, `code`, `country`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -583,7 +574,66 @@ INSERT INTO `country` (`id`, `code`, `country`, `createuser`, `modifyuser`, `cre
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `language`
+-- Table structure for table `gallery`
+--
+
+CREATE TABLE IF NOT EXISTS `gallery` (
+`id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `title` varchar(80) DEFAULT NULL,
+  `type` varchar(45) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `gallery`
+--
+
+INSERT INTO `gallery` (`id`, `name`, `title`, `type`, `description`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(1, 'Wallpapers', 'Wallpapers', 'images', 'Galeria de Fondos de escritorio de Mangas japoneses', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(2, 'Iconos', 'Iconos', 'images', 'Galeria de Iconos de distintops tipos', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gallery_image`
+--
+
+CREATE TABLE IF NOT EXISTS `gallery_image` (
+  `id` int(11) NOT NULL,
+  `galleryid` int(11) NOT NULL,
+  `imageid` int(11) NOT NULL,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `image`
+--
+
+CREATE TABLE IF NOT EXISTS `image` (
+`id` int(11) NOT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `title` varchar(60) DEFAULT NULL,
+  `path` varchar(1000) DEFAULT NULL,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `language`
 --
 
 CREATE TABLE IF NOT EXISTS `language` (
@@ -593,12 +643,11 @@ CREATE TABLE IF NOT EXISTS `language` (
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`code`)
+  `modifydate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `language`
+-- Dumping data for table `language`
 --
 
 INSERT INTO `language` (`code`, `language`, `flag`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -608,25 +657,22 @@ INSERT INTO `language` (`code`, `language`, `flag`, `createuser`, `modifyuser`, 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `neighborhood`
+-- Table structure for table `neighborhood`
 --
 
 CREATE TABLE IF NOT EXISTS `neighborhood` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `cityid` int(11) NOT NULL,
   `townshipid` int(11) DEFAULT NULL,
   `neighborhood` varchar(100) DEFAULT NULL,
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_neighborhood_township1_idx` (`townshipid`),
-  KEY `fk_neighborhood_city1_idx` (`cityid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `neighborhood`
+-- Dumping data for table `neighborhood`
 --
 
 INSERT INTO `neighborhood` (`id`, `cityid`, `townshipid`, `neighborhood`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -636,7 +682,7 @@ INSERT INTO `neighborhood` (`id`, `cityid`, `townshipid`, `neighborhood`, `creat
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `neighborhoodview`
+-- Stand-in structure for view `neighborhoodview`
 --
 CREATE TABLE IF NOT EXISTS `neighborhoodview` (
 `id` int(11)
@@ -649,22 +695,21 @@ CREATE TABLE IF NOT EXISTS `neighborhoodview` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `role`
+-- Table structure for table `role`
 --
 
 CREATE TABLE IF NOT EXISTS `role` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `role` varchar(45) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `role`
+-- Dumping data for table `role`
 --
 
 INSERT INTO `role` (`id`, `role`, `description`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -674,23 +719,21 @@ INSERT INTO `role` (`id`, `role`, `description`, `createuser`, `modifyuser`, `cr
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `state`
+-- Table structure for table `state`
 --
 
 CREATE TABLE IF NOT EXISTS `state` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `countryid` int(11) NOT NULL,
   `state` varchar(100) DEFAULT NULL,
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_state_country1_idx` (`countryid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `state`
+-- Dumping data for table `state`
 --
 
 INSERT INTO `state` (`id`, `countryid`, `state`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -714,31 +757,28 @@ INSERT INTO `state` (`id`, `countryid`, `state`, `createuser`, `modifyuser`, `cr
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `testtabla`
+-- Table structure for table `testtabla`
 --
 
 CREATE TABLE IF NOT EXISTS `testtabla` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `test` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+`id` int(11) NOT NULL,
+  `test` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tower`
+-- Table structure for table `tower`
 --
 
 CREATE TABLE IF NOT EXISTS `tower` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `companyid` int(11) NOT NULL,
-  `number` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_tower_company_idx` (`companyid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+  `number` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `tower`
+-- Dumping data for table `tower`
 --
 
 INSERT INTO `tower` (`id`, `companyid`, `number`) VALUES
@@ -752,23 +792,21 @@ INSERT INTO `tower` (`id`, `companyid`, `number`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `township`
+-- Table structure for table `township`
 --
 
 CREATE TABLE IF NOT EXISTS `township` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `cityid` int(11) NOT NULL,
   `township` varchar(100) DEFAULT NULL,
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_township_city1_idx` (`cityid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `township`
+-- Dumping data for table `township`
 --
 
 INSERT INTO `township` (`id`, `cityid`, `township`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -782,7 +820,7 @@ INSERT INTO `township` (`id`, `cityid`, `township`, `createuser`, `modifyuser`, 
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `townshipview`
+-- Stand-in structure for view `townshipview`
 --
 CREATE TABLE IF NOT EXISTS `townshipview` (
 `id` int(11)
@@ -795,24 +833,22 @@ CREATE TABLE IF NOT EXISTS `townshipview` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `translation`
+-- Table structure for table `translation`
 --
 
 CREATE TABLE IF NOT EXISTS `translation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `languagecode` varchar(10) NOT NULL,
   `translatekey` varchar(50) DEFAULT NULL,
   `value` varchar(2000) DEFAULT NULL,
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_translation_language1_idx` (`languagecode`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=331 ;
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=331 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `translation`
+-- Dumping data for table `translation`
 --
 
 INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -1145,35 +1181,30 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `username` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
-  `password` longtext,
-  `createuser` varchar(45) NOT NULL,
-  `modifyuser` varchar(45) NOT NULL,
-  `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=40 ;
+  `password` longtext
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `user`
+-- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `email`, `password`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
-(30, 'admin', 'andresfranco@cableonda.net', '$2a$08$GYhoUJZxQha4xYSX4WbapebHRBYhT.biiqsia63QICJhS8NMepN1W', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(37, 'test2', 'andresfranco@cableonda.net', '$2a$08$13NjHo7VHfGd7DRkPCCoW.8a.hWjDUTcBJXNCL3OC2o61aeRcJr8y', 'admin', 'admin', '2015-09-16 22:45:49', '2015-09-16 22:45:49'),
-(38, 'test5', 'andresfranco@cableonda.net', '$2a$08$RbaMD9e6TZ1d6U9qljY1WeFROKpfYrV6sqMD8OeSc.92A5HurGqii', 'admin', 'admin', '2015-09-16 23:04:10', '2015-09-16 23:04:10'),
-(39, 'test99as', 'andresfranco@cableonda.net', '$2a$08$f6fK6GRyZwgPCLMienjls.0npOUESpFXSPGvprrSmxULBP5niTT8G', 'admin', 'admin', '2015-09-29 03:21:01', '2015-09-28 20:28:00');
+INSERT INTO `user` (`id`, `username`, `email`, `password`) VALUES
+(30, 'admin', 'andresfranco@cableonda.net', '$2a$08$GYhoUJZxQha4xYSX4WbapebHRBYhT.biiqsia63QICJhS8NMepN1W'),
+(37, 'test2', 'andresfranco@cableonda.net', '$2a$08$13NjHo7VHfGd7DRkPCCoW.8a.hWjDUTcBJXNCL3OC2o61aeRcJr8y'),
+(38, 'test5', 'andresfranco@cableonda.net', '$2a$08$RbaMD9e6TZ1d6U9qljY1WeFROKpfYrV6sqMD8OeSc.92A5HurGqii'),
+(39, 'test99as', 'andresfranco@cableonda.net', '$2a$08$f6fK6GRyZwgPCLMienjls.0npOUESpFXSPGvprrSmxULBP5niTT8G');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `user_role`
+-- Table structure for table `user_role`
 --
 
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -1182,14 +1213,11 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
-  `modifydate` datetime NOT NULL,
-  PRIMARY KEY (`userid`,`roleid`),
-  KEY `fk_user_role_user1_idx` (`userid`),
-  KEY `fk_user_role_role1_idx` (`roleid`)
+  `modifydate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `user_role`
+-- Dumping data for table `user_role`
 --
 
 INSERT INTO `user_role` (`userid`, `roleid`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
@@ -1200,7 +1228,7 @@ INSERT INTO `user_role` (`userid`, `roleid`, `createuser`, `modifyuser`, `create
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `apartmentlist`
+-- Structure for view `apartmentlist`
 --
 DROP TABLE IF EXISTS `apartmentlist`;
 
@@ -1209,7 +1237,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `neighborhoodview`
+-- Structure for view `neighborhoodview`
 --
 DROP TABLE IF EXISTS `neighborhoodview`;
 
@@ -1218,91 +1246,312 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `townshipview`
+-- Structure for view `townshipview`
 --
 DROP TABLE IF EXISTS `townshipview`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `townshipview` AS select `t`.`id` AS `id`,`t`.`cityid` AS `cityid`,`c`.`city` AS `city`,`c2`.`country` AS `country`,`s`.`state` AS `state`,`t`.`township` AS `township` from (((`township` `t` join `city` `c` on((`c`.`id` = `t`.`cityid`))) join `country` `c2` on((`c2`.`id` = `c`.`countryid`))) join `state` `s` on((`s`.`id` = `c`.`stateid`)));
 
 --
--- Restricciones para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Filtros para la tabla `action_role`
+-- Indexes for table `action`
+--
+ALTER TABLE `action`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `action_role`
 --
 ALTER TABLE `action_role`
-  ADD CONSTRAINT `fk_action_role_action1` FOREIGN KEY (`actionid`) REFERENCES `action` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_action_role_role1` FOREIGN KEY (`roleid`) REFERENCES `role` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ ADD PRIMARY KEY (`actionid`,`roleid`), ADD KEY `fk_action_role_role1_idx` (`roleid`);
 
 --
--- Filtros para la tabla `address`
+-- Indexes for table `address`
 --
 ALTER TABLE `address`
-  ADD CONSTRAINT `fk_address_city1` FOREIGN KEY (`cityid`) REFERENCES `city` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_address_country1` FOREIGN KEY (`countryid`) REFERENCES `country` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_address_neighborhood1` FOREIGN KEY (`neighborhoodid`) REFERENCES `neighborhood` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_address_state1` FOREIGN KEY (`stateid`) REFERENCES `state` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_address_township1` FOREIGN KEY (`townshipid`) REFERENCES `township` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_address_country1_idx` (`countryid`), ADD KEY `fk_address_city1_idx` (`cityid`), ADD KEY `fk_address_township1_idx` (`townshipid`), ADD KEY `fk_address_neighborhood1_idx` (`neighborhoodid`), ADD KEY `fk_address_state1_idx` (`stateid`);
 
 --
--- Filtros para la tabla `apartment`
+-- Indexes for table `apartment`
 --
 ALTER TABLE `apartment`
-  ADD CONSTRAINT `fk_apartment_company1` FOREIGN KEY (`companyid`) REFERENCES `company` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_apartment_tower1` FOREIGN KEY (`towerid`) REFERENCES `tower` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_apartment_tower1_idx` (`towerid`), ADD KEY `fk_apartment_company1_idx` (`companyid`);
 
 --
--- Filtros para la tabla `city`
+-- Indexes for table `city`
 --
 ALTER TABLE `city`
-  ADD CONSTRAINT `fk_city_country1` FOREIGN KEY (`countryid`) REFERENCES `country` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_city_state1` FOREIGN KEY (`stateid`) REFERENCES `state` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_city_country1_idx` (`countryid`), ADD KEY `fk_city_state1_idx` (`stateid`);
 
 --
--- Filtros para la tabla `company_address`
+-- Indexes for table `company`
+--
+ALTER TABLE `company`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `company_address`
 --
 ALTER TABLE `company_address`
-  ADD CONSTRAINT `fk_company_address_address1` FOREIGN KEY (`addressid`) REFERENCES `address` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_company_address_company1` FOREIGN KEY (`companyid`) REFERENCES `company` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ ADD PRIMARY KEY (`companyid`,`addressid`), ADD KEY `fk_company_address_address1_idx` (`addressid`);
 
 --
--- Filtros para la tabla `neighborhood`
+-- Indexes for table `country`
+--
+ALTER TABLE `country`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `gallery`
+--
+ALTER TABLE `gallery`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `gallery_image`
+--
+ALTER TABLE `gallery_image`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_gallery_image_image1_idx` (`imageid`), ADD KEY `fk_gallery_image_gallery1_idx` (`galleryid`);
+
+--
+-- Indexes for table `image`
+--
+ALTER TABLE `image`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `language`
+--
+ALTER TABLE `language`
+ ADD PRIMARY KEY (`code`);
+
+--
+-- Indexes for table `neighborhood`
 --
 ALTER TABLE `neighborhood`
-  ADD CONSTRAINT `fk_neighborhood_city1` FOREIGN KEY (`cityid`) REFERENCES `city` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_neighborhood_township1` FOREIGN KEY (`townshipid`) REFERENCES `township` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_neighborhood_township1_idx` (`townshipid`), ADD KEY `fk_neighborhood_city1_idx` (`cityid`);
 
 --
--- Filtros para la tabla `state`
+-- Indexes for table `role`
+--
+ALTER TABLE `role`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `state`
 --
 ALTER TABLE `state`
-  ADD CONSTRAINT `fk_state_country1` FOREIGN KEY (`countryid`) REFERENCES `country` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_state_country1_idx` (`countryid`);
 
 --
--- Filtros para la tabla `tower`
+-- Indexes for table `testtabla`
+--
+ALTER TABLE `testtabla`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tower`
 --
 ALTER TABLE `tower`
-  ADD CONSTRAINT `fk_tower_company` FOREIGN KEY (`companyid`) REFERENCES `company` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_tower_company_idx` (`companyid`);
 
 --
--- Filtros para la tabla `township`
+-- Indexes for table `township`
 --
 ALTER TABLE `township`
-  ADD CONSTRAINT `fk_township_city1` FOREIGN KEY (`cityid`) REFERENCES `city` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_township_city1_idx` (`cityid`);
 
 --
--- Filtros para la tabla `translation`
+-- Indexes for table `translation`
 --
 ALTER TABLE `translation`
-  ADD CONSTRAINT `fk_translation_language1` FOREIGN KEY (`languagecode`) REFERENCES `language` (`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_translation_language1_idx` (`languagecode`);
 
 --
--- Filtros para la tabla `user_role`
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user_role`
 --
 ALTER TABLE `user_role`
-  ADD CONSTRAINT `fk_user_role_role1` FOREIGN KEY (`roleid`) REFERENCES `role` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_user_role_user1` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ ADD PRIMARY KEY (`userid`,`roleid`), ADD KEY `fk_user_role_user1_idx` (`userid`), ADD KEY `fk_user_role_role1_idx` (`roleid`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `action`
+--
+ALTER TABLE `action`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=52;
+--
+-- AUTO_INCREMENT for table `address`
+--
+ALTER TABLE `address`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `apartment`
+--
+ALTER TABLE `apartment`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `city`
+--
+ALTER TABLE `city`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `company`
+--
+ALTER TABLE `company`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `country`
+--
+ALTER TABLE `country`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=251;
+--
+-- AUTO_INCREMENT for table `gallery`
+--
+ALTER TABLE `gallery`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `image`
+--
+ALTER TABLE `image`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `neighborhood`
+--
+ALTER TABLE `neighborhood`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `role`
+--
+ALTER TABLE `role`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `state`
+--
+ALTER TABLE `state`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
+--
+-- AUTO_INCREMENT for table `testtabla`
+--
+ALTER TABLE `testtabla`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tower`
+--
+ALTER TABLE `tower`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `township`
+--
+ALTER TABLE `township`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT for table `translation`
+--
+ALTER TABLE `translation`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=331;
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=40;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `action_role`
+--
+ALTER TABLE `action_role`
+ADD CONSTRAINT `fk_action_role_action1` FOREIGN KEY (`actionid`) REFERENCES `action` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_action_role_role1` FOREIGN KEY (`roleid`) REFERENCES `role` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `address`
+--
+ALTER TABLE `address`
+ADD CONSTRAINT `fk_address_city1` FOREIGN KEY (`cityid`) REFERENCES `city` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_address_country1` FOREIGN KEY (`countryid`) REFERENCES `country` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_address_neighborhood1` FOREIGN KEY (`neighborhoodid`) REFERENCES `neighborhood` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_address_state1` FOREIGN KEY (`stateid`) REFERENCES `state` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_address_township1` FOREIGN KEY (`townshipid`) REFERENCES `township` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `apartment`
+--
+ALTER TABLE `apartment`
+ADD CONSTRAINT `fk_apartment_company1` FOREIGN KEY (`companyid`) REFERENCES `company` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_apartment_tower1` FOREIGN KEY (`towerid`) REFERENCES `tower` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `city`
+--
+ALTER TABLE `city`
+ADD CONSTRAINT `fk_city_country1` FOREIGN KEY (`countryid`) REFERENCES `country` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_city_state1` FOREIGN KEY (`stateid`) REFERENCES `state` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `company_address`
+--
+ALTER TABLE `company_address`
+ADD CONSTRAINT `fk_company_address_address1` FOREIGN KEY (`addressid`) REFERENCES `address` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_company_address_company1` FOREIGN KEY (`companyid`) REFERENCES `company` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `gallery_image`
+--
+ALTER TABLE `gallery_image`
+ADD CONSTRAINT `fk_gallery_image_gallery1` FOREIGN KEY (`galleryid`) REFERENCES `gallery` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_gallery_image_image1` FOREIGN KEY (`imageid`) REFERENCES `image` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `neighborhood`
+--
+ALTER TABLE `neighborhood`
+ADD CONSTRAINT `fk_neighborhood_city1` FOREIGN KEY (`cityid`) REFERENCES `city` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_neighborhood_township1` FOREIGN KEY (`townshipid`) REFERENCES `township` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `state`
+--
+ALTER TABLE `state`
+ADD CONSTRAINT `fk_state_country1` FOREIGN KEY (`countryid`) REFERENCES `country` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `tower`
+--
+ALTER TABLE `tower`
+ADD CONSTRAINT `fk_tower_company` FOREIGN KEY (`companyid`) REFERENCES `company` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `township`
+--
+ALTER TABLE `township`
+ADD CONSTRAINT `fk_township_city1` FOREIGN KEY (`cityid`) REFERENCES `city` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `translation`
+--
+ALTER TABLE `translation`
+ADD CONSTRAINT `fk_translation_language1` FOREIGN KEY (`languagecode`) REFERENCES `language` (`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `user_role`
+--
+ALTER TABLE `user_role`
+ADD CONSTRAINT `fk_user_role_role1` FOREIGN KEY (`roleid`) REFERENCES `role` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_user_role_user1` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

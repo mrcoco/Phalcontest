@@ -46,7 +46,7 @@
  {% if page.items is defined %}
  {% for index,file_names in page.items %}
   <tr>
- 	<td width ="30%">{{ file_names['name']}}</td>
+ 	<td width ="30%"><a href ="{{ download_path~file_names['name'] }}">{{ file_names['name']}}</a></td>
  	<td width ="30%">{{ file_names['type']}}</td>
 	<td width ="30%">{{ file_names['size']}}{{'MB'}}</td>
 	<td><a id ="{{'deleteicon'~index}}" name="{{'deleteicon'~index}}" class="btn btn-icon-only red" data-toggle="modal" data-id="{{ file_names['name']}}" href="#basic">

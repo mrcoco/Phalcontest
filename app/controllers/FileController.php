@@ -15,6 +15,7 @@ class FileController extends ControllerBase
     {
 
         $this->file_params['upload_files_path']= $this->get_upload_files_path();
+        $this->file_params['download_files_path'] =$this->url->getBaseUri().'files/';
         $this->file_params['thumbnail_path']= $this->get_thumbnail_path();
     }
 
@@ -170,6 +171,7 @@ public function get_assets()
      $this->view->title ='Archivos';
      $this->view->listroute ='file/list';
      $this->view->page = $paginator->getPaginate();
+     $this->view->download_path =$this->file_params['download_files_path'];
 
      $this->view->pick('files/filelist');
    }
