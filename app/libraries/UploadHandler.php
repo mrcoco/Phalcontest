@@ -211,11 +211,14 @@ class UploadHandler
 
        if( ($file_type !="image" ) and ($file_type!="video" ) and ($file_type !="document" ) )
       {
+
           $file_type = 'other';
           $file_path = $this->get_path().'other'.DS;
       }
 
-      }
+
+
+
 
 
       return $file_path;
