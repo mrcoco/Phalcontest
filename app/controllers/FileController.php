@@ -68,8 +68,8 @@ public function get_assets()
     */
     public function upload_filesAction()
     {
-      error_reporting(E_ALL | E_STRICT);
-      $upload_handler = new  UploadHandler();
+      //error_reporting(E_ALL | E_STRICT);
+      $upload_handler = new  UploadHandler( array('image_versions' => array()));
 
       //return json_encode($upload_handler);
 
