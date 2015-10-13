@@ -42,7 +42,7 @@ $(function () {
             disableImageResize: /Android(?!.*Chrome)|Opera/
                 .test(window.navigator.userAgent),
             maxFileSize: 5000000,
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png|odt|zip)$/i,
+            acceptFileTypes:  /(\.|\/)(gif|jpe?g|png|odt|zip|docx|pdf)$/i,
 
 
         });

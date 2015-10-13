@@ -33,10 +33,10 @@
         {
             action: 'validate',
             // Always trigger this action,
-            // even if the previous action was rejected: 
+            // even if the previous action was rejected:
             always: true,
             // Options taken from the global options map:
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png|odt|zip|jar|deb)$/i,
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png|odt|zip|docx|pdf)$/i,
             maxFileSize: 10000000,
             minFileSize: 0,
             maxNumberOfFiles: 10,

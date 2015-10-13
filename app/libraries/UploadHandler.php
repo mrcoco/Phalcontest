@@ -9,7 +9,7 @@
  * Licensed under the MIT license:
  * http://www.opensource.org/licenses/MIT
  */
-
+define('DS', DIRECTORY_SEPARATOR);
 class UploadHandler
 {
 
@@ -41,7 +41,7 @@ class UploadHandler
     protected $image_objects = array();
 
     function __construct($options = null, $initialize = true, $error_messages = null) {
-      define('DS', DIRECTORY_SEPARATOR);
+
       $realpath = realpath('..');
       $path =  $realpath.DS.'public'.DS.'files'.DS;
         $this->response = array();
@@ -92,7 +92,7 @@ class UploadHandler
             // Defines which files can be displayed inline when downloaded:
             'inline_file_types' => ' /(\.|\/)(gif|jpe?g|png)$/i',
             // Defines which files (based on their names) are accepted for upload:
-            'accept_file_types' =>  '/\.(gif|jpe?g|png|zip|odt|pdf)$/i',
+            'accept_file_types' =>  '/\.(gif|jpe?g|png|zip|odt|pdf|docx)$/i',
             // The php.ini settings upload_max_filesize and post_max_size
             // take precedence over the following max_file_size setting:
             'max_file_size' => null,
@@ -173,6 +173,55 @@ class UploadHandler
         }
     }
 
+    public function get_path()
+    {
+
+      $real_path = realpath('..');
+      $path =  $real_path.DS.'public'.DS.'files'.DS;
+      return $path;
+    }
+
+    public function get_folder($file_name)
+    {
+      $images_type =  array('gif','png','jpg','gif');
+      $documents_type =  array('rtf','doc','docx','csv','xls','xlsx','pptx','ppt','odt','pdf','txt','html','xml','php','css','js');
+      $videos_type =array('mpg','mpeg','rm','avi','mkv','flv','mov','wmv','asf','mp4');
+      $userfile_extn = substr($file_name, strrpos($file_name, '.')+1);
+      $file_type ="";
+      $file_path ="";
+
+
+      if(in_array($userfile_extn,$images_type) )
+      {
+      $file_type ='image';
+      $file_path = $this->get_path().'images'.DS;
+      }
+
+      if(in_array($userfile_extn,$videos_type) )
+      {
+      $file_type ='video';
+      $file_path = $this->get_path().'videos'.DS;
+      }
+
+      if(in_array($userfile_extn,$documents_type) )
+      {
+      $file_type = 'document';
+      $file_path = $this->get_path().'documents'.DS;
+      }
+
+       if( ($file_type !="image" ) and ($file_type!="video" ) and ($file_type !="document" ) )
+      {
+          $file_type = 'other';
+          $file_path = $this->get_path().'other'.DS;
+      }
+
+      }
+
+
+      return $file_path;
+
+    }
+
     protected function initialize() {
         switch ($this->get_server_var('REQUEST_METHOD')) {
             case 'OPTIONS':
@@ -231,8 +280,10 @@ class UploadHandler
             }
             $version_path = $version.'/';
         }
-        return $this->options['upload_dir'].$this->get_user_path()
-            .$version_path.$file_name;
+
+
+        return $this->get_folder($file_name).$file_name;//$this->options['upload_dir'].$this->get_user_path()
+            //.$version_path.$file_name;
     }
 
     protected function get_query_separator($url) {
