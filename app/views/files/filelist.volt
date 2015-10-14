@@ -1,7 +1,7 @@
 {% extends "layouts/masterpage.volt" %}
 {% block pagetitle %}
 	<h3 class="page-title" align ="left">
-	{{title|t}}
+	{{title|t}} <div align="right"><a href ="{{url('file/index')}}" class="btn btn blue">{{'files.button.title'|t}} <i class="fa fa-arrow-right "></i> </a></div>
 	</h3>
 	<hr/>
 {% endblock %}

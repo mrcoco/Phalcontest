@@ -222,8 +222,8 @@
         <p align="left"><i class="fa fa-cloud-upload " ></i> {{'Upload Files'|t}}</p>
         </a>
       </li>
-      <li class="{% if 'file/list' in router.getRewriteUri() %}active{% endif %}">
-          <a href="{{ url("file/list") }}" >
+      <li class="{% if ('file/index' in router.getRewriteUri()) or ('file/list' in router.getRewriteUri())  %}active{% endif %}">
+          <a href="{{ url("file/index") }}" >
               <p align="left"><i class="fa fa-file-archive-o  " ></i> {{'Manage Files'|t}}</p>
           </a>
       </li>

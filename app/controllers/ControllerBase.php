@@ -112,6 +112,13 @@ public function get_thumbnail_path()
     return $thumbnail_path;
 }
 
+public function get_file_extension($file_name)
+{
+  $userfile_extn = substr($file_name, strrpos($file_name, '.')+1);
+  return $userfile_extn;
+}
+
+
 public function get_file_data($file_path,$file_name)
 {
     $file_data =array();
@@ -129,6 +136,46 @@ public function get_file_data($file_path,$file_name)
     //size in MB
     $file_data['size'] =round(filesize($file_path.$file_name)/1024/1024,3);
     return($file_data);
+
+}
+
+public function get_folder_by_extension($file_name,$file_extensions)
+{
+
+  $file_ext = $this->get_file_extension($file_name);
+  $images_type =$file_extensions['image_ext'];  //array('gif','png','jpg','gif');
+  $documents_type =$file_extensions['document_ext'];  //array('rtf','doc','docx','csv','xls','xlsx','pptx','ppt','odt','pdf','txt','html','xml','php','css','js');
+  $videos_type =$file_extensions['video_ext'];//array('mpg','mpeg','rm','avi','mkv','flv','mov','wmv','asf','mp4');
+
+  $file_path ="";
+  $file_type ="";
+
+  if(in_array($file_ext,$images_type) )
+  {
+  $file_type ='image';
+  $file_path = $this->get_upload_files_path().'images'.SEP;
+  }
+
+  if(in_array($file_ext,$videos_type) )
+  {
+  $file_type ='video';
+  $file_path = $this->get_upload_files_path().'videos'.SEP;
+  }
+
+  if(in_array($file_ext,$documents_type) )
+  {
+  $file_type = 'document';
+  $file_path = $this->get_upload_files_path().'documents'.SEP;
+  }
+
+   if( ($file_type !="image" ) and ($file_type!="video" ) and ($file_type !="document" ) )
+  {
+
+      $file_type = 'other';
+      $file_path = $this->get_upload_files_path().'other'.SEP;
+  }
+
+  return $file_path;
 
 }
 

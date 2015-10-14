@@ -92,10 +92,10 @@ class UploadHandler
             // Defines which files can be displayed inline when downloaded:
             'inline_file_types' => ' /(\.|\/)(gif|jpe?g|png)$/i',
             // Defines which files (based on their names) are accepted for upload:
-            'accept_file_types' =>  '/\.(gif|jpe?g|png|zip|odt|pdf|docx)$/i',
+            'accept_file_types' =>  '/\.(gif|jpe?g|png|zip|odt|pdf|docx|wmv|exe)$/i',
             // The php.ini settings upload_max_filesize and post_max_size
             // take precedence over the following max_file_size setting:
-            'max_file_size' => null,
+            'max_file_size' => 95000000,
             'min_file_size' => 1,
             // The maximum number of files for the upload directory:
             'max_number_of_files' => null,

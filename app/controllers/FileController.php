@@ -49,6 +49,14 @@ public function get_assets()
 
     }
 
+    /**
+    * @Route("/index", methods={"GET"}, name="index")
+    */
+    public function file_indexAction()
+    {
+      $this->view->pick('files/files_index');
+    }
+
     public function get_modal_assets()
     {
         $this->assets->collection('delete_modal_js')->addJs('js/validate_files/delete_file_modal.js');
@@ -69,7 +77,12 @@ public function get_assets()
     public function upload_filesAction()
     {
       //error_reporting(E_ALL | E_STRICT);
-      $upload_handler = new  UploadHandler( array('image_versions' => array()));
+      $upload_handler = new  UploadHandler(
+      array('image_versions' => array()
+      ,'accept_file_types' =>  '/\.(gif|jpe?g|png|zip|odt|pdf|docx|wmv|exe|msi|rar)$/i'
+      ,'max_file_size' => 95000000
+      ,'min_file_size' => 0
+      ,'max_number_of_files' => 10));
 
       //return json_encode($upload_handler);
 
@@ -113,10 +126,32 @@ public function get_assets()
 
     }
 
+    public function get_file_folder($file_type)
+
+    {
+      switch ($file_type)
+      {
+        case 'image':
+         $file_dir = $this->file_params['upload_files_path'].'images'.SEP;
+        break;
+        case 'video':
+         $file_dir = $this->file_params['upload_files_path'].'videos'.SEP;
+        break;
+        case 'document':
+         $file_dir = $this->file_params['upload_files_path'].'documents'.SEP;
+        break;
+        case 'other':
+         $file_dir = $this->file_params['upload_files_path'].'other'.SEP;
+        break;
+      }
+      return $file_dir;
+
+    }
+
     /**
-    * @Route("/list", methods={"GET","POST"}, name="list")
+    * @Route("/list/{file_type}", methods={"GET"}, name="list")
     */
-    public function list_filesAction()
+    public function list_filesAction($file_type)
     {
         $numberPage =1;
         if ($this->request->isPost()) {
@@ -126,12 +161,17 @@ public function get_assets()
         }
 
       $file_names =array();
-      $dir = $this->file_params['upload_files_path'];
+
+
+      $dir = $this->get_file_folder($file_type);
+
+
         if (is_dir($dir)) {
          if ($dh = opendir($dir)) {
 
              while (($file = readdir($dh)) !== false) {
-                  if( $file == '.' || $file == '..' || $file =='thumbnail')continue;
+
+                  if( $file == '.' || $file == '..' || $file =='thumbnail' || is_dir($dir.$file)==true)continue;
 
                   $file_data = $this->get_file_data($dir,$file);
                   $file_names[]=$file_data;
@@ -164,12 +204,12 @@ public function get_assets()
 
      $this->get_modal_assets();
      $this->view->noitems =$no_items;
-     $this->view->searchroute = 'file/search';
+     $this->view->searchroute = 'file/search/'.$file_type;
      $this->view->file_names = $file_names;
      $this->view->searchcolumns =$search_columns;
      $this->view->showroute ='file/show/';
      $this->view->title ='Archivos';
-     $this->view->listroute ='file/list';
+     $this->view->listroute ='file/list/'.$file_type;
      $this->view->page = $paginator->getPaginate();
      $this->view->download_path =$this->file_params['download_files_path'];
 
@@ -178,9 +218,9 @@ public function get_assets()
 
 
     /**
-     * @Route("/search", methods={"GET","POST"}, name="search")
+     * @Route("/search/{file_type}", methods={"GET","POST"}, name="search")
      */
-    public function search_filesAction()
+    public function search_filesAction($file_type)
     {
         $numberPage =1;
         if ($this->request->isPost()) {
@@ -208,7 +248,7 @@ public function get_assets()
 
 
         $file_names =array();
-        $dir = $this->file_params['upload_files_path'];
+        $dir = $this->get_file_folder($file_type);
         if (is_dir($dir))
         {
             if ($dh = opendir($dir)) {
@@ -297,32 +337,43 @@ public function get_assets()
         else {
             $no_items ="";
         }
+        $this->get_modal_assets();
         $this->view->noitems =$no_items;
-        $this->view->searchroute = 'file/search';
+        $this->view->searchroute = 'file/search/'.$file_type;
         $this->view->file_names = $file_names;
         $this->view->searchcolumns =$search_columns;
         $this->view->showroute ='file/show/';
         $this->view->title ='Archivos';
-        $this->view->listroute ='file/search';
+        $this->view->listroute ='file/search/'.$file_type;
         $this->view->page = $paginator->getPaginate();
-
+        $this->view->download_path =$this->file_params['download_files_path'];
         $this->view->pick('files/filelist');
+
     }
+
+     public function get_path_by_extension($file_name)
+     {
+       $file_extensions= array('image_ext' => array('gif','png','jpg','gif')
+       ,'document_ext'=>array('rtf','doc','docx','csv','xls','xlsx','pptx','ppt','odt','pdf','txt','html','xml','php','css','js')
+       ,'video_ext'=>array('mpg','mpeg','rm','avi','mkv','flv','mov','wmv','asf','mp4'));
+       $path = $this->get_folder_by_extension($file_name,$file_extensions);
+       return $path;
+     }
 
     /**
      * @Route("/delete/{filename}", methods={"POST"}, name="delete")
      */
-    public function delete_file_Action($filename)
+    public function delete_file_Action($file_name)
     {
-        $dir = $this->file_params['upload_files_path'];
+
+        $dir = $this->get_path_by_extension($file_name);
         if (is_dir($dir)) {
             if ($dh = opendir($dir)) {
 
                 while (($file = readdir($dh)) !== false) {
-                  if ($file ==$filename)
+                  if ($file ==$file_name)
                   {
-                      unlink( $this->file_params['thumbnail_path'].$file);
-                      unlink( $this->file_params['upload_files_path'].$file);
+                      unlink($this->get_path_by_extension($file_name).$file);
                       break;
                   }
 

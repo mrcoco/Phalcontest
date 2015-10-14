@@ -13,14 +13,16 @@ $(document).ready(function()
         var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
         var url_path =base_url+'/file/delete/';
         var filename =$("#filename").val();
+
         $.ajax
         ({
             type: "POST",
             url: url_path +filename,
             data:{"filename":filename},
             cache: false,
-            success: function()
+            success: function(data)
             {
+                
                 $('#basic').modal('hide')
                 location.reload();
             }

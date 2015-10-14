@@ -36,10 +36,10 @@
             // even if the previous action was rejected:
             always: true,
             // Options taken from the global options map:
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png|odt|zip|docx|pdf)$/i,
-            maxFileSize: 10000000,
-            minFileSize: 0,
-            maxNumberOfFiles: 10,
+            acceptFileTypes: file_param['acceptFileTypes'],
+            maxFileSize: file_param['maxFileSize'],
+            minFileSize:file_param['minFileSize'],
+            maxNumberOfFiles: file_param['maxNumberOfFiles'],
             disabled: '@disableValidation'
         }
     );

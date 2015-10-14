@@ -2,6 +2,13 @@
 {% block head %}
  {{super()}}
  {{assets.outputCss('upload_file_css')}}
+ <script>
+ var file_param =new Array();
+ file_param['acceptFileTypes'] =/(\.|\/)(gif|jpe?g|png|odt|zip|docx|pdf|wmv|exe|msi|rar)$/i;
+ file_param['maxFileSize'] =95000000;
+ file_param['minFileSize'] =0;
+ file_param['maxNumberOfFiles'] =10;
+ </script>
 {% endblock %}
 {% block javascripts %}
  {{assets.outputJs('upload_file_javascripts')}}
