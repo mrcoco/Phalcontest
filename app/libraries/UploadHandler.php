@@ -421,6 +421,7 @@ class UploadHandler
     }
 
     protected function validate($uploaded_file, $file, $error, $index) {
+    
         if ($error) {
             $file->error = $this->get_error_message($error);
             return false;

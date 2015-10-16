@@ -67,10 +67,12 @@
 
             // Error and info messages:
             messages: {
-                maxNumberOfFiles: 'Maximum number of files exceeded',
-                acceptFileTypes: 'File type not allowed',
-                maxFileSize: 'File is too large',
-                minFileSize: 'File is too small'
+
+
+                maxNumberOfFiles: file_param['max_number_files_error'],
+                acceptFileTypes:file_param['accept_file_error'],
+                maxFileSize: file_param['max_file_size_error'],
+                minFileSize: file_param['min_file_size_error']
             }
         },
 

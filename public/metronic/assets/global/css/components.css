@@ -3865,6 +3865,7 @@ h1 .label, h2 .label, h3 .label, h4 .label, h5 .label, h6 .label {
 
 .label-danger {
   background-color: #F3565D;
+  color: white !important;
 }
 .label-danger[href]:hover, .label-danger[href]:focus {
   background-color: #f0262f;

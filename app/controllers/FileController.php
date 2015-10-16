@@ -54,6 +54,13 @@ public function get_assets()
     */
     public function file_indexAction()
     {
+      $title_tags =array();
+      $title_tags['main_title'] ='index.files.title';
+      $title_tags['images_title'] ='index.files.images_title';
+      $title_tags['documents_title'] ='index.files.documents_title';
+      $title_tags['videos_title'] ='index.files.videos_title';
+      $title_tags['others_title'] ='index.files.others_title';
+      $this->view->title_tags =$title_tags;
       $this->view->pick('files/files_index');
     }
 
@@ -67,9 +74,18 @@ public function get_assets()
     */
     public function view_upload_files_Action()
     {
+     $title_tags =array();
+     $title_tags['main_title'] ='upload.files.title';
+     $title_tags['add_files_title'] = 'upload.files.add_files_title';
+     $title_tags['start_upload_title'] ='upload.files.start_upload_title';
+     $title_tags['cancel_upload_title'] = 'upload.files.cancel_upload_title';
+     $title_tags['start_button_title'] ='upload.start_button';
+     $title_tags['cancel_button_title']='upload.cancel_button';
      $this->get_assets();
-        $this->view->file_formats =$this->get_file_formats();
-        $this->view->upload_params =$this->get_file_upload_params();
+     $this->view->file_formats =$this->get_file_formats();
+     $this->view->upload_params =$this->get_file_upload_params();
+
+     $this->view->title_tags = $title_tags;
      $this->view->pick('files/upload_files');
     }
 
@@ -127,96 +143,36 @@ public function get_assets()
 
     }
 
-    public function get_file_folder($file_type)
 
-    {
-      switch ($file_type)
-      {
-        case 'image':
-         $file_dir = $this->file_params['upload_files_path'].'images'.SEP;
-        break;
-        case 'video':
-         $file_dir = $this->file_params['upload_files_path'].'videos'.SEP;
-        break;
-        case 'document':
-         $file_dir = $this->file_params['upload_files_path'].'documents'.SEP;
-        break;
-        case 'other':
-         $file_dir = $this->file_params['upload_files_path'].'other'.SEP;
-        break;
-      }
-      return $file_dir;
-
-    }
 
     /**
     * @Route("/list/{file_type}", methods={"GET"}, name="list")
     */
     public function list_filesAction($file_type)
     {
-        $numberPage =1;
-        if ($this->request->isPost()) {
-
-        } else {
-            $numberPage = $this->request->getQuery("page", "int");
-        }
 
       $file_names =array();
-
-
       $dir = $this->get_file_folder($file_type);
 
-
-        if (is_dir($dir)) {
-         if ($dh = opendir($dir)) {
-
-             while (($file = readdir($dh)) !== false) {
-
-                  if( $file == '.' || $file == '..' || $file =='thumbnail' || is_dir($dir.$file)==true)continue;
-
-                  $file_data = $this->get_file_data($dir,$file);
-                  $file_names[]=$file_data;
-
-             }
-             closedir($dh);
-         }
-     }
-
-     $search_columns= array(
-       array('name' => 'name','title' => 'File Name','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
-       array('name' => 'type','title' => 'Type','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
-       array('name' => 'size','title' => 'Size','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
-     );
-
-
-        $paginator = new PaginatorArray(array(
-            "data" => $file_names,
-            "limit"=> 10,
-            "page" => $numberPage
-        ));
-        if (count($file_names) == 0)
+        if (is_dir($dir))
         {
-            $no_items ="No se encontraron archivos";
+         if ($dh = opendir($dir))
+         {
+           while (($file = readdir($dh)) !== false)
+           {
 
-        }
-        else {
-            $no_items ="";
-        }
+                if( $file == '.' || $file == '..' || $file =='thumbnail' || is_dir($dir.$file)==true)continue;
 
+                $file_data = $this->get_file_data($dir,$file);
+                $file_names[]=$file_data;
 
+           }
+           closedir($dh);
 
-     $this->get_modal_assets();
-     $this->view->noitems =$no_items;
-     $this->view->searchroute = 'file/search/'.$file_type;
-     $this->view->file_names = $file_names;
-     $this->view->searchcolumns =$search_columns;
-     $this->view->showroute ='file/show/';
-     $this->view->title ='Archivos';
-     $this->view->listroute ='file/list/'.$file_type;
-     $this->view->page = $paginator->getPaginate();
-     $this->view->download_path =$this->file_params['download_files_path'];
+         }
+      }
 
-     $this->view->pick('files/filelist');
+    $this->set_grid_files('list',$file_type,$file_names);
    }
 
 
@@ -225,7 +181,7 @@ public function get_assets()
      */
     public function search_filesAction($file_type)
     {
-        $numberPage =1;
+
         if ($this->request->isPost()) {
 
             $name =$this->request->getPost("name");
@@ -237,7 +193,10 @@ public function get_assets()
             $this->persistent->size=$size;
 
         } else {
-            $numberPage = $this->request->getQuery("page", "int");
+            $name =$this->persistent->name;
+            $type =$this->persistent->type;
+            $size =$this->persistent->size;
+
         }
         if($this->request->getPost("name"))
         {
@@ -248,198 +207,87 @@ public function get_assets()
         $this->tag->setDefault("type",$this->persistent->type);
         $this->tag->setDefault("size",$this->persistent->size);
 
-
-
         $file_names =array();
         $dir = $this->get_file_folder($file_type);
         if (is_dir($dir))
         {
-            if ($dh = opendir($dir)) {
-
-                while (($file = readdir($dh)) !== false) {
+            if ($dh = opendir($dir))
+            {
+               while (($file = readdir($dh)) !== false)
+                {
                     if( $file == '.' || $file == '..' || $file =='thumbnail')continue;
 
                     $file_data = $this->get_file_data($dir,$file);
                      if (empty($name)==false or empty($type)==false or empty($size)==false)
                      {
 
-                         if (empty($name)==false)
-                         {
-                           $name_value = is_numeric(strpos($file, $name));
-                         }
-                         else
-                         {
-                             $name_value = false;
-                         }
+                         if (empty($name)==false){$name_value = is_numeric(strpos($file, $name));}
+                         else{$name_value = false;}
 
-                         if (empty($type)==false)
+                         if (empty($type)==false){$type_value = is_numeric(strpos( $file_data['type'], $type));}
+                         else{$type_value = false;}
 
-                         {
+                         if (empty($size)==false){$size_value = is_numeric(strpos(strval($this->get_file_size($file)), $size));}
+                         else{$size_value = false;}
 
-                             $type_value = is_numeric(strpos( $file_data['type'], $type));
-                         }
-                         else
-                         {
-                             $type_value = false;
-                         }
+                        if ( $name_value == true or $type_value == true or $size_value == true ){$file_names[]=$file_data;}
 
-                         if (empty($size)==false)
-                         {
-                             $size_value = is_numeric(strpos(strval($this->get_file_size($file)), $size));
-                         }
-                         else
-                         {
-                             $size_value = false;
-                         }
-
-                         if ( $name_value == true or $type_value == true or $size_value == true )
-                         {
-
-
-                             $file_names[]=$file_data;
-                         }
-
-                     }
-                      else
-                      {
-
-                          $file_names[]=$file_data;
-                      }
-
-
-
+                     } else{$file_names[]=$file_data;}
 
                 }
                 closedir($dh);
             }
         }
-
-
-
-
-
-
-        $search_columns= array(
-            array('name' => 'name','title' => 'File Name','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
-            array('name' => 'type','title' => 'Type','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
-            array('name' => 'size','title' => 'Size','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
-        );
-
-
-        $paginator = new PaginatorArray(array(
-            "data" => $file_names,
-            "limit"=> 10,
-            "page" => $numberPage
-        ));
-
-        if (count($file_names) == 0)
-        {
-            $no_items ="No se encontraron archivos";
-
-        }
-        else {
-            $no_items ="";
-        }
-        $this->get_modal_assets();
-        $this->view->noitems =$no_items;
-        $this->view->searchroute = 'file/search/'.$file_type;
-        $this->view->file_names = $file_names;
-        $this->view->searchcolumns =$search_columns;
-        $this->view->showroute ='file/show/';
-        $this->view->title ='Archivos';
-        $this->view->listroute ='file/search/'.$file_type;
-        $this->view->page = $paginator->getPaginate();
-        $this->view->download_path =$this->file_params['download_files_path'];
-        $this->view->pick('files/filelist');
-
+     $this->set_grid_files('search',$file_type,$file_names);
     }
 
-     public function get_path_by_extension($file_name)
+     public function set_grid_files($mode,$file_type,$file_names)
      {
-       $file_extensions=$this->get_file_formats();
-       $path = $this->get_folder_by_extension($file_name,$file_extensions);
-       return $path;
-     }
+      $grid_params =array();
+      $no_items ="";
 
-    public function get_system_param($code)
-    {
-        $system_parameters = SystemParameter::find(
-            array("conditions" => "code =:code:","bind"  =>  array("code"=>$code)))->toArray();
-        return $system_parameters;
-    }
-
-    public function get_file_upload_params()
-    {
-        $params = $this->get_system_param('file_upload');
-        $file_upload_params =array();
-        foreach ( $params as  $param)
-        {
-            Switch ($param['parameter'])
-            {
-              case 'max_file_size' :
-                  $file_upload_params['max_file_size']=$param['textvalue'];
-              break;
-            case 'min_file_size' :
-                $file_upload_params['min_file_size']=$param['textvalue'];
-                break;
-            case 'max_number_of_files' :
-                $file_upload_params['max_number_of_files']=$param['textvalue'];
-                break;
-
-            }
-
-        }
-        return $file_upload_params;
-    }
-
-     public function get_file_formats()
-     {
-       $file_formats = FileFormat::find(array("conditions"=>  "accept ='T'"))->toArray();
-
-       $image_ext =array();
-       $video_ext =array();
-       $document_ext =array();
-       $other_ext =array();
-       foreach ( $file_formats as  $file)
-       {
-          switch ($file['type'])
-          {
-            case 'image':
-            array_push($image_ext,$file['extension']);
-            break;
-            case 'video':
-            array_push($video_ext,$file['extension']);
-            break;
-            case 'document':
-            array_push($document_ext,$file['extension']);
-            break;
-            case 'other':
-            array_push($other_ext,$file['extension']);
-            break;
-          }
-
-       }
-
-       $file_extensions =array('image_ext' =>$image_ext
-       ,'document_ext'=>$document_ext
-       ,'video_ext'=>$video_ext
-       ,'other_ext'=>$other_ext
-       ,'accept_file_types'=> $this->get_accept_file_types($file_formats)
+      $numberPage =1;
+      if ($this->request->isGet()) {
+        $numberPage = $this->request->getQuery("page", "int");
+      }
+       //Set search columns
+       $search_columns= array(
+           array('name' => 'name','title' => 'File Name','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+           array('name' => 'type','title' => 'Type','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+           array('name' => 'size','title' => 'Size','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
        );
 
-       return $file_extensions;
-     }
+       //Set grid Paginator
+       $paginator = new PaginatorArray(array("data" => $file_names,"limit"=> 1,"page" => $numberPage));
 
-     public function get_accept_file_types($file_formats)
+       if (count($file_names) == 0){$no_items ="files.list.no_data";}
 
-     {
-        $reg_exp ='/\.(';
-       foreach ( $file_formats as  $file)
+       switch($mode)
        {
-         $reg_exp .= $file['extension'].'|';
+         case 'list':$listroute = 'file/list/'.$file_type;break;
+         case 'search':$listroute = 'file/search/'.$file_type;break;
        }
-       $reg_exp  =$reg_exp.')$/i';
-       return $reg_exp;
+
+       switch($file_type)
+       {
+         case 'image':$title = 'Images';break;
+         case 'video':$title = 'Videos';break;
+         case 'document':$title = 'Documents';break;
+         case 'other':$title = 'Other Files';break;
+       }
+
+       $this->get_modal_assets();
+       $this->view->noitems =$no_items;
+       $this->view->searchroute = 'file/search/'.$file_type;
+       $this->view->file_names = $file_names;
+       $this->view->searchcolumns =$search_columns;
+       $this->view->showroute ='file/show/';
+       $this->view->title =$title;
+       $this->view->listroute =$listroute;
+       $this->view->page = $paginator->getPaginate();
+       $this->view->download_path =$this->file_params['download_files_path'];
+       $this->view->pick('files/filelist');
+
      }
 
     /**

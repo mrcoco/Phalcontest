@@ -4,11 +4,16 @@
  {{assets.outputCss('upload_file_css')}}
  <script>
 
+
  var file_param =new Array();
- file_param['acceptFileTypes'] =file_formats['acceptFileTypes'] ;
- file_param['maxFileSize'] =upload_params['maxFileSize'];
- file_param['minFileSize'] =upload_params['minFileSize'];
- file_param['maxNumberOfFiles'] =upload_params['maxNumberOfFiles'];
+ file_param['acceptFileTypes'] ={{file_formats['accept_file_types']}} ;
+ file_param['maxFileSize'] ={{upload_params['max_file_size']}};
+ file_param['minFileSize'] ={{upload_params['min_file_size']}};
+ file_param['maxNumberOfFiles'] ={{upload_params['max_number_of_files']}};
+ file_param['accept_file_error']='{{"validate.file.validformats"|t}}';
+ file_param['max_file_size_error']='{{"validate.file.maxsize"|t}}';
+ file_param['min_file_size_error']='{{"validate.file.minsize"|t}}';
+ file_param['max_number_files_error']='{{"validate.file.filesnumber"|t}}';
  </script>
 {% endblock %}
 {% block javascripts %}
@@ -34,13 +39,13 @@
             {{'{%'}} if (!i && !o.options.autoUpload) { {{'%}'}}
                 <button class="btn blue start" disabled>
                     <i class="fa fa-upload"></i>
-                    <span>Start</span>
+                    <span>{{title_tags['start_button_title']|t}}</span>
                 </button>
             {{'{%'}} } {{'%}'}}
             {{'{%'}}if (!i) { {{'%}'}}
                 <button class="btn red cancel">
                     <i class="fa fa-ban"></i>
-                    <span>Cancel</span>
+                    <span>{{title_tags['cancel_button_title']|t}}</span>
                 </button>
           {{'{%'}} } {{'%}'}}
         </td>
@@ -66,7 +71,6 @@ FormFileUpload.init();
 </script>
 {% endblock %}
 {% block content %}
-
 	<!-- END SIDEBAR -->
 	<!-- BEGIN CONTENT -->
 
@@ -98,29 +102,29 @@ FormFileUpload.init();
 			<div class="row">
 				<div class="col-md-12">
           <h3 class="page-title" align ="left">
-        	{{'Subir Archivos'|t}}
+        	{{title_tags['main_title']|t}}
         	</h3>
         	<hr/>
 					<form id="fileupload" action="{{url('file/upload_files')}}" method="POST" enctype="multipart/form-data">
 						<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
 						<div class="row fileupload-buttonbar">
-							<div class="col-lg-7">
+							<div class="col-lg-10">
 								<!-- The fileinput-button span is used to style the file input field as button -->
 								<span class="btn green fileinput-button">
 								<i class="fa fa-plus"></i>
 								<span>
-								Add files... </span>
+								{{title_tags['add_files_title']|t}}{{'...'}} </span>
 								<input type="file" name="files[]" multiple="">
 								</span>
 								<button type="submit" class="btn blue start">
 								<i class="fa fa-upload"></i>
 								<span>
-								Start upload </span>
+								{{title_tags['start_upload_title']|t}}</span>
 								</button>
 								<button type="reset" class="btn warning cancel">
 								<i class="fa fa-ban-circle"></i>
 								<span>
-								Cancel upload </span>
+								{{title_tags['cancel_upload_title']|t}} </span>
 								</button>
 
 								<!-- The global file processing state -->

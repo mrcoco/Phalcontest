@@ -95,6 +95,7 @@ public function checkuser($userid)
 
 }
 
+// FIle upload functions--------------------------------------------------
 public function get_upload_files_path()
 {
 
@@ -161,6 +162,117 @@ public function get_folder_by_extension($file_name,$file_extensions)
 
 }
 
+public function get_path_by_extension($file_name)
+{
+  $file_extensions=$this->get_file_formats();
+  $path = $this->get_folder_by_extension($file_name,$file_extensions);
+  return $path;
+}
+
+public function get_system_param($code)
+{
+   $system_parameters = SystemParameter::find(
+       array("conditions" => "code =:code:","bind"  =>  array("code"=>$code)))->toArray();
+   return $system_parameters;
+}
+
+public function get_file_upload_params()
+{
+   $params = $this->get_system_param('file_upload');
+   $file_upload_params =array();
+   foreach ( $params as  $param)
+   {
+       Switch ($param['parameter'])
+       {
+         case 'max_file_size' :
+             $file_upload_params['max_file_size']=$param['textvalue'];
+         break;
+       case 'min_file_size' :
+           $file_upload_params['min_file_size']=$param['textvalue'];
+           break;
+       case 'max_number_of_files' :
+           $file_upload_params['max_number_of_files']=$param['textvalue'];
+           break;
+
+       }
+
+   }
+   return $file_upload_params;
+}
+
+public function get_file_formats()
+{
+  $file_formats = FileFormat::find(array("conditions"=>  "accept ='T'"))->toArray();
+
+  $image_ext =array();
+  $video_ext =array();
+  $document_ext =array();
+  $other_ext =array();
+  foreach ( $file_formats as  $file)
+  {
+     switch ($file['type'])
+     {
+       case 'image':
+       array_push($image_ext,$file['extension']);
+       break;
+       case 'video':
+       array_push($video_ext,$file['extension']);
+       break;
+       case 'document':
+       array_push($document_ext,$file['extension']);
+       break;
+       case 'other':
+       array_push($other_ext,$file['extension']);
+       break;
+     }
+
+  }
+
+  $file_extensions =array('image_ext' =>$image_ext
+  ,'document_ext'=>$document_ext
+  ,'video_ext'=>$video_ext
+  ,'other_ext'=>$other_ext
+  ,'accept_file_types'=> $this->get_accept_file_types($file_formats)
+  );
+
+  return $file_extensions;
+}
+
+public function get_accept_file_types($file_formats)
+
+{
+   $reg_exp ='/\.(';
+  foreach ( $file_formats as  $file)
+  {
+    $reg_exp .= $file['extension'].'|';
+  }
+  $reg_exp  =$reg_exp.')$/i';
+  return $reg_exp;
+}
+
+public function get_file_folder($file_type)
+
+{
+  switch ($file_type)
+  {
+    case 'image':
+     $file_dir = $this->file_params['upload_files_path'].'images'.SEP;
+    break;
+    case 'video':
+     $file_dir = $this->file_params['upload_files_path'].'videos'.SEP;
+    break;
+    case 'document':
+     $file_dir = $this->file_params['upload_files_path'].'documents'.SEP;
+    break;
+    case 'other':
+     $file_dir = $this->file_params['upload_files_path'].'other'.SEP;
+    break;
+  }
+  return $file_dir;
+
+}
+
+////-------------------------end file upload-----------------------------------------
 protected function getTranslation()
   {
 
