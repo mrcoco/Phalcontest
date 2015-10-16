@@ -1,5 +1,4 @@
 <?php
-
 /*
   +------------------------------------------------------------------------+
   | Phalcon Developer Tools                                                |
@@ -17,10 +16,7 @@
   |          Eduar Carvajal <eduar@phalconphp.com>                         |
   +------------------------------------------------------------------------+
 */
-
 use Phalcon\Web\Tools;
-
 require 'webtools.config.php';
 require PTOOLSPATH . '/scripts/Phalcon/Web/Tools.php';
-
 Tools::main(PTOOLSPATH, PTOOLS_IP);

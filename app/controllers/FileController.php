@@ -76,10 +76,11 @@ public function get_assets()
     */
     public function upload_filesAction()
     {
+      $file_formats =$this->get_file_formats();
       //error_reporting(E_ALL | E_STRICT);
       $upload_handler = new  UploadHandler(
       array('image_versions' => array()
-      ,'accept_file_types' =>  '/\.(gif|jpe?g|png|zip|odt|pdf|docx|wmv|exe|msi|rar)$/i'
+      ,'accept_file_types' => $file_formats['accept_file_types'] /*'/\.(gif|jpe?g|png|zip|odt|pdf|docx|wmv|exe|msi|rar)$/i'*/
       ,'max_file_size' => 95000000
       ,'min_file_size' => 0
       ,'max_number_of_files' => 10));
@@ -353,11 +354,61 @@ public function get_assets()
 
      public function get_path_by_extension($file_name)
      {
-       $file_extensions= array('image_ext' => array('gif','png','jpg','gif')
+       $file_extensions=$this->get_file_formats(); /*array('image_ext' => array('gif','png','jpg','gif')
        ,'document_ext'=>array('rtf','doc','docx','csv','xls','xlsx','pptx','ppt','odt','pdf','txt','html','xml','php','css','js')
-       ,'video_ext'=>array('mpg','mpeg','rm','avi','mkv','flv','mov','wmv','asf','mp4'));
+       ,'video_ext'=>array('mpg','mpeg','rm','avi','mkv','flv','mov','wmv','asf','mp4'));*/
        $path = $this->get_folder_by_extension($file_name,$file_extensions);
        return $path;
+     }
+
+     public function get_file_formats()
+     {
+       $file_formats = FileFormat::find(array("conditions"=>  "accept ='T'"))->toArray();
+
+       $image_ext =array();
+       $video_ext =array();
+       $document_ext =array();
+       $other_ext =array();
+       foreach ( $file_formats as  $file)
+       {
+          switch ($file['type'])
+          {
+            case 'image':
+            array_push($image_ext,$file['extension']);
+            break;
+            case 'video':
+            array_push($video_ext,$file['extension']);
+            break;
+            case 'document':
+            array_push($document_ext,$file['extension']);
+            break;
+            case 'other':
+            array_push($other_ext,$file['extension']);
+            break;
+          }
+
+       }
+
+       $file_extensions =array('image_ext' =>$image_ext
+       ,'document_ext'=>$document_ext
+       ,'video_ext'=>$video_ext
+       ,'other_ext'=>$other_ext
+       ,'accept_file_types'=> $this->get_accept_file_types($file_formats)
+       );
+
+       return $file_extensions;
+     }
+
+     public function get_accept_file_types($file_formats)
+
+     {
+        $reg_exp ='/\.(';
+       foreach ( $file_formats as  $file)
+       {
+         $reg_exp .= $file['extension'].'|';
+       }
+       $reg_exp  =$reg_exp.')$/i';
+       return $reg_exp;
      }
 
     /**
