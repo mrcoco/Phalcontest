@@ -1,6 +1,6 @@
 <?php
 
-class FileFormat extends \Phalcon\Mvc\Model
+class SystemParameter extends \Phalcon\Mvc\Model
 {
 
     /**
@@ -13,19 +13,19 @@ class FileFormat extends \Phalcon\Mvc\Model
      *
      * @var string
      */
-    protected $extension;
+    protected $code;
 
     /**
      *
      * @var string
      */
-    protected $type;
+    protected $parameter;
 
     /**
      *
      * @var string
      */
-    protected $accept;
+    protected $textvalue;
 
     /**
      * Method to set the value of field id
@@ -41,40 +41,40 @@ class FileFormat extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Method to set the value of field extension
+     * Method to set the value of field code
      *
-     * @param string $extension
+     * @param string $code
      * @return $this
      */
-    public function setExtension($extension)
+    public function setCode($code)
     {
-        $this->extension = $extension;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Method to set the value of field type
+     * Method to set the value of field parameter
      *
-     * @param string $type
+     * @param string $parameter
      * @return $this
      */
-    public function setType($type)
+    public function setParameter($parameter)
     {
-        $this->type = $type;
+        $this->parameter = $parameter;
 
         return $this;
     }
 
     /**
-     * Method to set the value of field accept
+     * Method to set the value of field textvalue
      *
-     * @param string $accept
+     * @param string $textvalue
      * @return $this
      */
-    public function setAccept($accept)
+    public function setTextvalue($textvalue)
     {
-        $this->accept = $accept;
+        $this->textvalue = $textvalue;
 
         return $this;
     }
@@ -90,33 +90,33 @@ class FileFormat extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Returns the value of field extension
+     * Returns the value of field code
      *
      * @return string
      */
-    public function getExtension()
+    public function getCode()
     {
-        return $this->extension;
+        return $this->code;
     }
 
     /**
-     * Returns the value of field type
+     * Returns the value of field parameter
      *
      * @return string
      */
-    public function getType()
+    public function getParameter()
     {
-        return $this->type;
+        return $this->parameter;
     }
 
     /**
-     * Returns the value of field accept
+     * Returns the value of field textvalue
      *
      * @return string
      */
-    public function getAccept()
+    public function getTextvalue()
     {
-        return $this->accept;
+        return $this->textvalue;
     }
 
     /**
@@ -126,14 +126,14 @@ class FileFormat extends \Phalcon\Mvc\Model
      */
     public function getSource()
     {
-        return 'file_format';
+        return 'system_parameter';
     }
 
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return FileFormat[]
+     * @return SystemParameter[]
      */
     public static function find($parameters = null)
     {
@@ -144,7 +144,7 @@ class FileFormat extends \Phalcon\Mvc\Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return FileFormat
+     * @return SystemParameter
      */
     public static function findFirst($parameters = null)
     {
@@ -161,9 +161,9 @@ class FileFormat extends \Phalcon\Mvc\Model
     {
         return array(
             'id' => 'id',
-            'extension' => 'extension',
-            'type' => 'type',
-            'accept' => 'accept'
+            'code' => 'code',
+            'parameter' => 'parameter',
+            'textvalue' => 'textvalue'
         );
     }
 

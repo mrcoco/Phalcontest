@@ -157,7 +157,8 @@ class UploadHandler
                     // dimensions and e.g. create square thumbnails:
                     //'crop' => true,
                     'max_width' => 80,
-                    'max_height' => 80
+                    'max_height' => 80,
+                    'all_file_formats'=>array()
                 )
             ),
             'print_response' => true
@@ -183,36 +184,38 @@ class UploadHandler
 
     public function get_folder($file_name)
     {
-      $images_type =  array('gif','png','jpg','gif');
-      $documents_type =  array('rtf','doc','docx','csv','xls','xlsx','pptx','ppt','odt','pdf','txt','html','xml','php','css','js');
-      $videos_type =array('mpg','mpeg','rm','avi','mkv','flv','mov','wmv','asf','mp4');
+      $file_extensions = $this->options['all_file_formats'];
+      $images_type =$file_extensions['image_ext'];  //array('gif','png','jpg','gif');
+      $documents_type =$file_extensions['document_ext'];  //array('rtf','doc','docx','csv','xls','xlsx','pptx','ppt','pdf','txt','html','xml','php','css','js');
+      $videos_type =$file_extensions['video_ext'];
+      $other_type =$file_extensions['other_ext'];  //array('mpg','mpeg','rm','avi','mkv','flv','mov','wmv','asf','mp4');
       $userfile_extn = substr($file_name, strrpos($file_name, '.')+1);
-      $file_type ="";
+
       $file_path ="";
 
 
       if(in_array($userfile_extn,$images_type) )
       {
-      $file_type ='image';
+
       $file_path = $this->get_path().'images'.DS;
       }
 
       if(in_array($userfile_extn,$videos_type) )
       {
-      $file_type ='video';
+
       $file_path = $this->get_path().'videos'.DS;
       }
 
       if(in_array($userfile_extn,$documents_type) )
       {
-      $file_type = 'document';
+
       $file_path = $this->get_path().'documents'.DS;
       }
 
-       if( ($file_type !="image" ) and ($file_type!="video" ) and ($file_type !="document" ) )
+      if(in_array($userfile_extn,$other_type) )
       {
 
-          $file_type = 'other';
+
           $file_path = $this->get_path().'other'.DS;
       }
 

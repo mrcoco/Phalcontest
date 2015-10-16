@@ -68,6 +68,8 @@ public function get_assets()
     public function view_upload_files_Action()
     {
      $this->get_assets();
+        $this->view->file_formats =$this->get_file_formats();
+        $this->view->upload_params =$this->get_file_upload_params();
      $this->view->pick('files/upload_files');
     }
 
@@ -76,16 +78,17 @@ public function get_assets()
     */
     public function upload_filesAction()
     {
-      $file_formats =$this->get_file_formats();
-      //error_reporting(E_ALL | E_STRICT);
+      $file_formats = $this->get_file_formats();
+      $file_upload_params = $this->get_file_upload_params();
+      error_reporting(E_ALL | E_STRICT);
       $upload_handler = new  UploadHandler(
       array('image_versions' => array()
-      ,'accept_file_types' => $file_formats['accept_file_types'] /*'/\.(gif|jpe?g|png|zip|odt|pdf|docx|wmv|exe|msi|rar)$/i'*/
-      ,'max_file_size' => 95000000
-      ,'min_file_size' => 0
-      ,'max_number_of_files' => 10));
+      ,'accept_file_types' => $file_formats['accept_file_types']
+      ,'max_file_size' => $file_upload_params['max_file_size']
+      ,'min_file_size' => $file_upload_params['min_file_size']
+      ,'max_number_of_files' => $file_upload_params['max_number_of_files']
+      ,'all_file_formats'=>$file_formats));
 
-      //return json_encode($upload_handler);
 
     }
 
@@ -102,9 +105,6 @@ public function get_assets()
     */
     public function uploadAction()
     {
-      #check if there is any file
-  //  define('DS', DIRECTORY_SEPARATOR);
-    $realpath = realpath('..');
 
     if($this->request->hasFiles() == true)
     {
@@ -203,6 +203,8 @@ public function get_assets()
             $no_items ="";
         }
 
+
+
      $this->get_modal_assets();
      $this->view->noitems =$no_items;
      $this->view->searchroute = 'file/search/'.$file_type;
@@ -273,7 +275,7 @@ public function get_assets()
                          if (empty($type)==false)
 
                          {
-                             var_dump(is_numeric(strpos( $file_data['type'], $type)));
+
                              $type_value = is_numeric(strpos( $file_data['type'], $type));
                          }
                          else
@@ -315,7 +317,7 @@ public function get_assets()
 
 
 
-        //var_dump('name: '.$name .' type: '.$type.' size: '.$size);
+
 
         $search_columns= array(
             array('name' => 'name','title' => 'File Name','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
@@ -354,12 +356,41 @@ public function get_assets()
 
      public function get_path_by_extension($file_name)
      {
-       $file_extensions=$this->get_file_formats(); /*array('image_ext' => array('gif','png','jpg','gif')
-       ,'document_ext'=>array('rtf','doc','docx','csv','xls','xlsx','pptx','ppt','odt','pdf','txt','html','xml','php','css','js')
-       ,'video_ext'=>array('mpg','mpeg','rm','avi','mkv','flv','mov','wmv','asf','mp4'));*/
+       $file_extensions=$this->get_file_formats();
        $path = $this->get_folder_by_extension($file_name,$file_extensions);
        return $path;
      }
+
+    public function get_system_param($code)
+    {
+        $system_parameters = SystemParameter::find(
+            array("conditions" => "code =:code:","bind"  =>  array("code"=>$code)))->toArray();
+        return $system_parameters;
+    }
+
+    public function get_file_upload_params()
+    {
+        $params = $this->get_system_param('file_upload');
+        $file_upload_params =array();
+        foreach ( $params as  $param)
+        {
+            Switch ($param['parameter'])
+            {
+              case 'max_file_size' :
+                  $file_upload_params['max_file_size']=$param['textvalue'];
+              break;
+            case 'min_file_size' :
+                $file_upload_params['min_file_size']=$param['textvalue'];
+                break;
+            case 'max_number_of_files' :
+                $file_upload_params['max_number_of_files']=$param['textvalue'];
+                break;
+
+            }
+
+        }
+        return $file_upload_params;
+    }
 
      public function get_file_formats()
      {
