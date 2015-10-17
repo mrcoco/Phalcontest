@@ -273,7 +273,25 @@ public function get_file_folder($file_type)
 }
 
 ////-------------------------end file upload-----------------------------------------
-protected function getTranslation()
+
+//------------------------Galleries----------------------------------------
+    public function Delete_folder_content($dir) {
+        $files = array_diff(scandir($dir), array('.','..'));
+        foreach ($files as $file) {
+            (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
+        }
+        rmdir($dir);
+    }
+    public function set_gallery_dir($name)
+    {
+
+        $dir = $this->get_upload_files_path()."galleries".SEP.$name."_gallery";
+        return $dir;
+    }
+
+//---------------------------End Galleries-----------------------------------
+
+    protected function getTranslation()
   {
 
 

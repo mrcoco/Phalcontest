@@ -28,25 +28,25 @@ class GalleryController extends ControllerBase
         $this->crud_params['new_title']          = 'gallery.title.new';
         $this->crud_params['edit_title']         = 'gallery.title.edit';
         $this->crud_params['form_columns']       = array(
-            array('name' => 'name','label'=>'Nombre'
+            array('name' => 'name','label'=>'Name'
             ,'required'=>'<span class="required" aria-required="true">* </span>'
             ,'div_control_class'=>'input-control select full-size'
             ,'div_cell_class'=>'cell colspan3'
             ,'div_row_class'=>'row cells1'
             ,'label_error'=>''),
-            array('name' => 'title','label'=>'Título'
+            array('name' => 'title','label'=>'Title'
             ,'required'=>'<span class="required" aria-required="true">* </span>'
             ,'div_control_class'=>'input-control select full-size'
             ,'div_cell_class'=>'cell colspan3'
             ,'div_row_class'=>'row cells1'
             ,'label_error'=>''),
-            array('name' => 'type','label'=>'Típo'
+            array('name' => 'type','label'=>'Type'
             ,'required'=>''
             ,'div_control_class'=>'input-control select full-size'
             ,'div_cell_class'=>'cell colspan3'
             ,'div_row_class'=>'row cells1'
             ,'label_error'=>''),
-            array('name' => 'description','label'=>'Descripción'
+            array('name' => 'description','label'=>'Description'
             ,'required'=>''
             ,'div_control_class'=>'input-control select full-size'
             ,'div_cell_class'=>'cell colspan3'
@@ -92,13 +92,13 @@ class GalleryController extends ControllerBase
                 ,'noitems_message'=>'gallery.notfound'
                 ,'title' =>'gallery.list.title'
                 ,'header_columns'=>array(
-                array('column_name' => 'name','title' => 'Nombre','class'=>''),
-                array('column_name'=>'title','title' => 'Título','class'=>''),
-                array('column_name'=>'type','title' => 'Típo','class'=>''))
+                array('column_name' => 'name','title' => 'Name','class'=>''),
+                array('column_name'=>'title','title' => 'Títle','class'=>''),
+                array('column_name'=>'type','title' => 'Type','class'=>''))
                 ,'search_columns'=>array(
-                array('name' => 'name','title' =>  'Nombre','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
-                array('name' => 'title','title' => 'Título','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
-                array('name' => 'type','title' => 'Típo','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
+                array('name' => 'name','title' =>  'Name','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+                array('name' => 'title','title' => 'Title','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+                array('name' => 'type','title' => 'Type','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
             )
             ];
         return $grid_values;

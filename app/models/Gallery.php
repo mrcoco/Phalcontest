@@ -1,5 +1,5 @@
 <?php
-
+use ControllerBase as ControllerBase;
 class Gallery extends \Phalcon\Mvc\Model
 {
 
@@ -56,6 +56,8 @@ class Gallery extends \Phalcon\Mvc\Model
      * @var string
      */
     protected $modifydate;
+
+    protected $base_obj;
 
     /**
      * Method to set the value of field id
@@ -270,6 +272,8 @@ class Gallery extends \Phalcon\Mvc\Model
     public function initialize()
     {
         $this->hasMany('id', 'GalleryImage', 'galleryid', array('alias' => 'GalleryImage'));
+        $this->base_obj =new ControllerBase();
+
     }
 
     /**
@@ -324,5 +328,47 @@ class Gallery extends \Phalcon\Mvc\Model
             'modifydate' => 'modifydate'
         );
     }
+
+    public function afterCreate()
+    {
+
+        mkdir($this->set_gallery_dir($this->base_obj),0777);
+    }
+
+    public function set_gallery_dir($base)
+    {
+
+        $dir = $base->get_upload_files_path()."galleries".SEP.$this->name."_gallery";
+        return $dir;
+    }
+
+    public function afterDelete()
+    {
+        $base = new ControllerBase();
+       $dir =$this->set_gallery_dir($base);
+        $base->Delete_folder_content($dir);
+    }
+
+    public function beforeSave()
+    {
+        $base = new ControllerBase();
+        $new_name =$base->get_upload_files_path()."galleries".SEP.$this->name."_gallery";
+        $old_name =$base->get_upload_files_path()."galleries".SEP.$this->get_old_name()."_gallery";
+        rename($old_name,$new_name);
+
+    }
+
+    public function get_old_name()
+    {
+      $galleries = Gallery::findFirst($this->id);
+      $old_name = $galleries->name;
+      return $old_name;
+
+    }
+
+
+
+
+
 
 }
