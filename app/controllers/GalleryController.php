@@ -122,6 +122,7 @@ class GalleryController extends ControllerBase
         $this->check_all_permissions($this->session->get('userid'));
 
         $this->view->uploadroute="gallery/set_images/";
+        $this->view->view_gallery_route ='gallery/view_gallery/';
 
     }
 
@@ -403,5 +404,38 @@ class GalleryController extends ControllerBase
         $this->view->gallery_data =$this->get_gallery_data($galleryid);
         $this->view->title_tags = $title_tags;
         $this->view->pick('gallery/upload_images');
+    }
+
+    /**
+     * @Route("/view_gallery/{galleryid}", methods={"GET"}, name="view_gallery")
+     */
+    public function view_galleryAction($galleryid)
+    {
+      $gallery_data =$this->get_gallery_data($galleryid);
+      $dir = $this->set_gallery_dir($gallery_data['name']);
+      if (is_dir($dir))
+      {
+       if ($dh = opendir($dir))
+       {
+         while (($file = readdir($dh)) !== false)
+         {
+
+              if( $file == '.' || $file == '..' || $file =='thumbnail' || is_dir($dir.$file)==true)continue;
+
+              $file_data = $this->get_file_data($dir,$file);
+              $file_names[]=$file_data;
+
+         }
+         closedir($dh);
+
+       }
+    }
+      $this->assets->collection('delete_modal_js')->addJs('js/validate_gallery/delete_image_modal.js');
+      $this->view->title ='gallery.view.title';
+      $this->view->noitems ='gallery.view.noitems';
+      $this->view->gallery_dir =$dir;
+      $this->view->gallery_data =$gallery_data;
+      $this->view->file_names =$file_names;
+      $this->view->pick('gallery/view_gallery');
     }
 }
