@@ -103,7 +103,8 @@ public function get_assets()
       ,'max_file_size' => $file_upload_params['max_file_size']
       ,'min_file_size' => $file_upload_params['min_file_size']
       ,'max_number_of_files' => $file_upload_params['max_number_of_files']
-      ,'all_file_formats'=>$file_formats));
+      ,'all_file_formats'=>$file_formats
+      ,'gallery_data'=>array()));
 
 
     }

@@ -158,7 +158,8 @@ class UploadHandler
                     //'crop' => true,
                     'max_width' => 80,
                     'max_height' => 80,
-                    'all_file_formats'=>array()
+                    'all_file_formats'=>array(),
+                    'gallery_data' =>array()
                 )
             ),
             'print_response' => true
@@ -185,6 +186,7 @@ class UploadHandler
     public function get_folder($file_name)
     {
       $file_extensions = $this->options['all_file_formats'];
+      $gallery_data =$this->options['gallery_data'];
       $images_type =$file_extensions['image_ext'];  //array('gif','png','jpg','gif');
       $documents_type =$file_extensions['document_ext'];  //array('rtf','doc','docx','csv','xls','xlsx','pptx','ppt','pdf','txt','html','xml','php','css','js');
       $videos_type =$file_extensions['video_ext'];
@@ -217,6 +219,11 @@ class UploadHandler
 
 
           $file_path = $this->get_path().'other'.DS;
+      }
+
+      if ($gallery_data)
+      {
+          $file_path = $this->get_path().'galleries'.DS.$gallery_data['name'].'_gallery'.DS;
       }
 
 

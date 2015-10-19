@@ -4,9 +4,7 @@
     {{assets.outputJs('validate_forms_js')}}
     {{assets.outputJs('validatejs')}}
     <script>
-        var validatemessages = {
-            action:'{{"action.required"|t}}'
-        };
+    var validatemessages = {name:'{{"gallery.name.required"|t}}',title:'{{"gallery.title.required"|t}}'};
     </script>
 {% endblock %}
 {% block content %}
@@ -16,7 +14,9 @@
             <div class="portlet box blue">
                 <div class="portlet-title">
                     <div class="caption">
+
                         {{title|t}}
+
                     </div>
                 </div>
                 <div class="portlet-body form">

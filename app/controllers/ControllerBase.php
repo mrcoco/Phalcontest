@@ -238,6 +238,23 @@ public function get_file_formats()
   return $file_extensions;
 }
 
+public function get_image_file_formats()
+{
+    $file_formats = FileFormat::find(array("conditions"=>  "accept ='T' AND type='image' "))->toArray();
+    $image_ext =array();
+    foreach ( $file_formats as  $file)
+    {
+        array_push($image_ext,$file['extension']);
+    }
+
+    $file_extensions =array('image_ext' =>$image_ext
+    ,'accept_file_types'=> $this->get_accept_file_types($file_formats)
+    );
+
+    return $file_extensions;
+
+}
+
 public function get_accept_file_types($file_formats)
 
 {

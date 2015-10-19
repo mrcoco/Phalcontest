@@ -80,6 +80,7 @@
                 {% endfor %}
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             </thead>
             <!-- END HEADER-->
@@ -91,6 +92,11 @@
                         {% for index,item in headercolumns %}
                             <td width ="40%">{{ entity.readAttribute(item['column_name'])}}</td>
                         {% endfor %}
+                        <td width ="2%">
+
+                                {{link_to(uploadroute~entity.id,'<i class="fa fa-cloud-upload"></i>','class':'btn btn-icon-only blue')}}
+
+                        </td>
                         <td width ="2%">
                             {% if permissions['edit']=='Y' %}
                                 {{link_to(editroute~entity.id,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}

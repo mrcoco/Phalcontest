@@ -93,7 +93,7 @@ class GalleryController extends ControllerBase
                 ,'title' =>'gallery.list.title'
                 ,'header_columns'=>array(
                 array('column_name' => 'name','title' => 'Name','class'=>''),
-                array('column_name'=>'title','title' => 'Títle','class'=>''),
+                array('column_name'=>'title','title' => 'Title','class'=>''),
                 array('column_name'=>'type','title' => 'Type','class'=>''))
                 ,'search_columns'=>array(
                 array('name' => 'name','title' =>  'Name','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
@@ -120,6 +120,8 @@ class GalleryController extends ControllerBase
             ->execute();
         $this->set_grid_values($query,$grid_values);
         $this->check_all_permissions($this->session->get('userid'));
+
+        $this->view->uploadroute="gallery/set_images/";
 
     }
 
@@ -174,6 +176,28 @@ class GalleryController extends ControllerBase
             ->addJs('js/jqueryvalidate/jquery.validate.js')
             ->addJs('js/jqueryvalidate/additional-methods.min.js')
             ->addJs('js/validategallery/validate_gallery.js');
+        $this->assets
+            ->collection('upload_file_css')
+            ->addCss('metronic/assets/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css')
+            ->addCss('metronic/assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css')
+            ->addCss('metronic/assets/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css');
+
+        $this->assets
+            ->collection('upload_file_javascripts')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/vendor/tmpl.min.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/vendor/load-image.min.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/vendor/canvas-to-blob.min.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/blueimp-gallery/jquery.blueimp-gallery.min.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/jquery.iframe-transport.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-process.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-image.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-audio.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-video.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-validate.js')
+            ->addJs('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-ui.js')
+            ->addJs('metronic/assets/admin/pages/scripts/form-fileupload.js');
     }
 
 
@@ -228,7 +252,7 @@ class GalleryController extends ControllerBase
     }
 
     /**
-     * @Route("/create", methods={"POST"}, name="gallerycreate")
+     * @Route("/create", methods={"POST","GET"}, name="gallerycreate")
      */
     public function createAction()
     {
@@ -321,5 +345,63 @@ class GalleryController extends ControllerBase
             ,array('id'=>$id)
             ,$this->crud_params['action_list']
             ,'delete');
+    }
+
+    /**
+     * @Route("/upload_images/{galleryid}", methods={"POST"}, name="gallery_upload_images")
+     */
+    public function upload_imagesAction ($galleryid)
+    {
+        $file_formats = $this->get_image_file_formats();
+        $file_upload_params = $this->get_file_upload_params();
+        error_reporting(E_ALL | E_STRICT);
+        $upload_handler = new  UploadHandler(
+        array('image_versions' => array()
+        ,'accept_file_types' => $file_formats['accept_file_types']
+        ,'max_file_size' => $file_upload_params['max_file_size']
+        ,'min_file_size' => $file_upload_params['min_file_size']
+        ,'max_number_of_files' => $file_upload_params['max_number_of_files']
+        ,'all_file_formats'=>$file_formats
+        ,'gallery_data' =>$this->get_gallery_data($galleryid)));
+    }
+
+    public function get_gallery_data($galleryid)
+    {
+        $gallery_data =array();
+        $gallery = Gallery::findFirst($galleryid);
+
+
+            $gallery_data['id'] =$gallery->id;
+            $gallery_data['name'] =$gallery->name;
+            $gallery_data['title'] =$gallery->title;
+            $gallery_data['type'] =$gallery->type;
+            $gallery_data['description'] =$gallery->description;
+
+
+
+        return $gallery_data;
+
+    }
+
+
+    /**
+     * @Route("/set_images/{galleryid}", methods={"GET"}, name="gallery_set_images")
+     */
+    public function view_upload_files_Action($galleryid)
+    {
+        $title_tags =array();
+        $title_tags['main_title'] ='upload.images.title';
+        $title_tags['add_files_title'] = 'upload.files.add_files_title';
+        $title_tags['start_upload_title'] ='upload.files.start_upload_title';
+        $title_tags['cancel_upload_title'] = 'upload.files.cancel_upload_title';
+        $title_tags['start_button_title'] ='upload.start_button';
+        $title_tags['cancel_button_title']='upload.cancel_button';
+        $this->get_assets();
+        $this->view->file_formats =$this->get_image_file_formats();
+        $this->view->upload_params =$this->get_file_upload_params();
+        $this->view->galleryid =$galleryid;
+        $this->view->gallery_data =$this->get_gallery_data($galleryid);
+        $this->view->title_tags = $title_tags;
+        $this->view->pick('gallery/upload_images');
     }
 }

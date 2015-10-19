@@ -1,5 +1,7 @@
 <?php
 use ControllerBase as ControllerBase;
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 class Gallery extends \Phalcon\Mvc\Model
 {
 
@@ -354,8 +356,7 @@ class Gallery extends \Phalcon\Mvc\Model
         $base = new ControllerBase();
         $new_name =$base->get_upload_files_path()."galleries".SEP.$this->name."_gallery";
         $old_name =$base->get_upload_files_path()."galleries".SEP.$this->get_old_name()."_gallery";
-        rename($old_name,$new_name);
-
+        if($new_name !=$old_name ) {rename($old_name, $new_name);}
     }
 
     public function get_old_name()
@@ -364,6 +365,45 @@ class Gallery extends \Phalcon\Mvc\Model
       $old_name = $galleries->name;
       return $old_name;
 
+    }
+    public function validation()
+    {
+        $this->validate(new PresenceOf(array('field'=>'name')));
+        $this->validate(new PresenceOf(array('field'=>'title')));
+        $this->validate(new Uniqueness(array('field' => 'name')));
+        if ($this->validationHasFailed() == true) {return false;}
+        return true;
+    }
+
+    public function getMessages()
+    {
+        $messages = array();
+        $txtmessage ="";
+        foreach (parent::getMessages() as $message) {
+            switch ($message->getType())
+            {
+                case 'PresenceOf':
+                    switch ($message->getField()) {
+                      case 'name':$txtmessage = $this->di->get('translate')->_('gallery.name.required');break;
+                      case 'title':$txtmessage = $this->di->get('translate')->_('gallery.title.required');break;
+                    }
+                    $messages[] =$txtmessage;break;
+
+                case 'Unique':
+
+                    if (is_array($message->getField())) {$field =implode("-", $message->getField());}
+                    else {$field =$message->getField();}
+
+                    switch ($field)
+                    {
+                    case 'name':$txtmessage =$this->di->get('translate')->_('gallery.name.exist');break;
+                    }
+                    $messages[] =$txtmessage;break;
+
+            }
+        }
+
+        return $messages;
     }
 
 
