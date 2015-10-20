@@ -28,6 +28,31 @@ class FileFormat extends \Phalcon\Mvc\Model
     protected $accept;
 
     /**
+     *
+     * @var string
+     */
+    protected $createuser;
+
+    /**
+     *
+     * @var string
+     */
+    protected $modifyuser;
+
+    /**
+     *
+     * @var string
+     */
+    protected $createdate;
+
+    /**
+     *
+     * @var string
+     */
+    protected $modifydate;
+
+
+    /**
      * Method to set the value of field id
      *
      * @param integer $id
@@ -80,6 +105,58 @@ class FileFormat extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Method to set the value of field createuser
+     *
+     * @param string $createuser
+     * @return $this
+     */
+    public function setCreateuser($createuser)
+    {
+        $this->createuser = $createuser;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field modifyuser
+     *
+     * @param string $modifyuser
+     * @return $this
+     */
+    public function setModifyuser($modifyuser)
+    {
+        $this->modifyuser = $modifyuser;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field createdate
+     *
+     * @param string $createdate
+     * @return $this
+     */
+    public function setCreatedate($createdate)
+    {
+        $this->createdate = $createdate;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field modifydate
+     *
+     * @param string $modifydate
+     * @return $this
+     */
+    public function setModifydate($modifydate)
+    {
+        $this->modifydate = $modifydate;
+
+        return $this;
+    }
+
+    /**
      * Returns the value of field id
      *
      * @return integer
@@ -118,6 +195,47 @@ class FileFormat extends \Phalcon\Mvc\Model
     {
         return $this->accept;
     }
+    /**
+     * Returns the value of field createuser
+     *
+     * @return string
+     */
+    public function getCreateuser()
+    {
+        return $this->createuser;
+    }
+
+    /**
+     * Returns the value of field modifyuser
+     *
+     * @return string
+     */
+    public function getModifyuser()
+    {
+        return $this->modifyuser;
+    }
+
+    /**
+     * Returns the value of field createdate
+     *
+     * @return string
+     */
+    public function getCreatedate()
+    {
+        return $this->createdate;
+    }
+
+    /**
+     * Returns the value of field modifydate
+     *
+     * @return string
+     */
+    public function getModifydate()
+    {
+        return $this->modifydate;
+    }
+
+
 
     /**
      * Returns table name mapped in the model.
@@ -163,7 +281,11 @@ class FileFormat extends \Phalcon\Mvc\Model
             'id' => 'id',
             'extension' => 'extension',
             'type' => 'type',
-            'accept' => 'accept'
+            'accept' => 'accept',
+            'createuser' => 'createuser',
+            'modifyuser' => 'modifyuser',
+            'createdate' => 'createdate',
+            'modifydate' => 'modifydate'
         );
     }
 

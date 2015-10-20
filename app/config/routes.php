@@ -48,6 +48,7 @@ $router->addResource('Translation', '/translation');
 $router->addResource('Address', '/address');
 $router->addResource('File', '/file');
 $router->addResource('Gallery', '/gallery');
+$router->addResource('SystemParameter', '/systemparameter');
 
 
 return $router;

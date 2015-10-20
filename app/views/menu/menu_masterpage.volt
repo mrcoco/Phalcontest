@@ -21,6 +21,7 @@
 {% set neighborhoods ='N' %}
 {% set media ='N' %}
 {% set files ='N' %}
+{% set system_parameter ='N' %}
 {# END MENU OPTIONS SECURITY#}
 {% for item in actions %}
 {#Chek menu options#}
@@ -38,6 +39,9 @@
 {% endif %}
 {% if item.action =='Manage Roles' %}
  {% set roles ='Y' %}
+{% endif %}
+{% if item.action =='Manage System Parameter' %}
+ {% set system_parameter ='Y' %}
 {% endif %}
 {% if item.action =='Manage Translations' %}
  {% set translation ='Y' %}
@@ -170,6 +174,13 @@
           </a>
         </li>
       {% endif %}
+      {% if system_parameter =='Y'%}
+       <li class="{% if 'systemparameter' in router.getRewriteUri()%}active{% endif %}">
+         <a href="{{ url("systemparameter/list") }}" >
+           <p align="left"><i class="fa fa-gear" ></i>{{'Parámetros del Sistema'|t}}</p>
+         </a>
+       </li>
+     {% endif %}
     </ul>
   </li>
   {% endif %}

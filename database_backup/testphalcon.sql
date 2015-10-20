@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-10-2015 a las 11:38:52
+-- Tiempo de generación: 20-10-2015 a las 16:21:25
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `action` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=57 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=61 ;
 
 --
 -- Volcado de datos para la tabla `action`
@@ -106,7 +106,11 @@ INSERT INTO `action` (`id`, `action`, `description`, `createuser`, `modifyuser`,
 (53, 'Manage Files', 'Permite ver administrar archivos', 'admin', 'admin', '2015-10-05 14:25:10', '2015-10-05 14:25:10'),
 (54, 'Create Gallery', '', 'admin', 'admin', '2015-10-19 10:40:51', '2015-10-19 10:40:51'),
 (55, 'Edit Gallery', '', 'admin', 'admin', '2015-10-19 10:41:02', '2015-10-19 10:41:02'),
-(56, 'Delete Gallery', '', 'admin', 'admin', '2015-10-19 10:41:21', '2015-10-19 10:41:21');
+(56, 'Delete Gallery', '', 'admin', 'admin', '2015-10-19 10:41:21', '2015-10-19 10:41:21'),
+(57, 'Manage System Parameter', '', 'admin', 'admin', '2015-10-20 14:36:59', '2015-10-20 14:38:47'),
+(58, 'Create System Parameter', '', 'admin', 'admin', '2015-10-20 14:47:06', '2015-10-20 14:47:06'),
+(59, 'Edit System Parameter', '', 'admin', 'admin', '2015-10-20 14:47:19', '2015-10-20 14:47:19'),
+(60, 'Delete System Parameter', '', 'admin', 'admin', '2015-10-20 14:47:32', '2015-10-20 14:47:32');
 
 -- --------------------------------------------------------
 
@@ -191,7 +195,11 @@ INSERT INTO `action_role` (`actionid`, `roleid`, `createuser`, `modifyuser`, `cr
 (53, 1, 'admin', 'admin', '2015-10-19 10:39:18', '2015-10-19 10:39:18'),
 (54, 1, 'admin', 'admin', '2015-10-19 10:41:38', '2015-10-19 10:41:38'),
 (55, 1, 'admin', 'admin', '2015-10-19 10:41:48', '2015-10-19 10:41:48'),
-(56, 1, 'admin', 'admin', '2015-10-19 10:41:59', '2015-10-19 10:41:59');
+(56, 1, 'admin', 'admin', '2015-10-19 10:41:59', '2015-10-19 10:41:59'),
+(57, 1, 'admin', 'admin', '2015-10-20 14:39:19', '2015-10-20 14:39:19'),
+(58, 1, 'admin', 'admin', '2015-10-20 14:48:39', '2015-10-20 14:48:39'),
+(59, 1, 'admin', 'admin', '2015-10-20 14:48:49', '2015-10-20 14:48:49'),
+(60, 1, 'admin', 'admin', '2015-10-20 14:48:59', '2015-10-20 14:48:59');
 
 -- --------------------------------------------------------
 
@@ -618,6 +626,10 @@ CREATE TABLE IF NOT EXISTS `file_format` (
   `extension` varchar(10) DEFAULT NULL,
   `type` varchar(45) DEFAULT NULL,
   `accept` varchar(1) DEFAULT NULL,
+  `createuser` varchar(45) DEFAULT NULL,
+  `modifyuser` varchar(45) DEFAULT NULL,
+  `createdate` datetime DEFAULT NULL,
+  `modifydate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
 
@@ -625,42 +637,42 @@ CREATE TABLE IF NOT EXISTS `file_format` (
 -- Volcado de datos para la tabla `file_format`
 --
 
-INSERT INTO `file_format` (`id`, `extension`, `type`, `accept`) VALUES
-(1, 'jpg', 'image', 'T'),
-(2, 'gif', 'image', 'T'),
-(3, 'png', 'image', 'T'),
-(4, 'jpg', 'image', 'T'),
-(5, 'jpeg', 'image', 'T'),
-(6, 'mpg', 'video', 'T'),
-(7, 'mpeg', 'video', 'T'),
-(8, 'rm', 'video', 'T'),
-(9, 'avi', 'video', 'T'),
-(10, 'mkv', 'video', 'T'),
-(11, 'flv', 'video', 'T'),
-(12, 'mov', 'video', 'T'),
-(13, 'wmv', 'video', 'T'),
-(14, 'asf', 'video', 'T'),
-(15, 'mp4', 'video', 'T'),
-(16, 'rtf', 'document', 'T'),
-(17, 'doc', 'document', 'T'),
-(18, 'docx', 'document', 'T'),
-(19, 'csv', 'document', 'T'),
-(20, 'xls', 'document', 'T'),
-(21, 'xlsx', 'document', 'T'),
-(22, 'pptx', 'document', 'T'),
-(23, 'ppt', 'document', 'T'),
-(24, 'odt', 'document', 'T'),
-(25, 'pdf', 'document', 'T'),
-(26, 'txt', 'document', 'T'),
-(27, 'html', 'document', 'T'),
-(28, 'xml', 'document', 'T'),
-(29, 'php', 'document', 'T'),
-(30, 'css', 'document', 'T'),
-(31, 'js', 'document', 'T'),
-(32, 'rar', 'other', 'T'),
-(33, 'zip', 'other', 'T'),
-(34, '7z', 'other', 'T'),
-(35, 'deb', 'other', 'T');
+INSERT INTO `file_format` (`id`, `extension`, `type`, `accept`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(1, 'jpg', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(2, 'gif', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(3, 'png', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(4, 'jpg', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(5, 'jpeg', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(6, 'mpg', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(7, 'mpeg', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(8, 'rm', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(9, 'avi', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(10, 'mkv', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(11, 'flv', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(12, 'mov', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(13, 'wmv', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(14, 'asf', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(15, 'mp4', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(16, 'rtf', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(17, 'doc', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(18, 'docx', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(19, 'csv', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(20, 'xls', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(21, 'xlsx', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(22, 'pptx', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(23, 'ppt', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(24, 'odt', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(25, 'pdf', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(26, 'txt', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(27, 'html', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(28, 'xml', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(29, 'php', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(30, 'css', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(31, 'js', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(32, 'rar', 'other', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(33, 'zip', 'other', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(34, '7z', 'other', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(35, 'deb', 'other', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01');
 
 -- --------------------------------------------------------
 
@@ -864,17 +876,21 @@ CREATE TABLE IF NOT EXISTS `system_parameter` (
   `code` varchar(20) NOT NULL,
   `parameter` varchar(60) DEFAULT NULL,
   `textvalue` text,
+  `createuser` varchar(45) DEFAULT NULL,
+  `modifyuser` varchar(45) DEFAULT NULL,
+  `createdate` datetime DEFAULT NULL,
+  `modifydate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Volcado de datos para la tabla `system_parameter`
 --
 
-INSERT INTO `system_parameter` (`id`, `code`, `parameter`, `textvalue`) VALUES
-(4, 'file_upload', 'max_file_size', '95000000'),
-(5, 'file_upload', 'min_file_size', '0'),
-(6, 'file_upload', 'max_number_of_files', '10');
+INSERT INTO `system_parameter` (`id`, `code`, `parameter`, `textvalue`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(4, 'file_upload', 'max_file_size', '95000000', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(5, 'file_upload', 'min_file_size', '0', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(6, 'file_upload', 'max_number_of_files', '10', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01');
 
 -- --------------------------------------------------------
 
