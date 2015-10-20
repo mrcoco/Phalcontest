@@ -102,8 +102,9 @@
     <div class="row">
         <div class="col-md-12">
             <h3 class="page-title" align ="left">
-                {{title_tags['main_title']|t}}{{' '~gallery_data['title'] }}
+                {{title_tags['main_title']|t}}{{' ('~gallery_data['title']~')' }}
             </h3>
+            <div align="right"><a href ="{{url('gallery/list')}}" class="btn btn blue">{{'Galleries'|t}} <i class="fa fa-arrow-right "></i> </a></div>
             <hr/>
             <form id="fileupload" action="{{url('gallery/upload_images/'~galleryid)}}" method="POST" enctype="multipart/form-data">
                 <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->

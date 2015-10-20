@@ -165,6 +165,9 @@ class GalleryController extends ControllerBase
             ->getQuery()
             ->execute();
         $this->set_grid_values($query,$grid_values);
+        $this->view->uploadroute="gallery/set_images/";
+        $this->view->view_gallery_route ='gallery/view_gallery/';
+
         $this->check_all_permissions($this->session->get('userid'));
 
     }
@@ -176,7 +179,7 @@ class GalleryController extends ControllerBase
             ->collection('validatejs')
             ->addJs('js/jqueryvalidate/jquery.validate.js')
             ->addJs('js/jqueryvalidate/additional-methods.min.js')
-            ->addJs('js/validategallery/validate_gallery.js');
+            ->addJs('js/validate_gallery/validate_gallery.js');
         $this->assets
             ->collection('upload_file_css')
             ->addCss('metronic/assets/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css')
@@ -438,4 +441,29 @@ class GalleryController extends ControllerBase
       $this->view->file_names =$file_names;
       $this->view->pick('gallery/view_gallery');
     }
+
+    /**
+     * @Route("/delete/{galleryid}/{filename}", methods={"POST"}, name="delete")
+     */
+    public function delete_image_Action($galleryid,$file_name)
+    {
+
+        $gallery_data =$this->get_gallery_data($galleryid);
+        $dir = $this->set_gallery_dir($gallery_data['name']);
+        if (is_dir($dir)) {
+            if ($dh = opendir($dir)) {
+
+                while (($file = readdir($dh)) !== false) {
+                  if ($file ==$file_name)
+                  {
+                      unlink($dir.'/'.$file);
+                      break;
+                  }
+
+                }
+                closedir($dh);
+            }
+        }
+    }
+
 }

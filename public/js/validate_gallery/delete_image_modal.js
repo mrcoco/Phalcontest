@@ -10,28 +10,25 @@ $(document).ready(function()
 
     $("#deletebutton").click(function()
     {
-
-        /*var gallery = $("#filename").data('name');
+        var filename =$("#filename").val();
+        var galleryid = $("#filename").data('name');
         var l = window.location;
         var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
-        var url_path =base_url+'/galleries/delete/';
-        var filename =$("#filename").val();
-
+        var url_path =base_url+'/gallery/delete/'+galleryid+'/'+filename;
 
         $.ajax
         ({
             type: "POST",
-            url: url_path +filename,
-            data:{"filename":filename},
+            url: url_path,
+            data:{},
             cache: false,
             success: function(data)
             {
-
                 $('#basic').modal('hide')
                 location.reload();
             }
         });
-      */
+
     });
 
 });

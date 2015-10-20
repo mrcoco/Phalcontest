@@ -291,6 +291,7 @@ public function get_assets()
 
      }
 
+
     /**
      * @Route("/delete/{filename}", methods={"POST"}, name="delete")
      */

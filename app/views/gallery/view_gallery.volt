@@ -26,7 +26,7 @@
 {% endblock %}
 {% block pagetitle %}
     <h3 class="page-title" align ="left">
-      {{link_to('gallery/edit/'~gallery_data['id'],gallery_data['title']|t)}}
+      {{gallery_data['title']|t}}<div align="right"><a href ="{{url('gallery/list')}}" class="btn btn blue">{{'Galleries'|t}} <i class="fa fa-arrow-right "></i> </a></div>
     </h3>
     <hr/>
 {% endblock %}
@@ -62,7 +62,7 @@
         <h4 class="modal-title">{{'¿ Esta seguro que desea borrar este archivo ?'  }}</h4>
        </div>
        <div class="modal-footer">
-   			<input id="filename" type="hidden" name="filename" data-name ="" value="">
+   			<input id="filename" type="hidden" name="filename" data-name ="{{gallery_data['id']}}" value="">
         <button id ="deletebutton" type="button" class="btn blue">{{ 'Eliminar'|t }}</button>
         <button type="button" class="btn default" data-dismiss="modal">{{ 'Cerrar'|t }}</button>
 
