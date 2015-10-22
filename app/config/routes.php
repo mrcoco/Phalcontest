@@ -49,6 +49,7 @@ $router->addResource('Address', '/address');
 $router->addResource('File', '/file');
 $router->addResource('Gallery', '/gallery');
 $router->addResource('SystemParameter', '/systemparameter');
+$router->addResource('FileFormat', '/fileformat');
 
 
 return $router;

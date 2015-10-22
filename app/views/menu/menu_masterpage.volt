@@ -174,13 +174,6 @@
           </a>
         </li>
       {% endif %}
-      {% if system_parameter =='Y'%}
-       <li class="{% if 'systemparameter' in router.getRewriteUri()%}active{% endif %}">
-         <a href="{{ url("systemparameter/list") }}" >
-           <p align="left"><i class="fa fa-gear" ></i>{{'Parámetros del Sistema'|t}}</p>
-         </a>
-       </li>
-     {% endif %}
     </ul>
   </li>
   {% endif %}
@@ -215,7 +208,7 @@
  </li>
  {% endif %}
   {% if media =='Y'%}
- <li class="{% for key,name in ['media','file','gallery'] %}
+ <li class="{% for key,name in ['media','file/','gallery'] %}
    {% if name  in router.getRewriteUri() %}
        active open
    {% else %}
@@ -247,6 +240,34 @@
    </ul>
  </li>
  {% endif %}
+ {% if system_parameter =='Y'%}
+<li class="{% for key,name in ['systemparameter','fileformat'] %}
+  {% if name  in router.getRewriteUri() %}
+      active open
+  {% else %}
+  start
+  {% endif%}
+  {% endfor %}">
+  <a href="" style="padding-left:20px;">
+  <span class="arrow "></span>
+  <p align="left"><b><i class="fa fa-gear"></i>{{'Parámetros del Sistema'|t}}</b></p>
+  </a>
+  <ul class="sub-menu">
+     {% if  system_parameter =='Y'%}
+     <li class="{% if 'systemparameter' in router.getRewriteUri()%}active{% endif %}">
+       <a href="{{ url("systemparameter/list") }}" >
+         <p align="left"><i class="fa fa-gear" ></i>{{'Parámetros Generales'|t}}</p>
+       </a>
+     </li>
+     <li class="{% if 'fileformat' in router.getRewriteUri()%}active{% endif %}">
+       <a href="{{ url("fileformat/list") }}" >
+         <p align="left"><i class="fa fa-file-text-o " ></i>{{'Formatos de Archivos'|t}}</p>
+       </a>
+     </li>
+     {% endif %}
+  </ul>
+</li>
+{% endif %}
 </ul>
 
 <!-- END SIDEBAR MENU -->
