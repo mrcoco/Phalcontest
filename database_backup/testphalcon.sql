@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-10-2015 a las 16:21:25
+-- Tiempo de generación: 23-10-2015 a las 18:15:03
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `action` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=61 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=64 ;
 
 --
 -- Volcado de datos para la tabla `action`
@@ -110,7 +110,10 @@ INSERT INTO `action` (`id`, `action`, `description`, `createuser`, `modifyuser`,
 (57, 'Manage System Parameter', '', 'admin', 'admin', '2015-10-20 14:36:59', '2015-10-20 14:38:47'),
 (58, 'Create System Parameter', '', 'admin', 'admin', '2015-10-20 14:47:06', '2015-10-20 14:47:06'),
 (59, 'Edit System Parameter', '', 'admin', 'admin', '2015-10-20 14:47:19', '2015-10-20 14:47:19'),
-(60, 'Delete System Parameter', '', 'admin', 'admin', '2015-10-20 14:47:32', '2015-10-20 14:47:32');
+(60, 'Delete System Parameter', '', 'admin', 'admin', '2015-10-20 14:47:32', '2015-10-20 14:47:32'),
+(61, 'Create File Format', '', 'admin', 'admin', '2015-10-22 14:36:53', '2015-10-22 14:36:53'),
+(62, 'Edit File Format', '', 'admin', 'admin', '2015-10-22 14:37:25', '2015-10-22 14:37:25'),
+(63, 'Delete File Format', '', 'admin', 'admin', '2015-10-22 14:37:38', '2015-10-22 14:37:38');
 
 -- --------------------------------------------------------
 
@@ -199,7 +202,10 @@ INSERT INTO `action_role` (`actionid`, `roleid`, `createuser`, `modifyuser`, `cr
 (57, 1, 'admin', 'admin', '2015-10-20 14:39:19', '2015-10-20 14:39:19'),
 (58, 1, 'admin', 'admin', '2015-10-20 14:48:39', '2015-10-20 14:48:39'),
 (59, 1, 'admin', 'admin', '2015-10-20 14:48:49', '2015-10-20 14:48:49'),
-(60, 1, 'admin', 'admin', '2015-10-20 14:48:59', '2015-10-20 14:48:59');
+(60, 1, 'admin', 'admin', '2015-10-20 14:48:59', '2015-10-20 14:48:59'),
+(61, 1, 'admin', 'admin', '2015-10-22 14:38:01', '2015-10-22 14:38:01'),
+(62, 1, 'admin', 'admin', '2015-10-22 14:38:11', '2015-10-22 14:38:11'),
+(63, 1, 'admin', 'admin', '2015-10-22 14:38:33', '2015-10-22 14:38:33');
 
 -- --------------------------------------------------------
 
@@ -638,7 +644,7 @@ CREATE TABLE IF NOT EXISTS `file_format` (
 --
 
 INSERT INTO `file_format` (`id`, `extension`, `type`, `accept`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
-(1, 'jpg', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(1, 'jpg', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-10-23 09:43:45'),
 (2, 'gif', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
 (3, 'png', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
 (4, 'jpg', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
@@ -881,7 +887,7 @@ CREATE TABLE IF NOT EXISTS `system_parameter` (
   `createdate` datetime DEFAULT NULL,
   `modifydate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Volcado de datos para la tabla `system_parameter`
@@ -990,7 +996,7 @@ CREATE TABLE IF NOT EXISTS `translation` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_translation_language1_idx` (`languagecode`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=397 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=433 ;
 
 --
 -- Volcado de datos para la tabla `translation`
@@ -1387,7 +1393,44 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 (393, 'es', 'gallery.name.exist', 'Ya existe una galería con ese nombre', 'admin', 'admin', '2015-10-17 13:06:12', '2015-10-17 13:06:12'),
 (394, 'en', 'upload.images.title', 'Upload Images', 'admin', 'admin', '2015-10-20 10:39:05', '2015-10-20 10:39:05'),
 (395, 'es', 'upload.images.title', 'Subir Imágenes', 'admin', 'admin', '2015-10-20 10:39:25', '2015-10-20 10:39:25'),
-(396, 'es', 'Galleries', 'Galerias', 'admin', 'admin', '2015-10-20 10:39:52', '2015-10-20 10:39:52');
+(396, 'es', 'Galleries', 'Galerias', 'admin', 'admin', '2015-10-20 10:39:52', '2015-10-20 10:39:52'),
+(397, 'en', 'systemparameter.list.title', 'General Parameters', 'admin', 'admin', '2015-10-23 10:51:28', '2015-10-23 10:51:28'),
+(398, 'es', 'systemparameter.list.title', 'Parámetros Generales', 'admin', 'admin', '2015-10-23 10:51:46', '2015-10-23 10:51:46'),
+(399, 'es', 'Code', 'Código', 'admin', 'admin', '2015-10-23 10:52:07', '2015-10-23 10:52:07'),
+(400, 'es', 'Parameter', 'Parámetro', 'admin', 'admin', '2015-10-23 10:53:15', '2015-10-23 10:53:15'),
+(401, 'es', 'Value', 'Valor', 'admin', 'admin', '2015-10-23 10:53:29', '2015-10-23 10:53:29'),
+(402, 'en', 'systemparameter.title.new', 'New Parameter', 'admin', 'admin', '2015-10-23 10:54:26', '2015-10-23 10:54:26'),
+(403, 'es', 'systemparameter.title.new', 'Nuevo Parámetro', 'admin', 'admin', '2015-10-23 10:54:43', '2015-10-23 10:54:43'),
+(404, 'en', 'systemparameter.code.required', 'You must enter a code', 'admin', 'admin', '2015-10-23 10:55:06', '2015-10-23 10:55:06'),
+(405, 'es', 'systemparameter.code.required', 'Debe ingresar un código', 'admin', 'admin', '2015-10-23 10:55:22', '2015-10-23 10:55:22'),
+(406, 'en', 'systemparameter.parameter.required', 'You must enter a parameter', 'admin', 'admin', '2015-10-23 10:56:12', '2015-10-23 10:56:12');
+INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(407, 'es', 'systemparameter.parameter.required', 'Debe ingresar un parámetro', 'admin', 'admin', '2015-10-23 10:56:29', '2015-10-23 10:56:29'),
+(408, 'en', 'systemparameter.textvalue.required', 'You must enter a value', 'admin', 'admin', '2015-10-23 10:57:00', '2015-10-23 10:57:00'),
+(409, 'es', 'systemparameter.textvalue.required', 'Debe ingresar un valor', 'admin', 'admin', '2015-10-23 10:57:48', '2015-10-23 10:57:48'),
+(410, 'en', 'systemparameter.delete.question', 'Are you sure you want to delete this parameter ?', 'admin', 'admin', '2015-10-23 10:58:15', '2015-10-23 10:58:15'),
+(411, 'es', 'systemparameter.delete.question', '¿ Esta seguro que desea eliminar este parámetro ?', 'admin', 'admin', '2015-10-23 10:59:52', '2015-10-23 10:59:52'),
+(412, 'en', 'systemparameter.title.edit', 'Edit Parameter', 'admin', 'admin', '2015-10-23 11:00:11', '2015-10-23 11:00:11'),
+(413, 'es', 'systemparameter.title.edit', 'Editar Parámetro', 'admin', 'admin', '2015-10-23 11:01:00', '2015-10-23 11:01:00'),
+(414, 'en', 'systemparameter.code_parameter.exist', 'Already exist this parameter', 'admin', 'admin', '2015-10-23 11:07:43', '2015-10-23 11:07:43'),
+(415, 'es', 'systemparameter.code_parameter.exist', 'Ya existe este parámetro', 'admin', 'admin', '2015-10-23 11:08:41', '2015-10-23 11:08:41'),
+(416, 'en', 'fileformat.list.title', 'File Formats', 'admin', 'admin', '2015-10-23 16:00:26', '2015-10-23 16:00:26'),
+(417, 'es', 'fileformat.list.title', 'Formatos de Archivos', 'admin', 'admin', '2015-10-23 16:00:45', '2015-10-23 16:00:45'),
+(418, 'en', 'fileformat.title.edit', 'Edit Format Files', 'admin', 'admin', '2015-10-23 16:01:07', '2015-10-23 16:01:07'),
+(419, 'es', 'fileformat.title.edit', 'Editar Formatos de Archivo', 'admin', 'admin', '2015-10-23 16:02:31', '2015-10-23 16:02:31'),
+(420, 'en', 'fileformat.title.new', 'New Format File', 'admin', 'admin', '2015-10-23 16:03:49', '2015-10-23 16:03:49'),
+(421, 'es', 'fileformat.title.new', 'Nuevo Formato de Archivo', 'admin', 'admin', '2015-10-23 16:04:10', '2015-10-23 16:04:10'),
+(422, 'en', 'fileformat.extension.required', 'You must enter an extension', 'admin', 'admin', '2015-10-23 16:04:28', '2015-10-23 16:04:28'),
+(423, 'es', 'fileformat.extension.required', 'Debe ingresar una extensión', 'admin', 'admin', '2015-10-23 16:04:48', '2015-10-23 16:04:48'),
+(424, 'en', 'fileformat.extension.exist', 'Already exist this extension', 'admin', 'admin', '2015-10-23 16:06:27', '2015-10-23 16:06:27'),
+(425, 'es', 'fileformat.extension.exist', 'Ya existe esta extensión', 'admin', 'admin', '2015-10-23 16:06:48', '2015-10-23 16:06:48'),
+(426, 'en', 'fileformat.delete.question', 'Are you sure you want to delete this file format ?', 'admin', 'admin', '2015-10-23 16:07:22', '2015-10-23 16:07:22'),
+(427, 'es', 'fileformat.delete.question', '¿ Esta seguro que desea eliminar este formato de archivo ?', 'admin', 'admin', '2015-10-23 16:07:46', '2015-10-23 16:07:46'),
+(428, 'es', 'Extension', 'Extensión', 'admin', 'admin', '2015-10-23 16:08:39', '2015-10-23 16:08:39'),
+(429, 'es', 'Accepted', 'Aceptado', 'admin', 'admin', '2015-10-23 16:09:10', '2015-10-23 16:09:10'),
+(430, 'es', 'Yes', 'Si', 'admin', 'admin', '2015-10-23 16:11:07', '2015-10-23 16:11:07'),
+(431, 'es', 'Image', 'Imagen', 'admin', 'admin', '2015-10-23 16:14:20', '2015-10-23 16:14:20'),
+(432, 'es', 'Document', 'Documentos', 'admin', 'admin', '2015-10-23 16:15:16', '2015-10-23 16:15:16');
 
 -- --------------------------------------------------------
 
