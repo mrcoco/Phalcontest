@@ -5,7 +5,10 @@
 {{assets.outputJs('validatejs')}}
 <script>
 var validatemessages = {
-action:'{{"action.required"|t}}'
+code:'{{"systemparameter.code.required"|t}}',
+parameter:'{{"systemparameter.parameter.required"|t}}',
+textvalue:'{{"systemparameter.textvalue.required"|t}}'
+
 };
 </script>
 {% endblock %}

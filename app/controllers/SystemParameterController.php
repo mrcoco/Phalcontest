@@ -205,7 +205,7 @@ class SystemParameterController extends ControllerBase
   }
 
   /**
-  * @Route("/create", methods={"POST"}, name="systemparametercreate")
+  * @Route("/create", methods={"POST","GET"}, name="systemparametercreate")
   */
   public function createAction()
   {

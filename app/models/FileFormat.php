@@ -1,5 +1,6 @@
 <?php
-
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 class FileFormat extends \Phalcon\Mvc\Model
 {
 
@@ -288,5 +289,48 @@ class FileFormat extends \Phalcon\Mvc\Model
             'modifydate' => 'modifydate'
         );
     }
+
+    public function validation()
+    {
+        $this->validate(new PresenceOf(array('field'=>'extension')));
+        $this->validate(new Uniqueness(array('field' => array('extension'))));
+        if ($this->validationHasFailed() == true) {return false;}
+        return true;
+    }
+    public function getMessages()
+    {
+        $messages = array();
+        $txtmessage ="";
+        foreach (parent::getMessages() as $message) {
+            switch ($message->getType())
+            {
+                case 'PresenceOf':
+                    switch ($message->getField()) {
+                      case 'extension':$txtmessage = $this->di->get('translate')->_('fileformat.extension.required');break;
+                    }
+                    $messages[] =$txtmessage;break;
+                    case 'Unique':
+
+                         if (is_array($message->getField()))
+                         {
+                           $field =implode("-", $message->getField());
+                         }
+                         else {
+                           $field =$message->getField();
+                         }
+
+                         switch ($field) {
+                          case 'extension':
+                             $txtmessage =$this->di->get('translate')->_('fileformat.extension.exist');
+                          break;
+                      }
+                      $messages[] =$txtmessage;break;
+
+            }
+        }
+
+        return $messages;
+    }
+
 
 }

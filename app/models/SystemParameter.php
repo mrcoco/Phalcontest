@@ -325,8 +325,9 @@ class SystemParameter extends \Phalcon\Mvc\Model
                          switch ($field) {
                           case 'code-parameter':
                              $txtmessage =$this->di->get('translate')->_('systemparameter.code_parameter.exist');
-                        break;
+                          break;
                       }
+                      $messages[] =$txtmessage;break;
 
             }
         }

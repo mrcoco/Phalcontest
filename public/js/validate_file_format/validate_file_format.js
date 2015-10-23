@@ -4,10 +4,9 @@ $(function() {
     $("#appform").validate({
          errorClass:'has-error',
         // Specify the validation rules
-        rules: {code:{required:true},parameter:{required:true},textvalue:{required:true}},
+        rules: {extension:{required:true}},
         // Specify the validation error messages
-        messages: {code:{required:validatemessages.code},parameter:{required:validatemessages.parameter}
-        ,textvalue:{required:validatemessages.textvalue}},
+        messages: {extension:{required:validatemessages.extension}},
 
         submitHandler: function(form) {
             form.submit();

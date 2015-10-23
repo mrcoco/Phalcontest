@@ -22,11 +22,14 @@ class FileFormatForm extends Form
   $this->add($extension);
 
 
-  $type = new Text('type');
+  $type = new Select("type",array('image' => $this->di->get('translate')->_('Image')
+  ,'video' => $this->di->get('translate')->_('Video')
+  ,'document'=>$this->di->get('translate')->_('Document')
+  ,'other'=>$this->di->get('translate')->_('Other')));
   $type->setLabel('Type');
   $this->add($type);
 
-  $accept = new Select("accept",array('T' => 'Yes','F' => 'No'));
+  $accept = new Select("accept",array('T' => $this->di->get('translate')->_('Yes'),'F' => $this->di->get('translate')->_('No')));
   $accept->setLabel('Accept');
   $this->add($accept);
 

@@ -5,7 +5,7 @@
 {{assets.outputJs('validatejs')}}
 <script>
 var validatemessages = {
-action:'{{"action.required"|t}}'
+extension:'{{"fileformat.extension.required"|t}}'
 };
 </script>
 {% endblock %}

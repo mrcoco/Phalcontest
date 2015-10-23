@@ -31,12 +31,8 @@ class FileFormatController extends ControllerBase
         array('name' => 'extension','label'=>'Extension'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'label_error'=>''),
-        array('name' => 'type','label'=>'Type'
-        ,'required'=>'<span class="required" aria-required="true">* </span>'
-        ,'label_error'=>''),
-        array('name' => 'accept','label'=>'Accepted','required'=>'<span class="required" aria-required="true">* </span>'
-        ,'label_error'=>'')
-        );
+        array('name' => 'type','label'=>'Type','required'=>'','label_error'=>''),
+        array('name' => 'accept','label'=>'Accepted','required'=>'','label_error'=>''));
         $this->crud_params['save_button_name']       ='Guardar';
         $this->crud_params['cancel_button_name']     ='Cancelar';
         $this->crud_params['delete_button_name']     ='Eliminar';
@@ -134,7 +130,7 @@ class FileFormatController extends ControllerBase
     ,array('name'=>'accept','value'=>$this->request->getPost("accept")));
 
     $params_query =$this->set_search_grid_post_values($search_values);
-
+    if(strtoupper($params_query['accept']) =='YES'){$params_query['accept'] ='T';}if(strtoupper($params_query['accept']) =='NO'){$params_query['accept'] ='F';}
     $query = $this->modelsManager->createBuilder()
             ->columns(array('ff.id ','ff.extension','ff.type','ff.accept'))
             ->from(array('ff' => 'FileFormat'))
