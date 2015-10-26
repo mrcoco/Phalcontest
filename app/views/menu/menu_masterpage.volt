@@ -22,6 +22,7 @@
 {% set media ='N' %}
 {% set files ='N' %}
 {% set system_parameter ='N' %}
+{% set articles ='N' %}
 {# END MENU OPTIONS SECURITY#}
 {% for item in actions %}
 {#Chek menu options#}
@@ -72,6 +73,9 @@
 {% endif %}
 {% if item.action =='Manage Files' %}
  {% set files ='Y'%}
+{% endif %}
+{% if item.action =='Manage Articles' %}
+    {% set articles ='Y'%}
 {% endif %}
 {% endfor %}
 <ul class="page-sidebar-menu page-sidebar-menu-closed" data-slide-speed="200" data-auto-scroll="true" data-keep-expanded="false">
@@ -268,6 +272,35 @@
   </ul>
 </li>
 {% endif %}
+
+    {% if articles =='Y'%}
+        <li class="{% for key,name in ['article','comment'] %}
+  {% if name  in router.getRewriteUri() %}
+      active open
+  {% else %}
+  start
+  {% endif%}
+  {% endfor %}">
+            <a href="" style="padding-left:20px;">
+                <span class="arrow "></span>
+                <p align="left"><b><i class="fa fa-book"></i>{{'Artículos'|t}}</b></p>
+            </a>
+            <ul class="sub-menu">
+                {% if  articles =='Y'%}
+                    <li class="{% if 'article' in router.getRewriteUri()%}active{% endif %}">
+                        <a href="{{ url("article/list") }}" >
+                            <p align="left"><i class="fa fa-book" ></i>{{'Artículos'|t}}</p>
+                        </a>
+                    </li>
+                    <li class="{% if 'comment' in router.getRewriteUri()%}active{% endif %}">
+                        <a href="{{ url("article/list") }}" >
+                            <p align="left"><i class="fa fa-comment-o " ></i>{{'Comentarios'|t}}</p>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </li>
+    {% endif %}
 </ul>
 
 <!-- END SIDEBAR MENU -->

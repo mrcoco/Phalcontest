@@ -50,6 +50,7 @@ $router->addResource('File', '/file');
 $router->addResource('Gallery', '/gallery');
 $router->addResource('SystemParameter', '/systemparameter');
 $router->addResource('FileFormat', '/fileformat');
+$router->addResource('Article', '/article');
 
 
 return $router;

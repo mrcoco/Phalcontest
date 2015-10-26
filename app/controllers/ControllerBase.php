@@ -78,7 +78,6 @@ public function initialize()
   ->addJs('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')
   ->addJs('metronic/assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js')
   ->addJs('metronic/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js')
-  ->addJs('metronic/assets/global/plugins/ckeditor/ckeditor.js')
   ->addJs('metronic/assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js')
   ->addJs('metronic/assets/global/plugins/bootstrap-markdown/lib/markdown.js');
 

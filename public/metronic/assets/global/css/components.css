@@ -4268,7 +4268,7 @@ Customized Bootstrap Modal
 .modal-backdrop {
   border: 0;
   outline: none;
-  z-index: 10049;
+  //z-index: 10049;
 }
 .page-portlet-fullscreen .modal-backdrop {
   z-index: 10059;

@@ -29,4 +29,4 @@ defined('PTOOLS_IP') || define('PTOOLS_IP', '192.168.');
 /**
  * @const PTOOLSPATH The path to the Phalcon Developers Tools.
  */
-defined('PTOOLSPATH') || define('PTOOLSPATH', 'C:/phalcon-tools');
+defined('PTOOLSPATH') || define('PTOOLSPATH', '/home/kolo/phalcon-devtools');

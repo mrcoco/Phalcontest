@@ -1,12 +1,32 @@
 {% extends "layouts/masterpage.volt" %}
+{% block head %}
+ {{super()}}
+	<link href="{{static_url('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}" rel="stylesheet" type="text/css" />
+	<script src="{{static_url('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js')}}"></script>
+{% endblock %}
+
 {% block javascripts %}
 {{super() }}
 {{assets.outputJs('validate_forms_js')}}
 {{assets.outputJs('validatejs')}}
+
 <script>
 var validatemessages = {
-extension:'{{"fileformat.extension.required"|t}}'
+title:'{{"article.title.required"|t}}',
+author:'{{"article.author.required"|t}}',
+content:'{{"article.content.required"|t}}'
 };
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+$('#summernote').summernote({
+	height: "250px",
+	width:"600px"
+});
+});
+var postForm = function() {
+var content = $('textarea[name="content"]').html($('#summernote').code());
+}
 </script>
 {% endblock %}
 {% block content %}
@@ -39,7 +59,7 @@ extension:'{{"fileformat.extension.required"|t}}'
 		{{item['required']}}
                 </label>
 		<div class="col-md-4">
-		{{ form.render(item['name'],["class":"form-control"]) }}
+		{{ form.render(item['name']) }}
 		<!-- LOAD CONTROL ERROR LABEL-->
 		{{item['label_error']|t}}
 		</div>
