@@ -2,6 +2,7 @@
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
+use Phalcon\Forms\Element\Select;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Query;
 
@@ -30,6 +31,12 @@ class ArticleForm extends Form
         ));
         $content->setLabel('Content');
         $this->add($content);
+
+        $active = new Select("active"
+        ,array('Y' => $this->di->get('translate')->_('Yes'),'N' => $this->di->get('translate')->_('No'))
+        ,array('class' =>'form-control'));
+        $active->setLabel('active');
+        $this->add($active);
 
 
 

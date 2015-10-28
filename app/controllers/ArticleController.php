@@ -17,7 +17,7 @@ class ArticleController extends ControllerBase
         $this->crud_params['entityname']         = 'Article';
         $this->crud_params['not_found_message']  = 'article.entity.notfound';
         $this->crud_params['controller']         = 'Article';
-        $this->crud_params['action_list']        = 'actionlist';
+        $this->crud_params['action_list']        = 'articlelist';
         $this->crud_params['form_name']          = 'ArticleForm';
         $this->crud_params['delete_message']     = 'article.delete.question';
         $this->crud_params['create_route']       = 'article/create';
@@ -36,6 +36,9 @@ class ArticleController extends ControllerBase
             ,'label_error'=>''),
             array('name' => 'content','label'=>'Content'
             ,'required'=>'<span class="required" aria-required="true">* </span>'
+            ,'label_error'=>''),
+            array('name' => 'active','label'=>'Active'
+            ,'required'=>''
             ,'label_error'=>'')
         );
         $this->crud_params['save_button_name']       ='Guardar';
@@ -50,41 +53,45 @@ class ArticleController extends ControllerBase
             $this->tag->setDefault("title", $entity_object->getTitle());
             $this->tag->setDefault("author", $entity_object->getAuthor());
             $this->tag->setDefault("content", $entity_object->getContent());
+            $this->tag->setDefault("active", $entity_object->getActive());
 
         }
     }
 
     public function set_post_values($entity)
     {
+
         $entity->setTitle($this->request->getPost("title"));
         $entity->setAuthor($this->request->getPost("author"));
-        $entity->setContent($this->request->getPost("content"));
+        $entity->setContent($this->request->getPost("articlecontent"));
+        $entity->setActive($this->request->getPost("active"));
     }
 
     public function set_grid_parameters($routelist)
     {
-        $grid_values =
-            [
-                'new_route'=>'article/new'
-                ,'edit_route'=>'article/edit/'
-                ,'show_route'=>'article/show/'
-                ,'search_route'=>'article/search'
-                ,'route_list'=>$routelist
-                ,'view_name'=>'article/articlelist'
-                ,'numberPage'=>1
-                ,'pagelimit'=>10
-                ,'noitems_message'=>'article.notfound'
-                ,'title' =>'article.list.title'
-                ,'header_columns'=>array(
-                array('column_name' => 'title','title' => 'Title','class'=>''),
-                array('column_name'=>'author','title' => 'Author','class'=>''),
-                array('column_name'=>'content','title' => 'Content','class'=>''))
-                ,'search_columns'=>array(
-                array('name' => 'title','title' => 'Title','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
-                array('name' => 'author','title' => 'Author','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
-                array('name' => 'content','title' => 'Content','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
-            )
-            ];
+    $grid_values =
+        [
+            'new_route'=>'article/new'
+            ,'edit_route'=>'article/edit/'
+            ,'show_route'=>'article/show/'
+            ,'search_route'=>'article/search'
+            ,'route_list'=>$routelist
+            ,'view_name'=>'article/articlelist'
+            ,'numberPage'=>1
+            ,'pagelimit'=>10
+            ,'noitems_message'=>'article.notfound'
+            ,'title' =>'article.list.title'
+            ,'header_columns'=>array(
+            array('column_name' => 'title','title' => 'Title','class'=>''),
+            array('column_name'=>'author','title' => 'Author','class'=>''),
+            array('column_name'=>'content','title' => 'Content','class'=>''))
+            ,'search_columns'=>array(
+            array('name' => 'title','title' => 'Title','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+            array('name' => 'author','title' => 'Author','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+            array('name' => 'content','title' => 'Content','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+            array('name' => 'active','title' => 'Active','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
+        )
+        ];
         return $grid_values;
     }
 
@@ -97,7 +104,7 @@ class ArticleController extends ControllerBase
         $order=$this->set_grid_order();
         $grid_values =$this->set_grid_parameters('article/list');
         $query= $this->modelsManager->createBuilder()
-            ->columns(array('a.id ','a.title','a.author','a.content'))
+            ->columns(array('a.id ','a.title','a.author','a.content','a.active'))
             ->from(array('a' => 'Article'))
             ->orderBy($order)
             ->getQuery()
@@ -132,15 +139,18 @@ class ArticleController extends ControllerBase
 
         $search_values =array(array('name'=>'title','value'=>$this->request->getPost("title"))
         ,array('name'=>'author','value'=>$this->request->getPost("author"))
-        ,array('name'=>'content','value'=>$this->request->getPost("content")));
+        ,array('name'=>'content','value'=>$this->request->getPost("content"))
+        ,array('name'=>'active','value'=>$this->request->getPost("active")));
 
         $params_query =$this->set_search_grid_post_values($search_values);
 
         $query = $this->modelsManager->createBuilder()
-            ->columns(array('a.id ','a.title','a.author','a.content'))
+            ->columns(array('a.id ','a.title','a.author','a.content','a.active'))
+            ->from(array('a' => 'Article'))
             ->Where('a.title LIKE :title:', array('title' => '%' . $params_query['title']. '%'))
             ->AndWhere('a.author LIKE :author:', array('author' => '%' . $params_query['author']. '%'))
             ->AndWhere('a.content LIKE :content:', array('content' => '%' . $params_query['content']. '%'))
+            ->AndWhere('a.active LIKE :active:', array('active' => '%' . $params_query['active']. '%'))
             ->orderBy($order)
             ->getQuery()
             ->execute();

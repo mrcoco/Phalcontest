@@ -119,7 +119,7 @@ class Article extends \Phalcon\Mvc\Model
      */
     public function setActive($active)
     {
-        $this->content = $active;
+        $this->active = $active;
 
         return $this;
     }
@@ -321,7 +321,8 @@ class Article extends \Phalcon\Mvc\Model
             'createuser' => 'createuser',
             'modifyuser' => 'modifyuser',
             'createdate' => 'createdate',
-            'modifydate' => 'modifydate'
+            'modifydate' => 'modifydate',
+            'active'=>'active'
         );
     }
 
@@ -329,8 +330,8 @@ class Article extends \Phalcon\Mvc\Model
     {
         $this->validate(new PresenceOf(array('field'=>'title')));
         $this->validate(new PresenceOf(array('field'=>'author')));
-        $this->validate(new PresenceOf(array('field'=>'content')));
         $this->validate(new Uniqueness(array('field' => array('title'))));
+        $this->validate(new Uniqueness(array('field' => array('content'))));
         if ($this->validationHasFailed() == true) {return false;}
         return true;
     }
