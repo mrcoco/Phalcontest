@@ -1,7 +1,7 @@
 <?php
-
 use Phalcon\Mvc\Model\Validator\Email as Email;
-
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 class ArticleComment extends \Phalcon\Mvc\Model
 {
 
@@ -34,6 +34,13 @@ class ArticleComment extends \Phalcon\Mvc\Model
      * @var string
      */
     protected $comment;
+
+    /**
+     *
+     * @var string
+     */
+    protected $active;
+
 
     /**
      * Method to set the value of field id
@@ -101,6 +108,20 @@ class ArticleComment extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Method to set the value of field active
+     *
+     * @param string $active
+     * @return $this
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+
+    /**
      * Returns the value of field id
      *
      * @return integer
@@ -151,27 +172,16 @@ class ArticleComment extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Validations and business logic
+     * Returns the value of field content
      *
-     * @return boolean
+     * @return string
      */
-    public function validation()
+    public function getActive()
     {
-        $this->validate(
-            new Email(
-                array(
-                    'field'    => 'email',
-                    'required' => true,
-                )
-            )
-        );
-
-        if ($this->validationHasFailed() == true) {
-            return false;
-        }
-
-        return true;
+        return $this->active;
     }
+
+
 
     /**
      * Initialize method for model.
@@ -226,8 +236,47 @@ class ArticleComment extends \Phalcon\Mvc\Model
             'articleid' => 'articleid',
             'name' => 'name',
             'email' => 'email',
-            'comment' => 'comment'
+            'comment' => 'comment',
+            'active' => 'active'
         );
+    }
+
+    public function validation()
+    {
+        $this->validate(new PresenceOf(array('field'=>'name')));
+        $this->validate(new PresenceOf(array('field'=>'email')));
+        $this->validate(new PresenceOf(array('field'=>'comment')));
+        $this->validate(new Email(array('field'=>'email')));
+
+        if ($this->validationHasFailed() == true) {return false;}
+        return true;
+    }
+
+    public function getMessages()
+    {
+        $messages = array();
+        $txtmessage ="";
+        foreach (parent::getMessages() as $message) {
+            switch ($message->getType())
+            {
+                case 'PresenceOf':
+                    switch ($message->getField()) {
+                        case 'name':$txtmessage = $this->di->get('translate')->_('article_comment.name.required');break;
+                        case 'email':$txtmessage = $this->di->get('translate')->_('article_comment.email.required');break;
+                        case 'comment':$txtmessage = $this->di->get('translate')->_('article_comment.comment.required');break;
+                    }
+                    $messages[] =$txtmessage;break;
+                case 'Email':
+                    switch ($message->getField()) {
+                        case 'email':
+                            $txtmessage =$this->di->get('translate')->_('article_comment.email.exist');
+                            break;
+                    }
+                    $messages[] =$txtmessage;break;
+            }
+        }
+
+        return $messages;
     }
 
 }

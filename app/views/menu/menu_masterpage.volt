@@ -23,6 +23,7 @@
 {% set files ='N' %}
 {% set system_parameter ='N' %}
 {% set articles ='N' %}
+{% set article_comments ='N' %}
 {# END MENU OPTIONS SECURITY#}
 {% for item in actions %}
 {#Chek menu options#}
@@ -76,6 +77,9 @@
 {% endif %}
 {% if item.action =='Manage Articles' %}
     {% set articles ='Y'%}
+{% endif %}
+{% if item.action =='Manage Article Comment' %}
+    {% set article_comments ='Y'%}
 {% endif %}
 {% endfor %}
 <ul class="page-sidebar-menu page-sidebar-menu-closed" data-slide-speed="200" data-auto-scroll="true" data-keep-expanded="false">
@@ -274,32 +278,35 @@
 {% endif %}
 
     {% if articles =='Y'%}
-        <li class="{% for key,name in ['article','comment'] %}
+        <li class="{% for key,name in ['article','article_comment'] %}
   {% if name  in router.getRewriteUri() %}
       active open
   {% else %}
   start
   {% endif%}
   {% endfor %}">
-            <a href="" style="padding-left:20px;">
-                <span class="arrow "></span>
-                <p align="left"><b><i class="fa fa-book"></i>{{'Artículos'|t}}</b></p>
-            </a>
-            <ul class="sub-menu">
-                {% if  articles =='Y'%}
-                    <li class="{% if 'article' in router.getRewriteUri()%}active{% endif %}">
-                        <a href="{{ url("article/list") }}" >
-                            <p align="left"><i class="fa fa-book" ></i>{{'Artículos'|t}}</p>
-                        </a>
-                    </li>
-                    <li class="{% if 'comment' in router.getRewriteUri()%}active{% endif %}">
-                        <a href="{{ url("article/list") }}" >
-                            <p align="left"><i class="fa fa-comment-o " ></i>{{'Comentarios'|t}}</p>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </li>
+  <a href="" style="padding-left:20px;">
+      <span class="arrow "></span>
+      <p align="left"><b><i class="fa fa-book"></i>{{'Artículos'|t}}</b></p>
+  </a>
+  <ul class="sub-menu">
+      {% if  articles =='Y'%}
+          <li class="{% if '/article/' in router.getRewriteUri()%}active{% endif %}">
+              <a href="{{ url("article/list") }}" >
+                  <p align="left"><i class="fa fa-book" ></i>{{'Artículos'|t}}</p>
+              </a>
+          </li>
+      {% endif %}
+      {{article_comments}}
+      {% if  article_comments =='Y'%}
+          <li class="{% if '/article_comment' in router.getRewriteUri()%}active{% endif %}">
+              <a href="{{ url("article_comment/list") }}" >
+                  <p align="left"><i class="fa fa-comment-o " ></i>{{'Comentarios'|t}}</p>
+              </a>
+          </li>
+      {% endif %}
+  </ul>
+  </li>
     {% endif %}
 </ul>
 

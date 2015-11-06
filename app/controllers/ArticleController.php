@@ -84,7 +84,8 @@ class ArticleController extends ControllerBase
             ,'header_columns'=>array(
             array('column_name' => 'title','title' => 'Title','class'=>''),
             array('column_name'=>'author','title' => 'Author','class'=>''),
-            array('column_name'=>'content','title' => 'Content','class'=>''))
+            array('column_name'=>'content','title' => 'Content','class'=>''),
+            array('column_name'=>'active','title' => 'Active','class'=>''))
             ,'search_columns'=>array(
             array('name' => 'title','title' => 'Title','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
             array('name' => 'author','title' => 'Author','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
@@ -143,6 +144,17 @@ class ArticleController extends ControllerBase
         ,array('name'=>'active','value'=>$this->request->getPost("active")));
 
         $params_query =$this->set_search_grid_post_values($search_values);
+
+        if (strtoupper($params_query['active']) =='YES' or
+        strtoupper($params_query['active']) == strtoupper($this->di->get('translate')->_('Yes')))
+        {
+          $params_query['active']='Y';
+        }
+        if (strtoupper($params_query['active']) =='NO' or
+        strtoupper($params_query['active']) == strtoupper($this->di->get('translate')->_('No')))
+        {
+          $params_query['active']='N';
+        }
 
         $query = $this->modelsManager->createBuilder()
             ->columns(array('a.id ','a.title','a.author','a.content','a.active'))

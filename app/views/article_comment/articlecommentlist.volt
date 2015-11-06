@@ -89,15 +89,15 @@
 		{% for entity in page.items %}
 			<tr>
 			{% for index,item in headercolumns %}
-        {% if item['column_name']=='active'%}
-				   {% if entity.readAttribute(item['column_name']) =="Y"%}
-					    <td width ="15%">{{'Yes'|t}}</td>
-             {% elseif  entity.readAttribute(item['column_name']) =="N" %}
-						  <td width ="15%">{{'No'|t}}</td>
-					 {% endif %}
-			  {% else %}
-				 <td width ="15%">{{ entity.readAttribute(item['column_name'])}}</td>
-        {% endif %}
+			{% if item['column_name']=='active'%}
+				{% if entity.readAttribute(item['column_name']) =="Y"%}
+					 <td width ="15%">{{'Yes'|t}}</td>
+					 {% elseif  entity.readAttribute(item['column_name']) =="N" %}
+					 <td width ="15%">{{'No'|t}}</td>
+				{% endif %}
+		 {% else %}
+			<td width ="15%">{{ entity.readAttribute(item['column_name'])}}</td>
+			{% endif %}
 			{% endfor %}
 			<td width ="2%">
 				{% if permissions['edit']=='Y' %}
