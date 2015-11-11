@@ -9,8 +9,12 @@
  * Licensed under the MIT license:
  * http://www.opensource.org/licenses/MIT
  */
+ use Phalcon\Mvc\Model\Criteria;
+ use Phalcon\Mvc\Model\Query;
+ use Phalcon\Mvc\Controller;
+ use ControllerBase as Base;
 define('DS', DIRECTORY_SEPARATOR);
-class UploadHandler
+class UploadHandlerController
 {
 
     protected $options;
@@ -171,7 +175,7 @@ class UploadHandler
             $this->error_messages = $error_messages + $this->error_messages;
         }
         if ($initialize) {
-            $this->initialize();
+            $this->initialize_values();
         }
     }
 
@@ -235,7 +239,7 @@ class UploadHandler
 
     }
 
-    protected function initialize() {
+    public function initialize_values() {
         switch ($this->get_server_var('REQUEST_METHOD')) {
             case 'OPTIONS':
             case 'HEAD':
@@ -1119,6 +1123,31 @@ class UploadHandler
         $this->destroy_image_object($file_path);
     }
 
+   public function save_gallery_images($file_path,$file)
+   {
+     $is_image =getimagesize($file_path);
+     $gallery_data =$this->options['gallery_data'];
+     //$txt =$gallery_data['id'];
+     if (($is_image !=0) and ($gallery_data['id'] !=null))
+     {
+
+       $image_entity =new Image();
+       $base = new Base();
+       $image_entity->setName($file->name);
+       $image_entity->setPath($file_path);
+       $base->audit_fields($image_entity,'create');
+       $image_entity->save();
+
+       $gallery_image = new GalleryImage();
+       $gallery_image->setGalleryid($gallery_data['id']);
+       $gallery_image->setImageid($image_entity->id);
+       $base->audit_fields($gallery_image,'create');
+       $gallery_image->save();
+
+     }
+
+   }
+
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
             $index = null, $content_range = null) {
         $file = new \stdClass();
@@ -1145,6 +1174,15 @@ class UploadHandler
                     );
                 } else {
                     move_uploaded_file($uploaded_file, $file_path);
+
+                    $this->save_gallery_images($file_path,$file);
+
+                    //$type = mime_content_type($file_path);
+                    //$myfile = fopen("C:\\xampp\htdocs\Phalcontest\debug\debug.txt", "w") or die("Unable to open file!");
+
+
+                    //fwrite($myfile, $txt);
+                    //fclose($myfile);
                 }
             } else {
                 // Non-multipart uploads (PUT method support)

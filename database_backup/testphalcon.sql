@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-10-2015 a las 15:05:08
+-- Tiempo de generación: 11-11-2015 a las 15:49:37
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `action` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=68 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=72 ;
 
 --
 -- Volcado de datos para la tabla `action`
@@ -117,7 +117,11 @@ INSERT INTO `action` (`id`, `action`, `description`, `createuser`, `modifyuser`,
 (64, 'Manage Articles', '', 'admin', 'admin', '2015-10-25 17:38:49', '2015-10-25 17:38:49'),
 (65, 'Create Article', '', 'admin', 'admin', '2015-10-25 17:42:15', '2015-10-25 17:42:15'),
 (66, 'Edit Article', '', 'admin', 'admin', '2015-10-25 17:42:22', '2015-10-25 17:42:22'),
-(67, 'Delete Article', '', 'admin', 'admin', '2015-10-25 17:42:31', '2015-10-25 17:42:31');
+(67, 'Delete Article', '', 'admin', 'admin', '2015-10-25 17:42:31', '2015-10-25 17:42:31'),
+(68, 'Manage Article Comment', '', 'admin', 'admin', '2015-10-29 13:46:44', '2015-10-29 13:46:44'),
+(69, 'Create Article Comment', '', 'admin', 'admin', '2015-10-29 14:07:29', '2015-10-29 14:07:29'),
+(70, 'Edit Article Comment', '', 'admin', 'admin', '2015-10-29 14:07:40', '2015-10-29 14:07:40'),
+(71, 'Delete Article Comment', '', 'admin', 'admin', '2015-10-29 14:08:03', '2015-10-29 14:08:03');
 
 -- --------------------------------------------------------
 
@@ -213,7 +217,11 @@ INSERT INTO `action_role` (`actionid`, `roleid`, `createuser`, `modifyuser`, `cr
 (64, 1, 'admin', 'admin', '2015-10-25 17:39:01', '2015-10-25 17:39:01'),
 (65, 1, 'admin', 'admin', '2015-10-25 17:43:18', '2015-10-25 17:43:18'),
 (66, 1, 'admin', 'admin', '2015-10-25 17:43:26', '2015-10-25 17:43:26'),
-(67, 1, 'admin', 'admin', '2015-10-25 17:43:34', '2015-10-25 17:43:34');
+(67, 1, 'admin', 'admin', '2015-10-25 17:43:34', '2015-10-25 17:43:34'),
+(68, 1, 'admin', 'admin', '2015-10-29 13:47:06', '2015-10-29 13:47:06'),
+(69, 1, 'admin', 'admin', '2015-10-29 14:08:32', '2015-10-29 14:08:32'),
+(70, 1, 'admin', 'admin', '2015-10-29 14:08:43', '2015-10-29 14:08:43'),
+(71, 1, 'admin', 'admin', '2015-10-29 14:08:55', '2015-10-29 14:08:55');
 
 -- --------------------------------------------------------
 
@@ -303,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `article` (
   `createdate` date NOT NULL,
   `modifydate` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 --
 -- Volcado de datos para la tabla `article`
@@ -327,7 +335,14 @@ CREATE TABLE IF NOT EXISTS `article_comment` (
   `active` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_comment_article1_idx` (`articleid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Volcado de datos para la tabla `article_comment`
+--
+
+INSERT INTO `article_comment` (`id`, `articleid`, `name`, `email`, `comment`, `active`) VALUES
+(4, 12, 'test', 'test@test.com', '<p>assasa<br></p>', 'Y');
 
 -- --------------------------------------------------------
 
@@ -748,14 +763,14 @@ CREATE TABLE IF NOT EXISTS `gallery` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Volcado de datos para la tabla `gallery`
 --
 
 INSERT INTO `gallery` (`id`, `name`, `title`, `type`, `description`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
-(3, 'test', 'test', 'image', 'asa', 'admin', 'admin', '2015-10-19 13:40:33', '2015-10-19 13:40:33');
+(4, 'prueba', 'prueba', 'image', '', 'admin', 'admin', '2015-11-11 10:07:16', '2015-11-11 10:07:17');
 
 -- --------------------------------------------------------
 
@@ -764,13 +779,24 @@ INSERT INTO `gallery` (`id`, `name`, `title`, `type`, `description`, `createuser
 --
 
 CREATE TABLE IF NOT EXISTS `gallery_image` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `galleryid` int(11) NOT NULL,
   `imageid` int(11) NOT NULL,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_gallery_image_gallery1_idx` (`galleryid`),
   KEY `fk_gallery_image_image1_idx` (`imageid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `gallery_image`
+--
+
+INSERT INTO `gallery_image` (`id`, `galleryid`, `imageid`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(2, 4, 5, 'admin', 'admin', '2015-11-11 15:35:17', '2015-11-11 15:35:17');
 
 -- --------------------------------------------------------
 
@@ -779,7 +805,7 @@ CREATE TABLE IF NOT EXISTS `gallery_image` (
 --
 
 CREATE TABLE IF NOT EXISTS `image` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
   `title` varchar(80) DEFAULT NULL,
   `path` varchar(2000) DEFAULT NULL,
@@ -788,7 +814,14 @@ CREATE TABLE IF NOT EXISTS `image` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Volcado de datos para la tabla `image`
+--
+
+INSERT INTO `image` (`id`, `name`, `title`, `path`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(5, 'failure_succes.jpg', NULL, 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\galleries\\prueba_gallery\\failure_succes.jpg', 'admin', 'admin', '2015-11-11 15:35:16', '2015-11-11 15:35:16');
 
 -- --------------------------------------------------------
 
@@ -1047,7 +1080,7 @@ CREATE TABLE IF NOT EXISTS `translation` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_translation_language1_idx` (`languagecode`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=452 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=473 ;
 
 --
 -- Volcado de datos para la tabla `translation`
@@ -1500,7 +1533,28 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 (448, 'en', 'article.content.required', 'You must enter a content', 'admin', 'admin', '2015-10-27 15:42:33', '2015-10-27 15:42:33'),
 (449, 'es', 'article.content.required', 'Debe ingresar un contenido', 'admin', 'admin', '2015-10-27 15:42:47', '2015-10-27 15:42:47'),
 (450, 'en', 'article.title.exist', 'Already exist an article with this title', 'admin', 'admin', '2015-10-27 15:43:28', '2015-10-27 15:43:28'),
-(451, 'es', 'article.title.exist', 'Ya existe un artículo con ese título', 'admin', 'admin', '2015-10-27 15:43:59', '2015-10-27 15:43:59');
+(451, 'es', 'article.title.exist', 'Ya existe un artículo con ese título', 'admin', 'admin', '2015-10-27 15:43:59', '2015-10-27 15:43:59'),
+(452, 'en', 'article.notfound', 'Article not found', 'admin', 'admin', '2015-10-29 14:02:37', '2015-10-29 14:02:37'),
+(453, 'es', 'article.notfound', 'No se encontraron artículos', 'admin', 'admin', '2015-10-29 14:03:00', '2015-10-29 14:03:00'),
+(454, 'es', 'Select an Article', 'Seleccione un artículo', 'admin', 'admin', '2015-10-29 14:15:54', '2015-10-29 14:15:54'),
+(455, 'es', 'Article', 'Artículo', 'admin', 'admin', '2015-11-06 10:32:30', '2015-11-06 10:32:30'),
+(456, 'es', 'Comment', 'Comentario', 'admin', 'admin', '2015-11-06 10:33:20', '2015-11-06 10:33:20'),
+(457, 'en', 'article_comment.list.title', 'Article Comments', 'admin', 'admin', '2015-11-06 10:34:18', '2015-11-06 10:34:18'),
+(458, 'es', 'article_comment.list.title', 'Comentarios de Artículos', 'admin', 'admin', '2015-11-06 10:37:55', '2015-11-06 10:37:55'),
+(459, 'en', 'article_comment.title.new', 'New Comment', 'admin', 'admin', '2015-11-06 10:39:26', '2015-11-06 10:39:26'),
+(460, 'es', 'article_comment.title.new', 'Nuevo Comentario', 'admin', 'admin', '2015-11-06 10:39:41', '2015-11-06 10:39:41'),
+(461, 'en', 'article_comment.name.required', 'You must enter a name', 'admin', 'admin', '2015-11-06 10:41:04', '2015-11-06 10:41:04'),
+(462, 'es', 'article_comment.name.required', 'Debe ingresar un nombre', 'admin', 'admin', '2015-11-06 10:41:28', '2015-11-06 10:41:28'),
+(463, 'en', 'article_comment.email.required', 'You must enter an email', 'admin', 'admin', '2015-11-06 10:43:16', '2015-11-06 10:43:16'),
+(464, 'es', 'article_comment.email.required', 'Debe ingresar un email', 'admin', 'admin', '2015-11-06 10:43:35', '2015-11-06 10:43:35'),
+(465, 'en', 'article_comment.comment.required', 'You must enter a comment', 'admin', 'admin', '2015-11-06 10:44:01', '2015-11-06 10:44:01'),
+(466, 'es', 'article_comment.comment.required', 'Debe ingresar un comentario', 'admin', 'admin', '2015-11-06 10:44:24', '2015-11-06 10:44:24'),
+(467, 'en', 'article_comment.email', 'You must enter a valid email', 'admin', 'admin', '2015-11-06 13:54:06', '2015-11-06 13:54:06'),
+(468, 'es', 'article_comment.email', 'Debe ingresar un email válido', 'admin', 'admin', '2015-11-06 13:54:39', '2015-11-06 13:54:39'),
+(469, 'en', 'article_comment.title.edit', 'Edit Comment', 'admin', 'admin', '2015-11-06 13:55:04', '2015-11-06 13:55:22'),
+(470, 'es', 'article_comment.title.edit', 'Editar Comentario', 'admin', 'admin', '2015-11-06 13:55:39', '2015-11-06 13:55:39'),
+(471, 'en', 'article_comment.delete.question', 'Are you sure you want to delete this comment ?', 'admin', 'admin', '2015-11-06 13:56:27', '2015-11-06 13:56:27'),
+(472, 'es', 'article_comment.delete.question', '¿ Esta seguro que desea eliminar este comentario ?', 'admin', 'admin', '2015-11-06 13:57:52', '2015-11-06 13:57:52');
 
 -- --------------------------------------------------------
 

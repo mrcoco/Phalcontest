@@ -3,7 +3,7 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Validation;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
-use  UploadHandler as  UploadHandler;
+use  UploadHandlerController as  UploadHandler;
 use Phalcon\Paginator\Adapter\NativeArray as PaginatorArray;
 /**
  * @RoutePrefix("/file")
@@ -259,7 +259,7 @@ public function get_assets()
        );
 
        //Set grid Paginator
-       $paginator = new PaginatorArray(array("data" => $file_names,"limit"=> 1,"page" => $numberPage));
+       $paginator = new PaginatorArray(array("data" => $file_names,"limit"=>10,"page" => $numberPage));
 
        if (count($file_names) == 0){$no_items ="files.list.no_data";}
 
