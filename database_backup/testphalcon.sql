@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-11-2015 a las 15:49:37
+-- Tiempo de generación: 12-11-2015 a las 16:33:03
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -690,6 +690,25 @@ INSERT INTO `country` (`id`, `code`, `country`, `createuser`, `modifyuser`, `cre
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `file`
+--
+
+CREATE TABLE IF NOT EXISTS `file` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(80) DEFAULT NULL,
+  `type` varchar(45) DEFAULT NULL,
+  `path` varchar(2000) DEFAULT NULL,
+  `size` varchar(45) DEFAULT NULL,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `file_format`
 --
 
@@ -789,14 +808,15 @@ CREATE TABLE IF NOT EXISTS `gallery_image` (
   PRIMARY KEY (`id`),
   KEY `fk_gallery_image_gallery1_idx` (`galleryid`),
   KEY `fk_gallery_image_image1_idx` (`imageid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Volcado de datos para la tabla `gallery_image`
 --
 
 INSERT INTO `gallery_image` (`id`, `galleryid`, `imageid`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
-(2, 4, 5, 'admin', 'admin', '2015-11-11 15:35:17', '2015-11-11 15:35:17');
+(6, 4, 9, 'admin', 'admin', '2015-11-12 14:31:33', '2015-11-12 14:31:33'),
+(7, 4, 10, 'admin', 'admin', '2015-11-12 16:11:56', '2015-11-12 16:11:56');
 
 -- --------------------------------------------------------
 
@@ -814,14 +834,15 @@ CREATE TABLE IF NOT EXISTS `image` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- Volcado de datos para la tabla `image`
 --
 
 INSERT INTO `image` (`id`, `name`, `title`, `path`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
-(5, 'failure_succes.jpg', NULL, 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\galleries\\prueba_gallery\\failure_succes.jpg', 'admin', 'admin', '2015-11-11 15:35:16', '2015-11-11 15:35:16');
+(9, 'failure_succes.jpg', 'failure_succes.jpg', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\galleries\\prueba_gallery\\failure_succes.jpg', 'admin', 'admin', '2015-11-12 14:31:33', '2015-11-12 14:31:33'),
+(10, 'error.png', 'error.png', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\galleries\\prueba_gallery\\error.png', 'admin', 'admin', '2015-11-12 16:11:56', '2015-11-12 16:11:56');
 
 -- --------------------------------------------------------
 
@@ -1080,7 +1101,7 @@ CREATE TABLE IF NOT EXISTS `translation` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_translation_language1_idx` (`languagecode`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=473 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=475 ;
 
 --
 -- Volcado de datos para la tabla `translation`
@@ -1554,7 +1575,9 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 (469, 'en', 'article_comment.title.edit', 'Edit Comment', 'admin', 'admin', '2015-11-06 13:55:04', '2015-11-06 13:55:22'),
 (470, 'es', 'article_comment.title.edit', 'Editar Comentario', 'admin', 'admin', '2015-11-06 13:55:39', '2015-11-06 13:55:39'),
 (471, 'en', 'article_comment.delete.question', 'Are you sure you want to delete this comment ?', 'admin', 'admin', '2015-11-06 13:56:27', '2015-11-06 13:56:27'),
-(472, 'es', 'article_comment.delete.question', '¿ Esta seguro que desea eliminar este comentario ?', 'admin', 'admin', '2015-11-06 13:57:52', '2015-11-06 13:57:52');
+(472, 'es', 'article_comment.delete.question', '¿ Esta seguro que desea eliminar este comentario ?', 'admin', 'admin', '2015-11-06 13:57:52', '2015-11-06 13:57:52'),
+(473, 'en', 'gallery.view.noitems', 'There are no images in this gallery', 'admin', 'admin', '2015-11-12 13:50:09', '2015-11-12 13:50:09'),
+(474, 'es', 'gallery.view.noitems', 'No hay imágenes en esta galería', 'admin', 'admin', '2015-11-12 13:50:37', '2015-11-12 13:50:37');
 
 -- --------------------------------------------------------
 

@@ -3,7 +3,7 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Validation;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
-use  UploadHandlerController as  UploadHandler;
+use UploadHandlerController as  UploadHandler;
 use Phalcon\Paginator\Adapter\NativeArray as PaginatorArray;
 /**
  * @RoutePrefix("/file")

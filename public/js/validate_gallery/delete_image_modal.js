@@ -3,18 +3,18 @@ $(document).ready(function()
 
     $('#basic').on('show.bs.modal', function(e) {
 
-        var filename = $(e.relatedTarget).data('id');
-        $("#filename").val( filename );
+        var fileid = $(e.relatedTarget).data('id');
+        $("#filename").val( fileid );
 
     });
 
     $("#deletebutton").click(function()
     {
-        var filename =$("#filename").val();
+        var fileid =$("#filename").val();
         var galleryid = $("#filename").data('name');
         var l = window.location;
         var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
-        var url_path =base_url+'/gallery/delete/'+galleryid+'/'+filename;
+        var url_path =base_url+'/gallery/delete/'+galleryid+'/'+fileid;
 
         $.ajax
         ({

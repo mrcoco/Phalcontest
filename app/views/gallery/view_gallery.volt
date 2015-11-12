@@ -33,26 +33,26 @@
 {% block pagebar %}
 {% endblock %}
 {% block content %}
-    {% if file_names %}
+    {% if gallery_images %}
     <div class="margin-top-10">
-        <div class="row mix-grid">
-           {% for file in file_names %}
-            <div style="display: block;  opacity: 1;" class="col-md-3 col-sm-4 mix category_1 mix_all">
-                <div class="mix-inner">
-                    <img   height="200" width="200"src="{{static_url('files/galleries/'~gallery_data['name']~'_gallery/'~file['name'])}}" alt="">
-                    <div class="mix-details">
-                        <h4>{{file['name']}}</h4>
-                        <a class="mix-link" data-toggle="modal" data-id="{{file['name']}}" href="#basic">
-                            <i class="fa fa-remove"></i>
-                        </a>
-                        <a class="mix-preview fancybox-button" href="{{static_url('files/galleries/'~gallery_data['name']~'_gallery/'~file['name'])}}"  data-rel="fancybox-button">
-                            <i class="fa fa-search"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-           {% endfor %}
-        </div>
+    <div class="row mix-grid">
+    {% for file in gallery_images %}
+    <div style="display: block;  opacity: 1;" class="col-md-3 col-sm-4 mix category_1 mix_all">
+      <div class="mix-inner">
+      <img   height="200" width="270"src="{{static_url('files/galleries/'~gallery_data['name']~'_gallery/'~file['name'])}}" alt="">
+      <div class="mix-details">
+        <h4>{{file['title']}}</h4>
+        <a class="mix-link" data-toggle="modal" data-id="{{file['imageid']}}" href="#basic">
+          <i class="fa fa-remove"></i>
+        </a>
+        <a class="mix-preview fancybox-button" href="{{static_url('files/galleries/'~gallery_data['name']~'_gallery/'~file['name'])}}"  data-rel="fancybox-button">
+          <i class="fa fa-search"></i>
+        </a>
+      </div>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
     </div>
     <div style="display: none;" class="modal fade" id="basic" tabindex="-1" role="basic" aria-hidden="true">
      <div class="modal-dialog">

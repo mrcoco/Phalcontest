@@ -1123,17 +1123,17 @@ class UploadHandlerController
         $this->destroy_image_object($file_path);
     }
 
-   public function save_gallery_images($file_path,$file)
+   public function store_files($file_path,$file)
    {
      $is_image =getimagesize($file_path);
      $gallery_data =$this->options['gallery_data'];
-     //$txt =$gallery_data['id'];
+     $base = new Base();
      if (($is_image !=0) and ($gallery_data['id'] !=null))
      {
 
        $image_entity =new Image();
-       $base = new Base();
        $image_entity->setName($file->name);
+       $image_entity->setTitle($file->name);
        $image_entity->setPath($file_path);
        $base->audit_fields($image_entity,'create');
        $image_entity->save();
@@ -1145,6 +1145,22 @@ class UploadHandlerController
        $gallery_image->save();
 
      }
+     else {
+       $this->save_file_data($file,$file_path);
+     }
+
+   }
+
+   public function save_file_data($file,$file_path)
+   {
+     $file_entity = new File();
+     $base = new Base();
+     $file_entity->setName($file->name);
+     $file_entity->setSize($file->size);
+     $file_entity->setType($file->type);
+     $file_entity->setPath($file_path);
+     $base->audit_fields($file_entity,'create');
+     $file_entity->save();
 
    }
 
@@ -1175,7 +1191,7 @@ class UploadHandlerController
                 } else {
                     move_uploaded_file($uploaded_file, $file_path);
 
-                    $this->save_gallery_images($file_path,$file);
+                    $this->store_files($file_path,$file);
 
                     //$type = mime_content_type($file_path);
                     //$myfile = fopen("C:\\xampp\htdocs\Phalcontest\debug\debug.txt", "w") or die("Unable to open file!");

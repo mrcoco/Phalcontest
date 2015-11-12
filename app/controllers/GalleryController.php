@@ -416,55 +416,77 @@ class GalleryController extends ControllerBase
     public function view_galleryAction($galleryid)
     {
       $gallery_data =$this->get_gallery_data($galleryid);
-      $dir = $this->set_gallery_dir($gallery_data['name']);
-      if (is_dir($dir))
-      {
-       if ($dh = opendir($dir))
-       {
-         while (($file = readdir($dh)) !== false)
-         {
-
-              if( $file == '.' || $file == '..' || $file =='thumbnail' || is_dir($dir.$file)==true)continue;
-
-              $file_data = $this->get_file_data($dir,$file);
-              $file_names[]=$file_data;
-
-         }
-         closedir($dh);
-
-       }
-    }
+      $gallery_images = $this->get_gallery_images($gallery_data['id']);
       $this->assets->collection('delete_modal_js')->addJs('js/validate_gallery/delete_image_modal.js');
+      $this->view->gallery_images =$gallery_images;
       $this->view->title ='gallery.view.title';
       $this->view->noitems ='gallery.view.noitems';
       $this->view->gallery_dir =$dir;
       $this->view->gallery_data =$gallery_data;
-      $this->view->file_names =$file_names;
       $this->view->pick('gallery/view_gallery');
     }
 
-    /**
-     * @Route("/delete/{galleryid}/{filename}", methods={"POST"}, name="delete")
-     */
-    public function delete_image_Action($galleryid,$file_name)
+    public function get_gallery_images($galleryid)
     {
 
-        $gallery_data =$this->get_gallery_data($galleryid);
-        $dir = $this->set_gallery_dir($gallery_data['name']);
-        if (is_dir($dir)) {
-            if ($dh = opendir($dir)) {
+      $gallery_images= $this->modelsManager->createBuilder()
+          ->columns(array('gi.imageid ','i.name','i.title','i.path'))
+          ->from(array('gi' => 'GalleryImage'))
+          ->join('Image', 'i.id = gi.imageid', 'i')
+          ->join('Gallery', 'g.id = gi.galleryid', 'g')
+          ->where('g.id ='.$galleryid)
+          ->getQuery()
+          ->execute()->toArray();
+      return $gallery_images;
+    }
 
-                while (($file = readdir($dh)) !== false) {
-                  if ($file ==$file_name)
-                  {
-                      unlink($dir.'/'.$file);
-                      break;
-                  }
 
-                }
-                closedir($dh);
-            }
-        }
+    public function delete_gallery_image($galleryid,$file_id)
+    {
+      //Delete Gallery_image
+      $this->modelsManager->executeQuery(
+    "DELETE FROM GalleryImage WHERE galleryid =:galleryid: AND imageid=:imageid:",
+    array(
+        'galleryid' =>$galleryid,
+        'imageid'   =>$file_id
+    ));
+    }
+
+    public function delete_image($galleryid,$file_id)
+    {
+      //Delete Image
+        $images = Image::findFirst($file_id);
+        $file_name = $images->name;
+        $images->delete();
+        return $file_name;
+    }
+
+    public function delete_image_file($galleryid,$file_name)
+    {
+    //Delete File
+       $gallery_data =$this->get_gallery_data($galleryid);
+       $dir = $this->set_gallery_dir($gallery_data['name']);
+       if (is_dir($dir)) {
+           if ($dh = opendir($dir))
+           {
+              while (($file = readdir($dh)) !== false)
+             {
+              if ($file ==$file_name){unlink($dir.'/'.$file);break;}
+
+              }
+             closedir($dh);
+           }
+       }
+    }
+    /**
+     * @Route("/delete/{galleryid}/{file_id}", methods={"POST"}, name="delete")
+     */
+    public function delete_image_Action($galleryid,$file_id)
+    {
+
+      $this->delete_gallery_image($galleryid,$file_id);
+      $file_name =$this->delete_image($galleryid,$file_id);
+      $this->delete_image_file($galleryid,$file_name);
     }
 
 }
