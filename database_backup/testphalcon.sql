@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-11-2015 a las 16:33:03
+-- Tiempo de generación: 17-11-2015 a las 14:38:13
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -704,7 +704,16 @@ CREATE TABLE IF NOT EXISTS `file` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Volcado de datos para la tabla `file`
+--
+
+INSERT INTO `file` (`id`, `name`, `type`, `path`, `size`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(1, 'Jellyfish.jpg', 'image/jpeg', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\images\\Jellyfish.jpg', '775702', 'admin', 'admin', '2015-11-13 08:43:55', '2015-11-13 08:43:55'),
+(2, 'Koala.jpg', 'image/jpeg', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\images\\Koala.jpg', '780831', 'admin', 'admin', '2015-11-13 08:51:35', '2015-11-13 08:51:35'),
+(3, 'Hydrangeas.jpg', 'image/jpeg', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\images\\Hydrangeas.jpg', '595284', 'admin', 'admin', '2015-11-13 08:52:43', '2015-11-13 08:52:43');
 
 -- --------------------------------------------------------
 

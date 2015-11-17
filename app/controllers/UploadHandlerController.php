@@ -1146,85 +1146,74 @@ class UploadHandlerController
 
      }
      else {
-       $this->save_file_data($file,$file_path);
+      $this->save_file_data($file->name,$file->type,$file->size,$file_path);
      }
 
    }
 
-   public function save_file_data($file,$file_path)
+   public function save_file_data($file_name,$file_type,$file_size,$file_path)
    {
      $file_entity = new File();
      $base = new Base();
-     $file_entity->setName($file->name);
-     $file_entity->setSize($file->size);
-     $file_entity->setType($file->type);
+     $file_entity->setName($file_name);
+     $file_entity->setSize($file_size);
+     $file_entity->setType($file_type);
      $file_entity->setPath($file_path);
      $base->audit_fields($file_entity,'create');
      $file_entity->save();
 
    }
 
-    protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
-            $index = null, $content_range = null) {
-        $file = new \stdClass();
-        $file->name = $this->get_file_name($uploaded_file, $name, $size, $type, $error,
-            $index, $content_range);
-        $file->size = $this->fix_integer_overflow((int)$size);
-        $file->type = $type;
-        if ($this->validate($uploaded_file, $file, $error, $index)) {
-            $this->handle_form_data($file, $index);
-            $upload_dir = $this->get_upload_path();
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, $this->options['mkdir_mode'], true);
-            }
-            $file_path = $this->get_upload_path($file->name);
-            $append_file = $content_range && is_file($file_path) &&
-                $file->size > $this->get_file_size($file_path);
-            if ($uploaded_file && is_uploaded_file($uploaded_file)) {
-                // multipart/formdata uploads (POST method uploads)
-                if ($append_file) {
-                    file_put_contents(
-                        $file_path,
-                        fopen($uploaded_file, 'r'),
-                        FILE_APPEND
-                    );
-                } else {
-                    move_uploaded_file($uploaded_file, $file_path);
-
-                    $this->store_files($file_path,$file);
-
-                    //$type = mime_content_type($file_path);
-                    //$myfile = fopen("C:\\xampp\htdocs\Phalcontest\debug\debug.txt", "w") or die("Unable to open file!");
-
-
-                    //fwrite($myfile, $txt);
-                    //fclose($myfile);
-                }
-            } else {
-                // Non-multipart uploads (PUT method support)
-                file_put_contents(
-                    $file_path,
-                    fopen('php://input', 'r'),
-                    $append_file ? FILE_APPEND : 0
-                );
-            }
-            $file_size = $this->get_file_size($file_path, $append_file);
-            if ($file_size === $file->size) {
-                $file->url = $this->get_download_url($file->name);
-                if ($this->is_valid_image_file($file_path)) {
-                    $this->handle_image_file($file_path, $file);
-                }
-            } else {
-                $file->size = $file_size;
-                if (!$content_range && $this->options['discard_aborted_uploads']) {
-                    unlink($file_path);
-                    $file->error = $this->get_error_message('abort');
-                }
-            }
-            $this->set_additional_file_properties($file);
+  protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,$index = null, $content_range = null)
+  {
+    $file = new \stdClass();
+    $file->name = $this->get_file_name($uploaded_file, $name, $size, $type, $error,$index, $content_range);
+    $file->size = $this->fix_integer_overflow((int)$size);
+    $file->type = $type;
+    if ($this->validate($uploaded_file, $file, $error, $index))
+    {
+        $this->handle_form_data($file, $index);
+        $upload_dir = $this->get_upload_path();
+        if (!is_dir($upload_dir))
+        {
+        mkdir($upload_dir, $this->options['mkdir_mode'], true);
         }
-        return $file;
+        $file_path = $this->get_upload_path($file->name);
+        $append_file = $content_range && is_file($file_path) &&
+            $file->size > $this->get_file_size($file_path);
+        if ($uploaded_file && is_uploaded_file($uploaded_file)) {
+            // multipart/formdata uploads (POST method uploads)
+            if ($append_file)
+            {
+                file_put_contents($file_path,fopen($uploaded_file, 'r'),FILE_APPEND);
+            }
+            else
+            {
+                move_uploaded_file($uploaded_file, $file_path);
+                //Save Files in database.
+                $this->store_files($file_path,$file);
+            }
+        } else {
+            // Non-multipart uploads (PUT method support)
+            file_put_contents($file_path,fopen('php://input', 'r'),$append_file ? FILE_APPEND : 0);
+        }
+        $file_size = $this->get_file_size($file_path, $append_file);
+        if ($file_size === $file->size) {
+            $file->url = $this->get_download_url($file->name);
+            if ($this->is_valid_image_file($file_path)) {
+                $this->handle_image_file($file_path, $file);
+            }
+        } else {
+            $file->size = $file_size;
+            if (!$content_range && $this->options['discard_aborted_uploads']) {
+                unlink($file_path);
+                $file->error = $this->get_error_message('abort');
+            }
+        }
+        $this->set_additional_file_properties($file);
     }
+    return $file;
+  }
 
     protected function readfile($file_path) {
         $file_size = $this->get_file_size($file_path);

@@ -214,7 +214,7 @@ class File extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Returns the value of field path
+     * Returns the value of field size
      *
      * @return string
      */
@@ -308,6 +308,7 @@ class File extends \Phalcon\Mvc\Model
             'name' => 'name',
             'type' => 'type',
             'path' => 'path',
+            'size' => 'size',
             'createuser' => 'createuser',
             'modifyuser' => 'modifyuser',
             'createdate' => 'createdate',
