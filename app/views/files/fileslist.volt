@@ -8,6 +8,7 @@
 {% block pagebar %}
 {% endblock %}
 {% block content %}
+ {{dump(document_types)}}
   <!-- GRID SEARCH -->
 	<div align="left" >
 	{{ form(searchroute, "method":"post", "autocomplete" : "off") }}
@@ -79,7 +80,6 @@
 	</th>
 	{% endfor %}
 	<th></th>
-	<th></th>
 	</tr>
 	</thead>
 	<!-- END HEADER-->
@@ -87,24 +87,26 @@
 	<tbody>
 	{% if page.items is defined %}
 		{% for entity in page.items %}
+    {% if 'image'in entity.type %}
+      {% set downloadroute = download_path~'images/' %}
+    {% elseif 'video' in entity.type %}
+      {% set downloadroute = download_path~'videos/' %}
+    {% elseif entity.type in document_types %}
+      {% set downloadroute = download_path~'documents/' %}
+    {% else %}
+      {% set downloadroute = download_path~'other/' %}
+      {% endif %}
 			<tr>
 			{% for index,item in headercolumns %}
-			{% if item['column_name'] =='accept'%}
+        {% if item['column_name']=='name'%}
+        <td width ="15%"><a href ="{{downloadroute~entity.readAttribute(item['column_name'])}}">{{ entity.readAttribute(item['column_name'])}}</a></td>
+        {% elseif item['column_name']=='size'%}
+         <td width ="15%">{{entity.readAttribute(item['column_name'])~ ' Mb'}}</td>
+        {% else %}
+        <td width ="15%">{{ entity.readAttribute(item['column_name'])}}</td>
+        {% endif %}
 
-			{% if entity.readAttribute(item['column_name'])=='T'%}
-			<td width ="40%">{{'Yes'|t}}</td>
-			{% else %}
-      <td width ="40%">{{'No'|t}}</td>
-			{% endif %}
-       {% else %}
-			  	<td width ="20%">{{ entity.readAttribute(item['column_name'])|t}}</td>
-			{% endif %}
 			{% endfor %}
-			<td width ="2%">
-				{% if permissions['edit']=='Y' %}
-				{{link_to(editroute~entity.id,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}
-				{% endif %}
-			</td>
 			<td width ="2%">
 				{% if permissions['delete']=='Y' %}
 				{{link_to(showroute~entity.id,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}

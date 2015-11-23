@@ -52,6 +52,6 @@ $router->addResource('SystemParameter', '/systemparameter');
 $router->addResource('FileFormat', '/fileformat');
 $router->addResource('Article', '/article');
 $router->addResource('ArticleComment', '/article_comment');
-
+$router->addResource('Files', '/files');
 
 return $router;

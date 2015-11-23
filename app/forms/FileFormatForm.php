@@ -29,6 +29,10 @@ class FileFormatForm extends Form
   $type->setLabel('Type');
   $this->add($type);
 
+  $mimetype = new Text('mimetype');
+  $mimetype->setLabel('Mime type');
+  $this->add($mimetype);
+
   $accept = new Select("accept",array('T' => $this->di->get('translate')->_('Yes'),'F' => $this->di->get('translate')->_('No')));
   $accept->setLabel('Accept');
   $this->add($accept);

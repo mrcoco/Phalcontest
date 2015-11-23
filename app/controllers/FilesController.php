@@ -2,23 +2,24 @@
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Validation;
-use ActionForm as ActionForm;
+use FileForm as FileForm;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
 /**
- * @RoutePrefix("/action")
+ * @RoutePrefix("/files")
  */
 class FilesController extends ControllerBase
 {
   public $crud_params =array();
+  public $file_params;
   public function onConstruct()
     {
         $this->crud_params['route_list']         = 'files/list';
         $this->crud_params['entityname']         = 'File';
         $this->crud_params['not_found_message']  = 'file.entity.notfound';
         $this->crud_params['controller']         = 'Files';
-        $this->crud_params['action_list']        = 'actionlist';
-        $this->crud_params['form_name']          = 'ActionForm';
+        $this->crud_params['action_list']        = 'fileslist';
+        $this->crud_params['form_name']          = 'FileForm';
         $this->crud_params['delete_message']     = 'files.delete.question';
         $this->crud_params['create_route']       = 'files/create';
         $this->crud_params['save_route']         = 'files/save/';
@@ -27,6 +28,15 @@ class FilesController extends ControllerBase
         $this->crud_params['show_view']          = 'files/show';
         $this->crud_params['new_title']          = 'files.title.new';
         $this->crud_params['edit_title']         = 'files.title.edit';
+        $this->file_params['download_files_path'] =$this->url->getBaseUri().'files/';
+        $this->document_types = array('application/pdf'
+        ,'application/vnd.openxmlformats-officedocument'
+        ,'application/vnd.oasis.opendocument.text'
+        ,'application/vnd.ms-excel'
+        ,'text/plain'
+        ,'text/csv'
+        ,'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ,'application/vnd.ms-powerpoint');
         $this->crud_params['form_columns']       = array(
         array('name' => 'name','label'=>'Name'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
@@ -45,6 +55,8 @@ class FilesController extends ControllerBase
         $this->crud_params['cancel_button_name']     ='Cancelar';
         $this->crud_params['delete_button_name']     ='Eliminar';
     }
+
+
 
     public function set_tags($mode,$entity_object)
     {
@@ -81,15 +93,13 @@ class FilesController extends ControllerBase
     ,'title' =>'files.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'name','title' => 'Name','class'=>''),
-      array('column_name'=>'type','title' => 'Type','class'=>'')),
-      array('column_name'=>'size','title' => 'Size','class'=>'')),
-      array('column_name'=>'path','title' => 'Path','class'=>''))
+      array('column_name'=>'type','title' => 'Type','class'=>''),
+      array('column_name'=>'size','title' => 'Size','class'=>''))
 
     ,'search_columns'=>array(
       array('name' => 'name','title' => 'Name','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
       array('name' => 'type','title' => 'Type','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
-      array('name' => 'size','title' => 'Size','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
-      array('name' => 'path','title' => 'Path','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
+      array('name' => 'size','title' => 'Size','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
 
     )
   ];
@@ -98,21 +108,50 @@ class FilesController extends ControllerBase
 
 
   /**
-  * @Route("/list", methods={"GET","POST"}, name="actionlist")
+  * @Route("/list", methods={"GET","POST"}, name="fileslist")
   */
   public function listAction()
   {
     $order=$this->set_grid_order();
     $grid_values =$this->set_grid_parameters('action/list');
     $query= $this->modelsManager->createBuilder()
-             ->columns(array('f.id ','f.name','f.type','f.size','f.path'))
+             ->columns(array('f.id ','f.name','f.type','round(f.size/1024/1024,4) as size','f.path'))
              ->from(array('f' => 'File'))
              ->orderBy($order)
              ->getQuery()
              ->execute();
     $this->set_grid_values($query,$grid_values);
     $this->check_all_permissions($this->session->get('userid'));
+    $this->view->download_path =$this->file_params['download_files_path'];
+    $this->view->document_types =$this->document_types;
+    $this->view->types = $this->get_document_mime_types;
 
+  }
+
+  public function get_document_mime_types()
+  {
+    $document_types=array();
+    $types = FileFormat::find();
+    foreach ($types as $type) {
+      array_push( $document_types,$type->mimetype);
+     }
+     /*$this->modelsManager->createBuilder()
+             ->columns(array('f.mimetype'))
+             ->from(array('f' => 'FileFormat'))
+             ->Where('f.type = :type:')
+              ->bind(array("type" => "document"))
+             ->getQuery()
+             ->execute()->toArray();*/
+
+    return $document_types;
+
+  }
+
+  //Convert file size to MB
+  public function convert_file_size($size)
+  {
+      $size_mb =round($size/1024/1024,4);
+      return $size_mb;
   }
 
   public function check_all_permissions($userid)
@@ -128,7 +167,7 @@ class FilesController extends ControllerBase
 
 
   /**
-  * @Route("/search", methods={"GET","POST"}, name="actionsearch")
+  * @Route("/search", methods={"GET","POST"}, name="filessearch")
   */
   public function searchAction()
 
@@ -139,21 +178,24 @@ class FilesController extends ControllerBase
     $grid_values =$this->set_grid_parameters('action/search');
 
     $search_values =array(array('name'=>'name','value'=>$this->request->getPost("name"))
-    ,array('name'=>'description','value'=>$this->request->getPost("description")));
+    ,array('name'=>'type','value'=>$this->request->getPost("type"))
+    ,array('name'=>'size','value'=>$this->request->getPost("size")));
 
     $params_query =$this->set_search_grid_post_values($search_values);
 
-    $query = $this->modelsManager->createBuilder()
-              ->columns(array('a.id ','a.action','a.description'))
-              ->from(array('a' => 'Action'))
-             ->Where('a.action LIKE :action:', array('action' => '%' . $params_query['action']. '%'))
-             ->AndWhere('a.description LIKE :desc:', array('desc' => '%' . $params_query['description']. '%'))
+    $query =  $this->modelsManager->createBuilder()
+             ->columns(array('f.id ','f.name','f.type','round(f.size/1024/1024,4) as size','f.path'))
+             ->from(array('f' => 'File'))
+             ->Where('f.name LIKE :name:', array('name' => '%' . $params_query['name']. '%'))
+             ->AndWhere('f.type LIKE :type:', array('type' => '%' . $params_query['type']. '%'))
+             ->AndWhere('round(f.size/1024/1024,4) LIKE :size:', array('size' => '%' .$params_query['size']. '%'))
              ->orderBy($order)
              ->getQuery()
              ->execute();
     $this->set_grid_values($query,$grid_values);
     $this->check_all_permissions($this->session->get('userid'));
-
+    $this->view->download_path =$this->file_params['download_files_path'];
+    $this->view->document_types =$this->document_types;
   }
 
 
@@ -168,7 +210,7 @@ class FilesController extends ControllerBase
 
 
   /**
-  * @Route("/new", methods={"GET"}, name="actionenew")
+  * @Route("/new", methods={"GET"}, name="filesenew")
   */
   public function newAction($entity=null)
   {
@@ -188,7 +230,7 @@ class FilesController extends ControllerBase
   }
 
   /**
-  * @Route("/edit/{id}", methods={"GET"}, name="actionedit")
+  * @Route("/edit/{id}", methods={"GET"}, name="filesedit")
   */
   public function editAction($id)
   {
@@ -218,7 +260,7 @@ class FilesController extends ControllerBase
   }
 
   /**
-  * @Route("/create", methods={"POST"}, name="actioncreate")
+  * @Route("/create", methods={"POST"}, name="filescreate")
   */
   public function createAction()
   {
@@ -240,7 +282,7 @@ class FilesController extends ControllerBase
   }
 
   /**
-  * @Route("/save/{id}", methods={"POST"}, name="actionsave")
+  * @Route("/save/{id}", methods={"POST"}, name="filessave")
   */
   public function saveAction($id)
   {
@@ -263,7 +305,7 @@ class FilesController extends ControllerBase
   }
 
   /**
-  * @Route("/show/{id}", methods={"GET"}, name="actionshow")
+  * @Route("/show/{id}", methods={"GET"}, name="filesshow")
   */
   public function showAction($id)
   {
@@ -293,10 +335,12 @@ class FilesController extends ControllerBase
   }
 
   /**
-  * @Route("/delete/{id}", methods={"POST"}, name="actiondelete")
+  * @Route("/delete/{id}", methods={"POST"}, name="filesdelete")
   */
   public function deleteAction($id)
   {
+    if(file_exists($this->get_file_path($id))){
+    unlink($this->get_file_path($id));
     $entity =$this->set_entity(
     $id
     ,$this->crud_params['entityname']
@@ -311,6 +355,27 @@ class FilesController extends ControllerBase
     ,array('id'=>$id)
     ,$this->crud_params['action_list']
     ,'delete');
+
+   }
+    else
+   {
+     $this->flash->notice($this->di->get('translate')->_('file.notfound.message'));
+     return $this->dispatcher->forward(array(
+         "controller" => "files",
+         "action" => "show"
+     ));
+
+    }
+
+
   }
+
+  public function get_file_path($id)
+  {
+    $entity = File::findFirst($id);
+    return $entity->path;
+
+  }
+
 
 }

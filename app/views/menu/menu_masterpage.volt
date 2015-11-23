@@ -235,7 +235,7 @@
         </a>
       </li>
       <li class="{% if ('file/index' in router.getRewriteUri()) or ('file/list' in router.getRewriteUri())  %}active{% endif %}">
-          <a href="{{ url("file/index") }}" >
+          <a href="{{ url("files/list") }}" >
               <p align="left"><i class="fa fa-file-archive-o  " ></i> {{'Manage Files'|t}}</p>
           </a>
       </li>

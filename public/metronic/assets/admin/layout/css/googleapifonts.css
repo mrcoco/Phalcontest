@@ -20,5 +20,5 @@
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../fonts/OpenSansBold.woff2) format('woff2');
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../fonts/OpenSans700.woff2) format('woff2');
 }

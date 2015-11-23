@@ -32,6 +32,12 @@ class FileFormat extends \Phalcon\Mvc\Model
      *
      * @var string
      */
+    protected $mimetype;
+
+    /**
+     *
+     * @var string
+     */
     protected $createuser;
 
     /**
@@ -101,6 +107,19 @@ class FileFormat extends \Phalcon\Mvc\Model
     public function setAccept($accept)
     {
         $this->accept = $accept;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field mimetype
+     *
+     * @param string $mimetype
+     * @return $this
+     */
+    public function setMimetype($mimetype)
+    {
+        $this->mimetype = $mimetype;
 
         return $this;
     }
@@ -196,6 +215,16 @@ class FileFormat extends \Phalcon\Mvc\Model
     {
         return $this->accept;
     }
+
+    /**
+     * Returns the value of field mimetype
+     *
+     * @return string
+     */
+    public function getMimetype()
+    {
+        return $this->mimetype;
+    }
     /**
      * Returns the value of field createuser
      *
@@ -283,6 +312,7 @@ class FileFormat extends \Phalcon\Mvc\Model
             'extension' => 'extension',
             'type' => 'type',
             'accept' => 'accept',
+            'mimetype' => 'mimetype',
             'createuser' => 'createuser',
             'modifyuser' => 'modifyuser',
             'createdate' => 'createdate',
@@ -290,10 +320,15 @@ class FileFormat extends \Phalcon\Mvc\Model
         );
     }
 
+    public function beforeValidationOnCreate()
+   {
+     $this->validate(new Uniqueness(array('field' => array('extension'))));
+     
+   }
     public function validation()
     {
         $this->validate(new PresenceOf(array('field'=>'extension')));
-        $this->validate(new Uniqueness(array('field' => array('extension'))));
+
         if ($this->validationHasFailed() == true) {return false;}
         return true;
     }

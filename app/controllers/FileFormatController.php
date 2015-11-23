@@ -32,6 +32,7 @@ class FileFormatController extends ControllerBase
         ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'label_error'=>''),
         array('name' => 'type','label'=>'Type','required'=>'','label_error'=>''),
+        array('name' => 'mimetype','label'=>'Mime Type','required'=>'','label_error'=>''),
         array('name' => 'accept','label'=>'Accepted','required'=>'','label_error'=>''));
         $this->crud_params['save_button_name']       ='Guardar';
         $this->crud_params['cancel_button_name']     ='Cancelar';
@@ -44,6 +45,7 @@ class FileFormatController extends ControllerBase
       {
       $this->tag->setDefault("extension", $entity_object->getExtension());
       $this->tag->setDefault("type", $entity_object->getType());
+      $this->tag->setDefault("mimetype", $entity_object->getMimetype());
       $this->tag->setDefault("accept", $entity_object->getAccept());
       }
     }
@@ -52,6 +54,7 @@ class FileFormatController extends ControllerBase
     {
       $entity->setExtension($this->request->getPost("extension"));
       $entity->setType($this->request->getPost("type"));
+      $entity->setMimetype($this->request->getPost("mimetype"));
       $entity->setAccept($this->request->getPost("accept"));
     }
 
@@ -66,18 +69,21 @@ class FileFormatController extends ControllerBase
     ,'route_list'=>$routelist
     ,'view_name'=>'fileformat/fileformatlist'
     ,'numberPage'=>1
-    ,'pagelimit'=>10
+    ,'pagelimit'=>50
     ,'noitems_message'=>'fileformat.notfound'
     ,'title' =>'fileformat.list.title'
     ,'header_columns'=>array(
       array('column_name' => 'extension','title' => 'Extension','class'=>''),
       array('column_name'=>'type','title' => 'Type','class'=>''),
+      array('column_name'=>'mimetype','title' => 'Mime Type','class'=>''),
       array('column_name'=>'accept','title' => 'Accepted','class'=>'')
     )
     ,'search_columns'=>array(
       array('name' => 'extension','title' => 'Extension','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
       array('name' => 'type','title' => 'Type','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
+      array('name' => 'mimetype','title' => 'Mime Type','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
       array('name' => 'accept','title' => 'Accepted','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
+
     )
   ];
     return $grid_values;
@@ -92,7 +98,7 @@ class FileFormatController extends ControllerBase
     $order=$this->set_grid_order();
     $grid_values =$this->set_grid_parameters('fileformat/list');
     $query= $this->modelsManager->createBuilder()
-             ->columns(array('ff.id ','ff.extension','ff.type','ff.accept'))
+             ->columns(array('ff.id ','ff.extension','ff.type','ff.mimetype','ff.accept'))
              ->from(array('ff' => 'FileFormat'))
              ->orderBy($order)
              ->getQuery()
