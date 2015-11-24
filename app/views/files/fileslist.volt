@@ -8,7 +8,6 @@
 {% block pagebar %}
 {% endblock %}
 {% block content %}
- {{dump(document_types)}}
   <!-- GRID SEARCH -->
 	<div align="left" >
 	{{ form(searchroute, "method":"post", "autocomplete" : "off") }}

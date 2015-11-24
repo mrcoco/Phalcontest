@@ -29,14 +29,7 @@ class FilesController extends ControllerBase
         $this->crud_params['new_title']          = 'files.title.new';
         $this->crud_params['edit_title']         = 'files.title.edit';
         $this->file_params['download_files_path'] =$this->url->getBaseUri().'files/';
-        $this->document_types = array('application/pdf'
-        ,'application/vnd.openxmlformats-officedocument'
-        ,'application/vnd.oasis.opendocument.text'
-        ,'application/vnd.ms-excel'
-        ,'text/plain'
-        ,'text/csv'
-        ,'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        ,'application/vnd.ms-powerpoint');
+        $this->document_types = $this->get_document_mime_types();
         $this->crud_params['form_columns']       = array(
         array('name' => 'name','label'=>'Name'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
@@ -124,25 +117,20 @@ class FilesController extends ControllerBase
     $this->check_all_permissions($this->session->get('userid'));
     $this->view->download_path =$this->file_params['download_files_path'];
     $this->view->document_types =$this->document_types;
-    $this->view->types = $this->get_document_mime_types;
 
   }
 
   public function get_document_mime_types()
   {
     $document_types=array();
-    $types = FileFormat::find();
-    foreach ($types as $type) {
-      array_push( $document_types,$type->mimetype);
-     }
-     /*$this->modelsManager->createBuilder()
-             ->columns(array('f.mimetype'))
-             ->from(array('f' => 'FileFormat'))
-             ->Where('f.type = :type:')
-              ->bind(array("type" => "document"))
+    $query= $this->modelsManager->createBuilder()
+             ->columns(array('ff.mimetype'))
+             ->from(array('ff' => 'FileFormat'))
              ->getQuery()
-             ->execute()->toArray();*/
-
+             ->execute()->toArray();
+    foreach ($query as $type) {
+      array_push( $document_types,$type['mimetype']);
+     }
     return $document_types;
 
   }
