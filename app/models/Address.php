@@ -77,6 +77,12 @@ class Address extends \Phalcon\Mvc\Model
     protected $modifydate;
 
     /**
+     *
+     * @var string
+     */
+    protected $idtemp;
+
+    /**
      * Method to set the value of field id
      *
      * @param integer $id
@@ -233,6 +239,18 @@ class Address extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Method to set the value of field idtemp
+     *
+     * @param string $idtemp
+     * @return $this
+     */
+    public function setIdtemp($idtemp)
+    {
+        $this->idtemp = $idtemp;
+
+        return $this;
+    }
+    /**
      * Returns the value of field id
      *
      * @return integer
@@ -350,6 +368,16 @@ class Address extends \Phalcon\Mvc\Model
     public function getModifydate()
     {
         return $this->modifydate;
+    }
+
+    /**
+     * Returns the value of field modifydate
+     *
+     * @return string
+     */
+    public function getIdtemp()
+    {
+        return $this->idtemp;
     }
 
     /**
@@ -535,6 +563,11 @@ class Address extends \Phalcon\Mvc\Model
 
        return $messages;
    }
+
+   public function afterSave()
+    {
+      $this->idtemp = $this->id;
+    }
 
 
 }

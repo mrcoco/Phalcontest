@@ -567,4 +567,5 @@ public function bind_search_values($search_values)
 
   //--------------------------------------------------------------------------END CRUD FUNCTIONS ------------------------
 
+
 }

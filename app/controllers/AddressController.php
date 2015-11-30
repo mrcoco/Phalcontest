@@ -365,6 +365,17 @@ class AddressController extends ControllerBase
   }
 
 
+  public function get_country_data()
+  {
+
+    $countries= $this->modelsManager->createBuilder()
+             ->columns(array('c.id as id','c.code as code','c.country as country'))
+             ->from(array('c' => 'Country'))
+             ->getQuery()
+             ->execute()->toArray();
+    return $countries;
+
+  }
 
   /**
   * @Route("/get_state_data/{countryid}", methods={"POST"}, name="get_state_data")

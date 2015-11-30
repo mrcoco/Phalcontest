@@ -1,27 +1,30 @@
 $(document).ready(function()
 {
 
- $("#countryid").change(function()
+ $("#countryid").unbind('change').change(function()
  {
+
     get_states();
-    get_cities();
-    get_townships();
-    get_neighborhoods();
+    remove_select_options("#cityid","Select a City");
+    remove_select_options("#townshipid","Select a Township");
+    remove_select_options("#neighborhoodid","Select a Neighborhood");
   });
 
-  $("#stateid").change(function()
+  $("#stateid").unbind('change').change(function()
   {
+
     get_cities();
-    get_townships();
-    get_neighborhoods();
+
   });
-  $("#cityid").change(function()
+  $("#cityid").unbind('change').change(function()
   {
+
    get_townships();
-   get_neighborhoods();
+
   });
-  $("#townshipid").change(function()
+  $("#townshipid").unbind('change').change(function(e)
   {
+
    get_neighborhoods();
   });
 });
@@ -138,7 +141,7 @@ $(document).ready(function()
     .find('option')
     .remove()
     .end()
-    .append('<option value="">'+select_text+'</option>')
+    .append('<option value="" selected>'+select_text+'</option>')
     .val('whatever')
 ;
 

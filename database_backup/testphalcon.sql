@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-11-2015 a las 14:38:13
+-- Tiempo de generación: 30-11-2015 a las 15:27:48
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `action` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=72 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=74 ;
 
 --
 -- Volcado de datos para la tabla `action`
@@ -121,7 +121,9 @@ INSERT INTO `action` (`id`, `action`, `description`, `createuser`, `modifyuser`,
 (68, 'Manage Article Comment', '', 'admin', 'admin', '2015-10-29 13:46:44', '2015-10-29 13:46:44'),
 (69, 'Create Article Comment', '', 'admin', 'admin', '2015-10-29 14:07:29', '2015-10-29 14:07:29'),
 (70, 'Edit Article Comment', '', 'admin', 'admin', '2015-10-29 14:07:40', '2015-10-29 14:07:40'),
-(71, 'Delete Article Comment', '', 'admin', 'admin', '2015-10-29 14:08:03', '2015-10-29 14:08:03');
+(71, 'Delete Article Comment', '', 'admin', 'admin', '2015-10-29 14:08:03', '2015-10-29 14:08:03'),
+(72, 'Delete File', '', 'admin', 'admin', '2015-11-23 09:03:26', '2015-11-23 09:03:26'),
+(73, 'Manage Restaurant', '', 'admin', 'admin', '2015-11-25 11:19:24', '2015-11-25 11:21:11');
 
 -- --------------------------------------------------------
 
@@ -221,7 +223,9 @@ INSERT INTO `action_role` (`actionid`, `roleid`, `createuser`, `modifyuser`, `cr
 (68, 1, 'admin', 'admin', '2015-10-29 13:47:06', '2015-10-29 13:47:06'),
 (69, 1, 'admin', 'admin', '2015-10-29 14:08:32', '2015-10-29 14:08:32'),
 (70, 1, 'admin', 'admin', '2015-10-29 14:08:43', '2015-10-29 14:08:43'),
-(71, 1, 'admin', 'admin', '2015-10-29 14:08:55', '2015-10-29 14:08:55');
+(71, 1, 'admin', 'admin', '2015-10-29 14:08:55', '2015-10-29 14:08:55'),
+(72, 1, 'admin', 'admin', '2015-11-23 09:03:53', '2015-11-23 09:03:53'),
+(73, 1, 'admin', 'admin', '2015-11-25 11:19:43', '2015-11-25 11:19:43');
 
 -- --------------------------------------------------------
 
@@ -248,14 +252,25 @@ CREATE TABLE IF NOT EXISTS `address` (
   KEY `fk_address_township1_idx` (`townshipid`),
   KEY `fk_address_neighborhood1_idx` (`neighborhoodid`),
   KEY `fk_address_state1_idx` (`stateid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
 -- Volcado de datos para la tabla `address`
 --
 
 INSERT INTO `address` (`id`, `countryid`, `stateid`, `cityid`, `townshipid`, `neighborhoodid`, `description`, `address`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
-(2, 49, 16, 2, 4, 3, '', 'test', 'admin', 'admin', '2015-10-05 11:36:07', '2015-10-05 11:36:07');
+(2, 49, 16, 2, 4, 3, '', 'calle 100 edificio iserra 100 , torre 3 apartamento 10 B', 'admin', 'admin', '2015-10-05 11:36:07', '2015-11-25 11:47:46'),
+(3, 49, 16, 2, 4, 3, NULL, 'test', 'admin', 'admin', '2015-11-27 11:25:46', '2015-11-27 11:25:46'),
+(4, 49, 16, 2, 4, 3, NULL, 'tesat', 'admin', 'admin', '2015-11-27 12:58:15', '2015-11-27 12:58:15'),
+(5, 49, 16, 2, 4, 3, NULL, 'test44', 'admin', 'admin', '2015-11-27 13:07:55', '2015-11-27 13:07:55'),
+(6, 49, 16, 2, 4, 3, NULL, 'test55', 'admin', 'admin', '2015-11-27 13:34:45', '2015-11-27 13:34:45'),
+(7, 49, 16, 2, 4, 3, NULL, 'test666', 'admin', 'admin', '2015-11-27 14:05:45', '2015-11-27 14:05:45'),
+(8, 49, 16, 2, 4, 3, NULL, 'test77', 'admin', 'admin', '2015-11-27 14:08:01', '2015-11-27 14:08:01'),
+(9, 49, 16, 2, 4, 3, NULL, 'test99', 'admin', 'admin', '2015-11-27 15:16:54', '2015-11-27 15:16:54'),
+(10, 49, 16, 2, 4, 3, NULL, 'test99a', 'admin', 'admin', '2015-11-27 15:17:24', '2015-11-27 15:17:24'),
+(11, 49, 16, 2, 4, 3, NULL, 'test99b', 'admin', 'admin', '2015-11-27 15:18:21', '2015-11-27 15:18:21'),
+(12, 49, 16, 2, 4, 3, 'Colombia,Cundinamarca,Bogotá,Norte,Cedritos,test99ba', 'test99ba', 'admin', 'admin', '2015-11-27 15:19:28', '2015-11-27 15:19:28'),
+(13, 49, 16, 2, 4, 3, 'Colombia,Cundinamarca,Bogotá,Norte,Cedritos,test778', 'test778', 'admin', 'admin', '2015-11-27 15:21:52', '2015-11-27 15:21:52');
 
 -- --------------------------------------------------------
 
@@ -690,6 +705,30 @@ INSERT INTO `country` (`id`, `code`, `country`, `createuser`, `modifyuser`, `cre
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `dish`
+--
+
+CREATE TABLE IF NOT EXISTS `dish` (
+  `id` int(11) NOT NULL,
+  `menuid` int(11) NOT NULL,
+  `galleryid` int(11) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `type` varchar(20) DEFAULT NULL,
+  `price` decimal(15,2) DEFAULT NULL,
+  `image_path` varchar(2000) DEFAULT NULL,
+  `description` varchar(1000) DEFAULT NULL,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_dish_gallery1_idx` (`galleryid`),
+  KEY `fk_dish_menu1_idx` (`menuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `file`
 --
 
@@ -704,7 +743,7 @@ CREATE TABLE IF NOT EXISTS `file` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Volcado de datos para la tabla `file`
@@ -713,7 +752,7 @@ CREATE TABLE IF NOT EXISTS `file` (
 INSERT INTO `file` (`id`, `name`, `type`, `path`, `size`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
 (1, 'Jellyfish.jpg', 'image/jpeg', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\images\\Jellyfish.jpg', '775702', 'admin', 'admin', '2015-11-13 08:43:55', '2015-11-13 08:43:55'),
 (2, 'Koala.jpg', 'image/jpeg', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\images\\Koala.jpg', '780831', 'admin', 'admin', '2015-11-13 08:51:35', '2015-11-13 08:51:35'),
-(3, 'Hydrangeas.jpg', 'image/jpeg', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\images\\Hydrangeas.jpg', '595284', 'admin', 'admin', '2015-11-13 08:52:43', '2015-11-13 08:52:43');
+(4, 'Requerimientos_APP.docx', 'application/vnd.openxmlformats-officedocument', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\documents\\Requerimientos_APP.docx', '13198', 'admin', 'admin', '2015-11-23 09:57:17', '2015-11-23 09:57:17');
 
 -- --------------------------------------------------------
 
@@ -726,6 +765,7 @@ CREATE TABLE IF NOT EXISTS `file_format` (
   `extension` varchar(10) DEFAULT NULL,
   `type` varchar(45) DEFAULT NULL,
   `accept` varchar(1) DEFAULT NULL,
+  `mimetype` varchar(80) DEFAULT NULL,
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
   `createdate` datetime NOT NULL,
@@ -737,42 +777,41 @@ CREATE TABLE IF NOT EXISTS `file_format` (
 -- Volcado de datos para la tabla `file_format`
 --
 
-INSERT INTO `file_format` (`id`, `extension`, `type`, `accept`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
-(1, 'jpg', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-10-23 09:43:45'),
-(2, 'gif', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(3, 'png', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(4, 'jpg', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(5, 'jpeg', 'image', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(6, 'mpg', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(7, 'mpeg', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(8, 'rm', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(9, 'avi', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(10, 'mkv', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(11, 'flv', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(12, 'mov', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(13, 'wmv', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(14, 'asf', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(15, 'mp4', 'video', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(16, 'rtf', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(17, 'doc', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(18, 'docx', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(19, 'csv', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(20, 'xls', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(21, 'xlsx', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(22, 'pptx', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(23, 'ppt', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(24, 'odt', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(25, 'pdf', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(26, 'txt', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(27, 'html', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(28, 'xml', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(29, 'php', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(30, 'css', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(31, 'js', 'document', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(32, 'rar', 'other', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(33, 'zip', 'other', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(34, '7z', 'other', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(35, 'deb', 'other', 'T', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01');
+INSERT INTO `file_format` (`id`, `extension`, `type`, `accept`, `mimetype`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(1, 'jpg', 'image', 'T', 'image/jpeg', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:24:03'),
+(2, 'gif', 'image', 'T', 'image/gif', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:24:43'),
+(3, 'png', 'image', 'T', 'image/png', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:24:56'),
+(5, 'jpeg', 'image', 'T', 'image/jpg', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:25:57'),
+(6, 'mpg', 'video', 'T', 'video/mpeg', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:26:51'),
+(7, 'mpeg', 'video', 'T', 'video/mpeg', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:27:05'),
+(8, 'rm', 'video', 'T', 'application/vnd.rn-realmedia', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:27:45'),
+(9, 'avi', 'video', 'T', 'video/x-msvideo', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:28:58'),
+(10, 'mkv', 'video', 'T', 'video/mkv', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:41:48'),
+(11, 'flv', 'video', 'T', 'video/x-flv', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:42:32'),
+(12, 'mov', 'video', 'T', 'video/quicktime', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:44:08'),
+(13, 'wmv', 'video', 'T', 'video/x-ms-wmv', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:44:37'),
+(14, 'asf', 'video', 'T', 'video/x-ms-asf', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:45:04'),
+(15, 'mp4', 'video', 'T', 'video/mp4', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:46:01'),
+(16, 'rtf', 'document', 'T', 'application/rtf', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:46:35'),
+(17, 'doc', 'document', 'T', 'application/msword', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:47:08'),
+(18, 'docx', 'document', 'T', 'application/vnd.openxmlformats-officedocument', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-24 10:20:15'),
+(19, 'csv', 'document', 'T', 'text/csv', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:48:56'),
+(20, 'xls', 'document', 'T', 'application/vnd.ms-excel', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:49:27'),
+(21, 'xlsx', 'document', 'T', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:49:54'),
+(22, 'pptx', 'document', 'T', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:50:27'),
+(23, 'ppt', 'document', 'T', 'application/vnd.ms-powerpoint', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:51:03'),
+(24, 'odt', 'document', 'T', 'application/vnd.oasis.opendocument.text', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:51:45'),
+(25, 'pdf', 'document', 'T', 'application/pdf', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:52:11'),
+(26, 'txt', 'document', 'T', 'text/plain', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:52:36'),
+(27, 'html', 'document', 'T', 'text/html', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:53:01'),
+(28, 'xml', 'document', 'T', 'application/xml', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:53:35'),
+(29, 'php', 'document', 'T', 'application/x-httpd-php', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:57:07'),
+(30, 'css', 'document', 'T', 'text/css', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:57:46'),
+(31, 'js', 'document', 'T', 'application/javascript', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:58:19'),
+(32, 'rar', 'other', 'T', 'application/x-rar-compressed', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:58:59'),
+(33, 'zip', 'other', 'T', 'application/zip', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 15:59:50'),
+(34, '7z', 'other', 'T', 'application/x-7z-compressed', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 16:00:28'),
+(35, 'deb', 'other', 'T', 'application/x-debian-package', 'admin', 'admin', '2015-09-16 09:38:01', '2015-11-23 16:01:10');
 
 -- --------------------------------------------------------
 
@@ -881,6 +920,25 @@ INSERT INTO `language` (`code`, `language`, `flag`, `createuser`, `modifyuser`, 
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `menu`
+--
+
+CREATE TABLE IF NOT EXISTS `menu` (
+  `id` int(11) NOT NULL,
+  `restaurantid` int(11) NOT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `active` varchar(1) DEFAULT NULL,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_menu_restaurant1_idx` (`restaurantid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `neighborhood`
 --
 
@@ -920,6 +978,27 @@ CREATE TABLE IF NOT EXISTS `neighborhoodview` (
 ,`township` varchar(100)
 ,`neighborhood` varchar(100)
 );
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `restaurant`
+--
+
+CREATE TABLE IF NOT EXISTS `restaurant` (
+  `id` int(11) NOT NULL,
+  `name` varchar(65) DEFAULT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `email` varchar(60) DEFAULT NULL,
+  `website` varchar(200) DEFAULT NULL,
+  `addressid` int(11) NOT NULL,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_restaurant_address1_idx` (`addressid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- --------------------------------------------------------
 
 --
@@ -1110,7 +1189,7 @@ CREATE TABLE IF NOT EXISTS `translation` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_translation_language1_idx` (`languagecode`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=475 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=481 ;
 
 --
 -- Volcado de datos para la tabla `translation`
@@ -1586,7 +1665,13 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 (471, 'en', 'article_comment.delete.question', 'Are you sure you want to delete this comment ?', 'admin', 'admin', '2015-11-06 13:56:27', '2015-11-06 13:56:27'),
 (472, 'es', 'article_comment.delete.question', '¿ Esta seguro que desea eliminar este comentario ?', 'admin', 'admin', '2015-11-06 13:57:52', '2015-11-06 13:57:52'),
 (473, 'en', 'gallery.view.noitems', 'There are no images in this gallery', 'admin', 'admin', '2015-11-12 13:50:09', '2015-11-12 13:50:09'),
-(474, 'es', 'gallery.view.noitems', 'No hay imágenes en esta galería', 'admin', 'admin', '2015-11-12 13:50:37', '2015-11-12 13:50:37');
+(474, 'es', 'gallery.view.noitems', 'No hay imágenes en esta galería', 'admin', 'admin', '2015-11-12 13:50:37', '2015-11-12 13:50:37'),
+(475, 'en', 'file.notfound.message', 'File not found', 'admin', 'admin', '2015-11-23 13:32:51', '2015-11-23 13:32:51'),
+(476, 'es', 'file.notfound.message', 'No se encontró el archivo', 'admin', 'admin', '2015-11-23 13:33:43', '2015-11-23 13:33:43'),
+(477, 'en', 'files.list.title', 'Manage Files', 'admin', 'admin', '2015-11-23 13:34:40', '2015-11-23 13:34:40'),
+(478, 'es', 'files.list.title', 'Administrar Archivos', 'admin', 'admin', '2015-11-23 13:35:23', '2015-11-23 13:35:23'),
+(479, 'en', 'files.delete.question', 'Are you sure you want to delete this file ?', 'admin', 'admin', '2015-11-23 13:36:11', '2015-11-23 13:36:11'),
+(480, 'es', 'files.delete.question', '¿ Esta seguro que desea eliminar este idioma ?', 'admin', 'admin', '2015-11-23 13:37:01', '2015-11-23 13:37:01');
 
 -- --------------------------------------------------------
 
@@ -1719,6 +1804,13 @@ ALTER TABLE `company_address`
   ADD CONSTRAINT `fk_company_address_company1` FOREIGN KEY (`companyid`) REFERENCES `company` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `dish`
+--
+ALTER TABLE `dish`
+  ADD CONSTRAINT `fk_dish_gallery1` FOREIGN KEY (`galleryid`) REFERENCES `gallery` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_dish_menu1` FOREIGN KEY (`menuid`) REFERENCES `menu` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
 -- Filtros para la tabla `gallery_image`
 --
 ALTER TABLE `gallery_image`
@@ -1726,11 +1818,23 @@ ALTER TABLE `gallery_image`
   ADD CONSTRAINT `fk_gallery_image_image1` FOREIGN KEY (`imageid`) REFERENCES `image` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `menu`
+--
+ALTER TABLE `menu`
+  ADD CONSTRAINT `fk_menu_restaurant1` FOREIGN KEY (`restaurantid`) REFERENCES `restaurant` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
 -- Filtros para la tabla `neighborhood`
 --
 ALTER TABLE `neighborhood`
   ADD CONSTRAINT `fk_neighborhood_city1` FOREIGN KEY (`cityid`) REFERENCES `city` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_neighborhood_township1` FOREIGN KEY (`townshipid`) REFERENCES `township` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `restaurant`
+--
+ALTER TABLE `restaurant`
+  ADD CONSTRAINT `fk_restaurant_address1` FOREIGN KEY (`addressid`) REFERENCES `address` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `state`
