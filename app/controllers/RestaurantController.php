@@ -31,9 +31,9 @@ class RestaurantController extends ControllerBase
         $this->crud_params['form_columns']       = array(
         array('name' => 'name','label'=>'Name'
         ,'required'=>'<span class="required" aria-required="true">* </span>','label_error'=>''),
-        array('name' => 'phone','label'=>'Phone','required'=>'','label_error'=>''),
-        array('name' => 'address','label'=>'Address','required'=>'','label_error'=>''),
-        array('name' => 'email','label'=>'Email','required'=>'','label_error'=>''),
+        array('name' => 'phone','label'=>'Phone','required'=>'<span class="required" aria-required="true">* </span>','label_error'=>''),
+        array('name' => 'address','label'=>'Address','required'=>'<span class="required" aria-required="true">* </span>','label_error'=>''),
+        array('name' => 'email','label'=>'Email','required'=>'<span class="required" aria-required="true">* </span>','label_error'=>''),
         array('name' => 'website','label'=>'Website','required'=>'','label_error'=>'')
         );
         $this->crud_params['save_button_name']       ='Guardar';
@@ -58,7 +58,13 @@ class RestaurantController extends ControllerBase
       $entity->setName($this->request->getPost("name"));
       $entity->setPhone($this->request->getPost("phone"));
       $entity->setEmail($this->request->getPost("email"));
-      $entity->setAddressid($this->request->getPost("addressid"));
+      $address_values = $this->request->getPost("addressid");
+      $addressid ="";
+      if($address_values)
+      {
+      $addressid =$this->create_addressAction($address_values);
+      }
+      $entity->setAddressid($addressid);
       $entity->setWebsite($this->request->getPost("website"));
     }
 
@@ -79,13 +85,11 @@ class RestaurantController extends ControllerBase
     ,'header_columns'=>array(
       array('column_name' => 'name','title' => 'Name','class'=>''),
       array('column_name'=>'phone','title' => 'Phone','class'=>''),
-      array('column_name'=>'email','title' => 'Email','class'=>''),
-      array('column_name'=>'address','title' => 'Address','class'=>''))
+      array('column_name'=>'email','title' => 'Email','class'=>''))
     ,'search_columns'=>array(
       array('name' => 'name','title' => 'Name','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
       array('name' => 'phone','title' => 'Phone','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
       array('name' => 'email','title' => 'Email','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search'),
-      array('name' => 'address','title' => 'Adress','size'=>200,'div_class'=>"input-control full-size",'label_class'=>'search')
     )
   ];
     return $grid_values;
@@ -279,9 +283,7 @@ class RestaurantController extends ControllerBase
     $address->setDescription($addres_description);
     $address->save();
 
-    $result_data = array("addressid"=>$address->id_temp,"description"=>$addres_description);
-
-    echo json_encode($result_data);
+    return $address->id_temp;
 
   }
 
@@ -297,6 +299,7 @@ class RestaurantController extends ControllerBase
     ,$this->crud_params['controller']
     ,$this->crud_params['action_list']
     ,'create');
+
 
     $this->set_post_values($entity);
     $this->audit_fields($entity,'create');

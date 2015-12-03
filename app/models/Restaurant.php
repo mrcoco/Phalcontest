@@ -1,5 +1,6 @@
 <?php
-
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 use Phalcon\Mvc\Model\Validator\Email as Email;
 
 class Restaurant extends \Phalcon\Mvc\Model
@@ -28,6 +29,12 @@ class Restaurant extends \Phalcon\Mvc\Model
      * @var string
      */
     protected $email;
+
+    /**
+     *
+     * @var string
+     */
+    protected $logo_path;
 
     /**
      *
@@ -113,6 +120,19 @@ class Restaurant extends \Phalcon\Mvc\Model
     public function setEmail($email)
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field logo_path
+     *
+     * @param string $logo_path
+     * @return $this
+     */
+    public function setLogoPath($logo_path)
+    {
+        $this->logo_path = $logo_path;
 
         return $this;
     }
@@ -236,6 +256,16 @@ class Restaurant extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Returns the value of field logo_path
+     *
+     * @return string
+     */
+    public function getLogoPath()
+    {
+        return $this->logo_path;
+    }
+
+    /**
      * Returns the value of field website
      *
      * @return string
@@ -296,27 +326,70 @@ class Restaurant extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Validations and business logic
-     *
-     * @return boolean
-     */
-    public function validation()
-    {
-        $this->validate(
-            new Email(
-                array(
-                    'field'    => 'email',
-                    'required' => true,
-                )
-            )
-        );
+       * Validations and business logic
+       *
+       * @return boolean
+       */
+       public function validation()
+       {
+           $this->validate(new PresenceOf(array('field'=>'name')));
+           $this->validate(new PresenceOf(array('field'=>'phone')));
+           $this->validate(new PresenceOf(array('field'=>'email')));
+           $this->validate(new PresenceOf(array('field'=>'addressid')));
+           $this->validate(new Uniqueness(array('field' => array('name'))));
+           $this->validate(new Uniqueness(array('field' => array('phone'))));
+           $this->validate(new Uniqueness(array('field' => array('email'))));
+           if ($this->validationHasFailed() == true) {return false;}
+           return true;
+       }
+       public function getMessages()
+       {
+           $messages = array();
+           $txtmessage ="";
+           foreach (parent::getMessages() as $message) {
+                //echo $message->getType();
+               switch ($message->getType())
+               {
 
-        if ($this->validationHasFailed() == true) {
-            return false;
-        }
+                   case 'PresenceOf':
+                   //echo $message->getField();
+                       switch ($message->getField()) {
+                           case 'addressid':$txtmessage = $this->di->get('translate')->_('restaurant.address.required');break;
+                           case 'name':$txtmessage = $this->di->get('translate')->_('restaurant.name.required');break;
+                           case 'phone':$txtmessage = $this->di->get('translate')->_('restaurant.phone.required');break;
+                           case 'email':$txtmessage = $this->di->get('translate')->_('restaurant.email.required');break;
+                       }
+                       $messages[] =$txtmessage;
+                       break;
+                   case 'Unique':
 
-        return true;
-    }
+                       if (is_array($message->getField()))
+                       {
+                           $field =implode("-", $message->getField());
+                       }
+                       else {
+                           $field =$message->getField();
+                       }
+
+                       switch ($field) {
+                           case 'name':
+                               $txtmessage =$this->di->get('translate')->_('restaurant.name.unique');
+                               break;
+                            case 'phone':
+                              $txtmessage =$this->di->get('translate')->_('restaurant.phone.unique');
+                              break;
+                            case 'email':
+                              $txtmessage =$this->di->get('translate')->_('restaurant.unique.unique');
+                              break;
+                       }
+                       $messages[] =$txtmessage;
+                       break;
+
+               }
+           }
+
+           return $messages;
+       }
 
     /**
      * Initialize method for model.
@@ -372,6 +445,7 @@ class Restaurant extends \Phalcon\Mvc\Model
             'name' => 'name',
             'phone' => 'phone',
             'email' => 'email',
+            'logo_path' => 'logo_path',
             'website' => 'website',
             'addressid' => 'addressid',
             'createuser' => 'createuser',

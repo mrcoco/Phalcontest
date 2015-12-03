@@ -1,17 +1,59 @@
 $(document).ready(function()
 {
-    $('#responsive').on('show.bs.modal', function(e) {
+  $("#save_restaurant_button").click(function()
+  {
+    // Setup form validation on the #register-form element
+    $("#appform").validate({
+      errorClass: "has-error",
+        // Specify the validation rules
+        rules: {
+          name:{
+              required:true
+          },
+          phone:{
+              required:true
+          },
+            email:{
+                required:true,
+                email:true
 
-      $('#responsive').css({
+            },
+            rest_address:{
+                required:true
+            }
+        },
+        // Specify the validation error messages
+        messages: {
+          name:{
+              required:validatemessages.name
+
+          },
+          phone:{
+              required:validatemessages.phone
+
+          },
+            email:{
+                required:validatemessages.email,
+                email:validatemessages.valid_email
+
+            },
+             rest_address:{
+                required:validatemessages.address
+
+            }
 
 
-
-            });
-            $('#modalbody').css({
+        },
 
 
-                  });
+        submitHandler: function(form) {
+                form.submit();
+        }
+
     });
+
+  });
+
 
     $("#save_address_button").click(function()
     {

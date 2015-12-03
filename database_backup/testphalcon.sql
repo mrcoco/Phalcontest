@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-11-2015 a las 15:27:48
+-- Tiempo de generación: 03-12-2015 a las 16:27:38
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -252,7 +252,7 @@ CREATE TABLE IF NOT EXISTS `address` (
   KEY `fk_address_township1_idx` (`townshipid`),
   KEY `fk_address_neighborhood1_idx` (`neighborhoodid`),
   KEY `fk_address_state1_idx` (`stateid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
 -- Volcado de datos para la tabla `address`
@@ -270,7 +270,10 @@ INSERT INTO `address` (`id`, `countryid`, `stateid`, `cityid`, `townshipid`, `ne
 (10, 49, 16, 2, 4, 3, NULL, 'test99a', 'admin', 'admin', '2015-11-27 15:17:24', '2015-11-27 15:17:24'),
 (11, 49, 16, 2, 4, 3, NULL, 'test99b', 'admin', 'admin', '2015-11-27 15:18:21', '2015-11-27 15:18:21'),
 (12, 49, 16, 2, 4, 3, 'Colombia,Cundinamarca,Bogotá,Norte,Cedritos,test99ba', 'test99ba', 'admin', 'admin', '2015-11-27 15:19:28', '2015-11-27 15:19:28'),
-(13, 49, 16, 2, 4, 3, 'Colombia,Cundinamarca,Bogotá,Norte,Cedritos,test778', 'test778', 'admin', 'admin', '2015-11-27 15:21:52', '2015-11-27 15:21:52');
+(13, 49, 16, 2, 4, 3, 'Colombia,Cundinamarca,Bogotá,Norte,Cedritos,test778', 'test778', 'admin', 'admin', '2015-11-27 15:21:52', '2015-11-27 15:21:52'),
+(14, 173, 1, 1, 1, 1, 'Panama,Panamá,Panamá,Juan Diaz,Chanis,test', 'test', 'admin', 'admin', '2015-12-03 15:36:35', '2015-12-03 15:36:35'),
+(15, 49, 16, 2, 4, 3, 'Colombia,Cundinamarca,Bogotá,Norte,Cedritos,test111', 'test111', 'admin', 'admin', '2015-12-03 15:38:11', '2015-12-03 15:38:11'),
+(16, 49, 16, 2, 4, 3, 'Colombia,Cundinamarca,Bogotá,Norte,Cedritos,ressd', 'ressd', 'admin', 'admin', '2015-12-03 15:51:34', '2015-12-03 15:51:34');
 
 -- --------------------------------------------------------
 
@@ -985,10 +988,11 @@ CREATE TABLE IF NOT EXISTS `neighborhoodview` (
 --
 
 CREATE TABLE IF NOT EXISTS `restaurant` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(65) DEFAULT NULL,
   `phone` varchar(45) DEFAULT NULL,
   `email` varchar(60) DEFAULT NULL,
+  `logo_path` varchar(2000) DEFAULT NULL,
   `website` varchar(200) DEFAULT NULL,
   `addressid` int(11) NOT NULL,
   `createuser` varchar(45) NOT NULL,
@@ -997,7 +1001,14 @@ CREATE TABLE IF NOT EXISTS `restaurant` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_restaurant_address1_idx` (`addressid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `restaurant`
+--
+
+INSERT INTO `restaurant` (`id`, `name`, `phone`, `email`, `logo_path`, `website`, `addressid`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(1, 'prueba', '2324244', 'koloinotzente@gmail.com', NULL, 'www.google.com', 15, 'admin', 'admin', '2015-12-03 15:38:12', '2015-12-03 15:38:12');
 
 -- --------------------------------------------------------
 

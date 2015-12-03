@@ -5,6 +5,8 @@ $(document).ready(function()
  {
 
     get_states();
+
+    remove_select_options("#stateid","Select a State");
     remove_select_options("#cityid","Select a City");
     remove_select_options("#townshipid","Select a Township");
     remove_select_options("#neighborhoodid","Select a Neighborhood");
@@ -14,18 +16,23 @@ $(document).ready(function()
   {
 
     get_cities();
+    remove_select_options("#cityid","Select a City");
+    remove_select_options("#townshipid","Select a Township");
+    remove_select_options("#neighborhoodid","Select a Neighborhood");
 
   });
   $("#cityid").unbind('change').change(function()
   {
 
    get_townships();
+   remove_select_options("#townshipid","Select a Township");
+   remove_select_options("#neighborhoodid","Select a Neighborhood");
 
   });
   $("#townshipid").unbind('change').change(function(e)
   {
+  get_neighborhoods();
 
-   get_neighborhoods();
   });
 });
 
@@ -142,7 +149,7 @@ $(document).ready(function()
     .remove()
     .end()
     .append('<option value="" selected>'+select_text+'</option>')
-    .val('whatever')
+    .val('')
 ;
 
 
