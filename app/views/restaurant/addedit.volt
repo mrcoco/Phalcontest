@@ -40,7 +40,7 @@ valid_email:'{{"restaurant.email.valid"|t}}'
 			{{'Name'|t}}<span class="required" aria-required="true">* </span>
 			</label>
 			<div class="col-md-4">
-			<input id="name" name="name" class="form-control" type="text">		<!-- LOAD CONTROL ERROR LABEL-->
+      {{ text_field("name", "type" : "text","class":"form-control") }}
 			</div>
 			</div>
 
@@ -49,7 +49,7 @@ valid_email:'{{"restaurant.email.valid"|t}}'
 				{{'Phone'|t}}<span class="required" aria-required="true">* </span>
 			</label>
 			<div class="col-md-4">
-			<input id="phone" name="phone" class="form-control" type="text">		<!-- LOAD CONTROL ERROR LABEL-->
+			{{ text_field("phone", "type" : "text","class":"form-control") }}
 			</div>
 			</div>
 
@@ -59,8 +59,9 @@ valid_email:'{{"restaurant.email.valid"|t}}'
 				{{' '}}{{'Address'|t}} </a><span class="required" aria-required="true">* </span>
 			</label>
 			<div class="col-md-4">
-			<textarea id="rest_address" name="rest_address" class="form-control" readonly></textarea>
-      <input id="addressid" name="addressid" class= "form-control" type="text" style="display:none;">
+			{{ text_area("rest_address", "class":"form-control","readonly":"") }}
+			<label id="erroraddress" name ="erroraddress"></label>
+			{{text_field("addressid", "type" : "text","class":"form-control","style":"display:none;") }}
 		  </div>
 		  </div>
 
@@ -69,14 +70,14 @@ valid_email:'{{"restaurant.email.valid"|t}}'
 				{{'Email'|t}}<span class="required" aria-required="true">* </span>
 			</label>
 			<div class="col-md-4">
-			<input id="email" name="email" class="form-control" type="text">		<!-- LOAD CONTROL ERROR LABEL-->
+			{{ text_field("email", "type" : "text","class":"form-control") }}
 			</div>
 			</div>
 
 			<div class="form-group">
 			<label name="website" id="lblwebsite" class="control-label col-md-3 formlabel">{{'Website'|t}}</label>
 			<div class="col-md-4">
-			<input id="website" name="website" class="form-control" type="text">		<!-- LOAD CONTROL ERROR LABEL-->
+			{{ text_field("website", "type" : "text","class":"form-control") }}
 			</div>
 			</div>
 		</div>

@@ -47,7 +47,7 @@ class RestaurantController extends ControllerBase
       {
       $this->tag->setDefault("name", $entity_object->getName());
       $this->tag->setDefault("phone", $entity_object->getPhone());
-      //$this->tag->setDefault("address", $entity_object->getAddressid());
+      $this->tag->setDefault("addressid", $entity_object->getAddressid());
       $this->tag->setDefault("email", $entity_object->getEmail());
       $this->tag->setDefault("website", $entity_object->getWebsite());
       }
@@ -67,6 +67,8 @@ class RestaurantController extends ControllerBase
       $entity->setAddressid($addressid);
       $entity->setWebsite($this->request->getPost("website"));
     }
+
+
 
   public function set_grid_parameters($routelist)
   {
@@ -203,25 +205,55 @@ class RestaurantController extends ControllerBase
   }
 
 
+  public function set_post_values_edit($entity,$address)
+  {
+    $entity->setName($this->request->getPost("name"));
+    $entity->setPhone($this->request->getPost("phone"));
+    $entity->setEmail($this->request->getPost("email"));
 
+    $address_description = $this->request->getPost("rest_address");
+    $address->setDescription($address_description);
+    $address->save();
+
+    $entity->setAddressid($address->getId());
+    $entity->setWebsite($this->request->getPost("website"));
+  }
   /**
   * @Route("/edit/{id}", methods={"GET"}, name="restaurantedit")
   */
   public function editAction($id)
   {
-    $entity =$this->set_entity(
-    $id
-    ,$this->crud_params['entityname']
-    ,$this->crud_params['not_found_message']
-    ,$this->crud_params['controller']
-    ,$this->crud_params['action_list']
-    ,'edit');
-
+    $entity = Restaurant::findFirstByid($id);
+    $address_entity = Address::findFirstByid($entity->getAddressid());
     $this->get_assets();
-    $this->set_tags('edit',$entity);
     $this->view->id = $entity->id;
+    $this->view->title = $this->crud_params['edit_title'];
+    $this->view->routeform = $this->crud_params['save_route'].$id;
+    $addressobj = new AddressController();
+    $this->view->countries_data = $addressobj->get_country_data();
+    $this->tag->setDefault("name", $entity->getName());
+    $this->tag->setDefault("rest_address", $address_entity->getDescription());
+    $address_data = '{
+      "countryid":"'.$address_entity->getCountryid().'"'.
+      ',"cityid":"'.$address_entity->getCityid().'"'.
+      ',"stateid":"'.$address_entity->getStateid().'"'.
+      ',"townshipid":"'.$address_entity->getTownshipid().'"'.
+      ',"neighborhoodid":"'.$address_entity->getNeighborhoodid().'"'.
+      ',"address":"'.$address_entity->getAddress().'"'.
+    '}';
+    $this->tag->setDefault("addressid",$address_data);
+    //echo $this->tag->textField("name");
 
-    $this->set_form_routes(
+    $this->tag->setDefault("phone", $entity->getPhone());
+    //$this->tag->setDefault("addressid", $entity->getAddressid());
+    $this->tag->setDefault("email", $entity->getEmail());
+
+    $this->tag->setDefault("website", $entity->getWebsite());
+
+    $this->view->pick('restaurant/addedit');
+
+
+  /*  $this->set_form_routes(
     $this->crud_params['save_route'].$id
     ,$this->crud_params['route_list']
     ,$this->crud_params['edit_title']
@@ -231,7 +263,7 @@ class RestaurantController extends ControllerBase
     ,$this->crud_params['save_button_name']
     ,$this->crud_params['cancel_button_name']
     ,''
-    );
+  );*/
   }
 
   /**
@@ -304,10 +336,12 @@ class RestaurantController extends ControllerBase
     $this->set_post_values($entity);
     $this->audit_fields($entity,'create');
 
-    $this->execute_entity_action($entity
+     $this->execute_entity_action($entity
     ,$this->crud_params['controller']
     ,'new',array($entity),$this->crud_params['action_list']
     ,'create');
+
+
   }
 
   /**
@@ -323,7 +357,9 @@ class RestaurantController extends ControllerBase
     ,$this->crud_params['action_list']
     ,'update');
 
-    $this->set_post_values($entity);
+    $address = Address::findFirstByid($entity->getAddressid());
+    $this->set_post_values_edit($entity,$address);
+    //$this->set_post_values($entity);
     $this->audit_fields($entity,'edit');
 
     $this->execute_entity_action(
@@ -361,6 +397,8 @@ class RestaurantController extends ControllerBase
     ,$this->crud_params['delete_button_name']
     );
     $this->set_tags('delete',$entity,'Y');
+    $address = Address::findFirstByid($entity->getAddressid());
+    $this->tag->setDefault("rest_address", $address->getDescription());
   }
 
   /**

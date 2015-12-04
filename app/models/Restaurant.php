@@ -336,9 +336,6 @@ class Restaurant extends \Phalcon\Mvc\Model
            $this->validate(new PresenceOf(array('field'=>'phone')));
            $this->validate(new PresenceOf(array('field'=>'email')));
            $this->validate(new PresenceOf(array('field'=>'addressid')));
-           $this->validate(new Uniqueness(array('field' => array('name'))));
-           $this->validate(new Uniqueness(array('field' => array('phone'))));
-           $this->validate(new Uniqueness(array('field' => array('email'))));
            if ($this->validationHasFailed() == true) {return false;}
            return true;
        }
@@ -361,30 +358,6 @@ class Restaurant extends \Phalcon\Mvc\Model
                        }
                        $messages[] =$txtmessage;
                        break;
-                   case 'Unique':
-
-                       if (is_array($message->getField()))
-                       {
-                           $field =implode("-", $message->getField());
-                       }
-                       else {
-                           $field =$message->getField();
-                       }
-
-                       switch ($field) {
-                           case 'name':
-                               $txtmessage =$this->di->get('translate')->_('restaurant.name.unique');
-                               break;
-                            case 'phone':
-                              $txtmessage =$this->di->get('translate')->_('restaurant.phone.unique');
-                              break;
-                            case 'email':
-                              $txtmessage =$this->di->get('translate')->_('restaurant.unique.unique');
-                              break;
-                       }
-                       $messages[] =$txtmessage;
-                       break;
-
                }
            }
 
@@ -454,5 +427,6 @@ class Restaurant extends \Phalcon\Mvc\Model
             'modifydate' => 'modifydate'
         );
     }
+
 
 }

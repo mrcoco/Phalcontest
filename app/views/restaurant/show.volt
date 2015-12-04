@@ -1,57 +1,86 @@
 {% extends "layouts/masterpage.volt" %}
 {% block javascripts %}
 {{super() }}
+{{assets.outputJs('validatejs')}}
 {{assets.outputJs('validate_forms_js')}}
 {{assets.outputJs('validatejs')}}
 {% endblock %}
 {% block content %}
+
 <div class="row">
 <div class="col-md-12">
-<!-- BEGIN PORTLET-->
 <div class="portlet box blue">
-	<div class="portlet-title">
-	<div class="caption">
-	{{title|t}}
-	</div>
-	</div>
-	<div class="portlet-body form">
-	<!-- BEGIN FORM-->
-	{{ form(routeform, "method":"post","id":"appform","role":"form","class":"form-horizontal") }}
-	<div class="form-body">
-	<!-- FORM ERROR MESSAGES-->
-	{% set errorvar = content() %}
-	{% if errorvar is not empty %}
-	<div class="alert alert-danger">
-	<button data-close="alert" class="close"></button>
-	{{ content() }}
-	</div>
-	{% endif %}
-		<!-- LOAD FORM CONTROLS-->
-	{% for index,item in formcolumns %}
-		<div class="form-group">
-		<label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
-		{{item['label']|t}}
-		</label>
-		<div class="col-md-4">
-		{{ form.render(item['name'],["class":"form-control",'disabled':'""']) }}
+		<div class="portlet-title">
+		<div class="caption">
+		{{title|t}}
 		</div>
 		</div>
-	{% endfor %}
-	</div>
-	<!-- FORM ACTION BUTTONS-->
-	<div class="form-actions">
-	<div class="row">
-	<div class="col-md-offset-2 col-md-4">
-    <button class="btn red">{{delete_button_name|t}}</button>
-		{{ link_to(routelist,cancel_button_name|t,"class":"btn grey-cascade") }}
-	</div>
-	</div>
-	</div>
-	</form>
-	<!-- END FORM-->
-	</div>
+		<div class="portlet-body form">
+		{{ form(routeform, "method":"post","id":"appform","role":"form","class":"form-horizontal") }}
+		<div class="form-body">
+			<!-- FORM ERROR MESSAGES-->
+			{% set errorvar = content() %}
+			{% if errorvar is not empty %}
+			<div class="alert alert-danger">
+			<button data-close="alert" class="close"></button>
+			{{ content() }}
+			</div>
+			{% endif %}
+			<div class="form-group">
+			<label name="lblname" id="lblname" class="control-label col-md-3 formlabel">
+			{{'Name'|t}}
+			</label>
+			<div class="col-md-4">
+      {{ text_field("name", "type" : "text","class":"form-control","readonly":"") }}
+			</div>
+			</div>
+
+			<div class="form-group">
+			<label name="lblphone" id="lblphone" class="control-label col-md-3 formlabel">
+				{{'Phone'|t}}
+			</label>
+			<div class="col-md-4">
+			{{ text_field("phone", "type" : "text","class":"form-control","readonly":"") }}
+			</div>
+			</div>
+
+			<div class="form-group">
+			<label name="lbladdress" id="lbladdress" class="control-label col-md-3 formlabel">
+				{{' '}}{{'Address'|t}}
+			</label>
+			<div class="col-md-4">
+			{{ text_area("rest_address", "class":"form-control","readonly":"") }}
+
+		  </div>
+		  </div>
+
+		  <div class="form-group">
+			<label name="email" id="lblemail" class="control-label col-md-3 formlabel">
+				{{'Email'|t}}
+			</label>
+			<div class="col-md-4">
+			{{ text_field("email", "type" : "text","class":"form-control","readonly":"") }}
+			</div>
+			</div>
+
+			<div class="form-group">
+			<label name="website" id="lblwebsite" class="control-label col-md-3 formlabel">{{'Website'|t}}</label>
+			<div class="col-md-4">
+			{{ text_field("website", "type" : "text","class":"form-control","readonly":"") }}
+			</div>
+			</div>
+		</div>
+
+			<div class="form-actions">
+			<div class="row">
+			<div class="col-md-offset-2 col-md-4">
+			<input id="save_restaurant_button"class="btn red" value="{{'Delete'|t}}" type="submit">
+			<a href="/Phalcontest/restaurant/list" class="btn grey-cascade">{{'Cancel'|t}}</a>	</div>
+			</div>
+			</div>
+		</form>
 </div>
-<!-- END PORTLET-->
+</div>
 </div>
 </div>
 {% endblock %}

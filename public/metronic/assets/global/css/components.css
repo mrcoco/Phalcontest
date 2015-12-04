@@ -3599,7 +3599,7 @@ label {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-input[type='text'].has-error ,input[type='password'].has-error {
+input[type='text'].has-error ,textarea.has-error,input[type='password'].has-error {
   border-color: #ebccd1 ;
   -webkit-box-shadow: none;
   box-shadow: none;

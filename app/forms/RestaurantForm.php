@@ -26,9 +26,12 @@ class RestaurantForm extends Form
   $phone ->setLabel('Phone');
   $this->add($phone);
 
-  $address = new TextArea("address");
+  $address = new TextArea("rest_address");
   $address ->setLabel('Address');
   $this->add($address);
+
+  $addressid= new Hidden('addressid');
+  $this->add($addressid);
 
   $email = new Text("email");
   $email->setLabel('email');

@@ -1,10 +1,21 @@
 $(document).ready(function()
 {
+
   $("#save_restaurant_button").click(function()
   {
+
+
     // Setup form validation on the #register-form element
     $("#appform").validate({
+      ignore: [],
       errorClass: "has-error",
+      errorPlacement: function(error, element)
+
+      {
+
+        if (element.attr("name") == "addressid" )
+        {error.appendTo('#erroraddress');$('#rest_address').addClass('has-error')}
+        else{error.insertAfter(element);}},
         // Specify the validation rules
         rules: {
           name:{
@@ -18,7 +29,7 @@ $(document).ready(function()
                 email:true
 
             },
-            rest_address:{
+            addressid:{
                 required:true
             }
         },
@@ -37,7 +48,7 @@ $(document).ready(function()
                 email:validatemessages.valid_email
 
             },
-             rest_address:{
+             addressid:{
                 required:validatemessages.address
 
             }
@@ -137,34 +148,12 @@ $(document).ready(function()
                +','+$('#address').val();
                ;
                $('#addressid').val(address_data);
+
                $('#rest_address').val(description);
                $('#responsive').modal('hide');
+               $("#erroraddress").hide();
+               $('#rest_address').removeClass('has-error');
 
-               //alert(description);
-
-            /* var urlpath =base_url+"/restaurant/create_address/"+address_data;
-
-              $.ajax
-              ({
-               dataType:'json',
-               type: "POST",
-               url: urlpath,
-               data:{"address_data":address_data},
-               cache: false,
-               success: function(data)
-               {
-
-                      $('#addressid').val(data.addressid);
-                      $('#rest_address').val(data.description);
-                      $('#responsive').modal('hide');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-               alert('error:'+jqXHR.status+' '+errorThrown +''+jqXHR.responseText);
-               }
-
-               });*/
-
-              //form.submit();
           }
 
       });
