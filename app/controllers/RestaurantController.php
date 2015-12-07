@@ -50,6 +50,7 @@ class RestaurantController extends ControllerBase
       $this->tag->setDefault("addressid", $entity_object->getAddressid());
       $this->tag->setDefault("email", $entity_object->getEmail());
       $this->tag->setDefault("website", $entity_object->getWebsite());
+      $this->tag->setDefault("logo", $entity_object->getLogoPath());
       }
     }
 
@@ -66,6 +67,7 @@ class RestaurantController extends ControllerBase
       }
       $entity->setAddressid($addressid);
       $entity->setWebsite($this->request->getPost("website"));
+      $entity->setLogoPath($this->request->getPost("logo"));
     }
 
 
@@ -201,8 +203,12 @@ class RestaurantController extends ControllerBase
     ,$this->crud_params['cancel_button_name']
     ,'');
     $addressobj = new AddressController();
+    $this->view->images = $this->get_logo_images();
     $this->view->countries_data = $addressobj->get_country_data();
+    $this->view->logo_path ='' ;
+    $this->view->mode ='new';
   }
+
 
 
   public function set_post_values_edit($entity,$address)
@@ -217,6 +223,7 @@ class RestaurantController extends ControllerBase
 
     $entity->setAddressid($address->getId());
     $entity->setWebsite($this->request->getPost("website"));
+    $entity->setLogoPath($this->request->getPost("logo"));
   }
   /**
   * @Route("/edit/{id}", methods={"GET"}, name="restaurantedit")
@@ -231,6 +238,9 @@ class RestaurantController extends ControllerBase
     $this->view->routeform = $this->crud_params['save_route'].$id;
     $addressobj = new AddressController();
     $this->view->countries_data = $addressobj->get_country_data();
+    $this->view->logo_path =$entity->logo_path ;
+    $this->view->mode ='edit';
+
     $this->tag->setDefault("name", $entity->getName());
     $this->tag->setDefault("rest_address", $address_entity->getDescription());
     $address_data = '{
@@ -242,28 +252,17 @@ class RestaurantController extends ControllerBase
       ',"address":"'.$address_entity->getAddress().'"'.
     '}';
     $this->tag->setDefault("addressid",$address_data);
-    //echo $this->tag->textField("name");
 
     $this->tag->setDefault("phone", $entity->getPhone());
-    //$this->tag->setDefault("addressid", $entity->getAddressid());
+
     $this->tag->setDefault("email", $entity->getEmail());
 
     $this->tag->setDefault("website", $entity->getWebsite());
 
+    $this->tag->setDefault("logo", $entity->getLogoPath());
+
     $this->view->pick('restaurant/addedit');
-
-
-  /*  $this->set_form_routes(
-    $this->crud_params['save_route'].$id
-    ,$this->crud_params['route_list']
-    ,$this->crud_params['edit_title']
-    ,$this->crud_params['add_edit_view']
-    ,'edit',$entity,$this->crud_params['form_name']
-    ,$this->crud_params['form_columns']
-    ,$this->crud_params['save_button_name']
-    ,$this->crud_params['cancel_button_name']
-    ,''
-  );*/
+    $this->view->images = $this->get_logo_images();
   }
 
   /**
@@ -399,6 +398,8 @@ class RestaurantController extends ControllerBase
     $this->set_tags('delete',$entity,'Y');
     $address = Address::findFirstByid($entity->getAddressid());
     $this->tag->setDefault("rest_address", $address->getDescription());
+    $this->view->logo_path =$entity->logo_path ;
+    $this->view->mode ='show';
   }
 
   /**
@@ -421,5 +422,14 @@ class RestaurantController extends ControllerBase
     ,$this->crud_params['action_list']
     ,'delete');
   }
+
+  public function get_logo_images()
+     {
+       $files = File::find(array(
+        "conditions" => "type like '%image%'"
+    ));
+       return $files->toArray();
+
+     }
 
 }

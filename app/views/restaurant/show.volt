@@ -45,6 +45,20 @@
 			</div>
 
 			<div class="form-group">
+			<label name="lbllogo" id="lblloko" class="control-label col-md-3 formlabel">
+			{{'Logo'|t}}
+			</label>
+			<div class="col-md-2">
+			{{ text_field("logo" ,"type" : "text","class":"form-control","readonly":"") }}
+			</div>
+			<div id ="logo_image" class="col-md-2">
+				{% if mode =='show' and logo_path !="" %}
+				<img id="theImg" src="{{url('files/images/'~logo_path)}}" width="50px" heigh="50px"/>
+				{% endif %}
+			</div>
+		</div>
+
+			<div class="form-group">
 			<label name="lbladdress" id="lbladdress" class="control-label col-md-3 formlabel">
 				{{' '}}{{'Address'|t}}
 			</label>

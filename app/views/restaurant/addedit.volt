@@ -1,7 +1,6 @@
 {% extends "layouts/masterpage.volt" %}
 {% block javascripts %}
 {{super() }}
-{{assets.outputJs('validatejs')}}
 {{assets.outputJs('validate_forms_js')}}
 {{assets.outputJs('validatejs')}}
 <script>
@@ -54,6 +53,21 @@ valid_email:'{{"restaurant.email.valid"|t}}'
 			</div>
 
 			<div class="form-group">
+			<label name="lbllogo" id="lblloko" class="control-label col-md-3 formlabel">
+				<a href="#ModalEditor" id="logourl"  data-toggle="modal" ><i class="fa fa-file-image-o"></i>
+					{{' '}}{{'Logo'|t}} </a>
+			</label>
+			<div class="col-md-2">
+			{{ text_field("logo" ,"type" : "text","class":"form-control") }}
+			</div>
+			<div id ="logo_image" class="col-md-2">
+				{% if mode =='edit' and logo_path !="" %}
+        <img id="theImg" src="{{url('files/images/'~logo_path)}}" width="50px" heigh="50px"/>
+				{% endif %}
+			</div>
+		</div>
+
+			<div class="form-group">
 			<label name="lbladdress" id="lbladdress" class="control-label col-md-3 formlabel">
 			<a href="#responsive" id="pencil"  data-toggle="modal" ><i class="fa fa-location-arrow"></i>
 				{{' '}}{{'Address'|t}} </a><span class="required" aria-required="true">* </span>
@@ -91,6 +105,9 @@ valid_email:'{{"restaurant.email.valid"|t}}'
 			</div>
 		</form>
 </div>
+
+
+
 </div>
 </div>
 </div>
@@ -181,4 +198,34 @@ valid_email:'{{"restaurant.email.valid"|t}}'
  </div>
  </div>
  </div>
+
+ <!-- Image Modal -->
+ <div id="ModalEditor" class="modal fade"  tabindex="-1" data-width="760" >
+  <div class="modal-body">
+	<div class="col-md-12">
+	<div class="portlet box blue" >
+		<div class="portlet-title">
+		<div class="caption">{{'Images'|t}}</div>
+		</div>
+		<div class="portlet-body form" >
+		<div class="col-md-12" style="background-color:white;">
+		{% for index,item in images %}
+		<div class="col-md-1" style="padding-top:15px;">
+	  <img  class="modal_hover" id ="{{item['name']}}" src="{{url('files/images/'~item['name'])}}"  height="100" width="100" onclick="selectImage(this.id);">
+		</div>
+		{% endfor %}
+	  </div>
+		<br><br>
+		<div class="col-md-12" style="background-color:white; padding-left:30px;padding-top:30px;padding-bottom:30px;">
+		<button type="button" data-dismiss="modal" class="btn btn-default">{{'Close'|t}}</button>
+		</div>
+		</div>
+	 </div>
+ </div>
+	</div>
+
+ </div>
+</div>
+</div>
+</div>
 {% endblock %}
