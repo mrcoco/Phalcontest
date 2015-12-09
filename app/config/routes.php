@@ -55,5 +55,6 @@ $router->addResource('ArticleComment', '/article_comment');
 $router->addResource('Files', '/files');
 $router->addResource('Restaurant', '/restaurant');
 $router->addResource('FrontEnd', '/front_end');
-
+$router->addResource('Menu', '/menu');
+$router->addResource('Dish', '/dish');
 return $router;

@@ -1,5 +1,7 @@
 <?php
-
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
+use Phalcon\Mvc\Model\Validator\Email as Email;
 class Menu extends \Phalcon\Mvc\Model
 {
 
@@ -295,5 +297,41 @@ class Menu extends \Phalcon\Mvc\Model
             'modifydate' => 'modifydate'
         );
     }
+
+    /**
+       * Validations and business logic
+       *
+       * @return boolean
+       */
+       public function validation()
+       {
+           $this->validate(new PresenceOf(array('field'=>'restaurantid')));
+           $this->validate(new PresenceOf(array('field'=>'name')));
+           if ($this->validationHasFailed() == true) {return false;}
+           return true;
+       }
+       public function getMessages()
+       {
+           $messages = array();
+           $txtmessage ="";
+           foreach (parent::getMessages() as $message) {
+
+               switch ($message->getType())
+               {
+
+                   case 'PresenceOf':
+
+                       switch ($message->getField()) {
+                           case 'restaurantid':$txtmessage = $this->di->get('translate')->_('menu.restaurant.required');break;
+                           case 'name':$txtmessage = $this->di->get('translate')->_('menu.name.required');break;
+                       }
+                       $messages[] =$txtmessage;
+                       break;
+               }
+           }
+
+           return $messages;
+       }
+
 
 }

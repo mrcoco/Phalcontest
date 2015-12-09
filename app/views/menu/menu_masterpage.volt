@@ -26,6 +26,7 @@
 {% set articles ='N' %}
 {% set article_comments ='N' %}
 {% set restaurant ='N' %}
+{% set menu ='N' %}
 {# END MENU OPTIONS SECURITY#}
 {% for item in actions %}
 {#Chek menu options#}
@@ -85,6 +86,9 @@
 {% endif %}
 {% if item.action =='Manage Restaurant'%}
     {% set restaurant ='Y'%}
+{% endif %}
+{% if item.action =='Manage Menu'%}
+    {% set menu ='Y'%}
 {% endif %}
 {% endfor %}
 <ul class="page-sidebar-menu page-sidebar-menu-closed" data-slide-speed="200" data-auto-scroll="true" data-keep-expanded="false">
@@ -331,9 +335,17 @@
               <p align="left"><i class="fa fa-cutlery" ></i>{{'Restaurants'|t}}</p>
           </a>
       </li>
+      {% if  menu =='Y'%}
+      <li class="{% if 'menu' in router.getRewriteUri()%}active{% endif %}">
+          <a href="{{ url("menu/list") }}" >
+              <p align="left"><i class="fa fa-list-alt" ></i>{{'Menu'|t}}</p>
+          </a>
+      </li>
+      {% endif %}
   </ul>
   </li>
     {% endif %}
+
 </ul>
 
 

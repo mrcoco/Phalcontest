@@ -5,6 +5,7 @@ use Phalcon\Validation;
 use RestaurantForm as RestaurantForm;
 use AddressController as AddressController;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
+use \Phalcon\Mvc\Model;
 
 /**
  * @RoutePrefix("/restaurant")
@@ -242,7 +243,11 @@ class RestaurantController extends ControllerBase
     $this->view->mode ='edit';
 
     $this->tag->setDefault("name", $entity->getName());
+
     $this->tag->setDefault("rest_address", $address_entity->getDescription());
+
+    $this->view->pick('restaurant/addedit');
+
     $address_data = '{
       "countryid":"'.$address_entity->getCountryid().'"'.
       ',"cityid":"'.$address_entity->getCityid().'"'.
@@ -261,7 +266,7 @@ class RestaurantController extends ControllerBase
 
     $this->tag->setDefault("logo", $entity->getLogoPath());
 
-    $this->view->pick('restaurant/addedit');
+
     $this->view->images = $this->get_logo_images();
   }
 

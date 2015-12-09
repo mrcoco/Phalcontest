@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-12-2015 a las 15:36:17
+-- Tiempo de generación: 09-12-2015 a las 15:29:01
 -- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `action` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=74 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=78 ;
 
 --
 -- Volcado de datos para la tabla `action`
@@ -123,7 +123,11 @@ INSERT INTO `action` (`id`, `action`, `description`, `createuser`, `modifyuser`,
 (70, 'Edit Article Comment', '', 'admin', 'admin', '2015-10-29 14:07:40', '2015-10-29 14:07:40'),
 (71, 'Delete Article Comment', '', 'admin', 'admin', '2015-10-29 14:08:03', '2015-10-29 14:08:03'),
 (72, 'Delete File', '', 'admin', 'admin', '2015-11-23 09:03:26', '2015-11-23 09:03:26'),
-(73, 'Manage Restaurant', '', 'admin', 'admin', '2015-11-25 11:19:24', '2015-11-25 11:21:11');
+(73, 'Manage Restaurant', '', 'admin', 'admin', '2015-11-25 11:19:24', '2015-11-25 11:21:11'),
+(74, 'Manage Menu', '', 'admin', 'admin', '2015-12-09 10:22:54', '2015-12-09 10:22:54'),
+(75, 'Create Menu', '', 'admin', 'admin', '2015-12-09 10:23:05', '2015-12-09 10:23:05'),
+(76, 'Edit Menu', '', 'admin', 'admin', '2015-12-09 10:23:15', '2015-12-09 10:23:15'),
+(77, 'Delete Menu', '', 'admin', 'admin', '2015-12-09 10:23:25', '2015-12-09 10:23:25');
 
 -- --------------------------------------------------------
 
@@ -225,7 +229,11 @@ INSERT INTO `action_role` (`actionid`, `roleid`, `createuser`, `modifyuser`, `cr
 (70, 1, 'admin', 'admin', '2015-10-29 14:08:43', '2015-10-29 14:08:43'),
 (71, 1, 'admin', 'admin', '2015-10-29 14:08:55', '2015-10-29 14:08:55'),
 (72, 1, 'admin', 'admin', '2015-11-23 09:03:53', '2015-11-23 09:03:53'),
-(73, 1, 'admin', 'admin', '2015-11-25 11:19:43', '2015-11-25 11:19:43');
+(73, 1, 'admin', 'admin', '2015-11-25 11:19:43', '2015-11-25 11:19:43'),
+(74, 1, 'admin', 'admin', '2015-12-09 10:23:45', '2015-12-09 10:23:45'),
+(75, 1, 'admin', 'admin', '2015-12-09 10:23:57', '2015-12-09 10:23:57'),
+(76, 1, 'admin', 'admin', '2015-12-09 10:24:08', '2015-12-09 10:24:08'),
+(77, 1, 'admin', 'admin', '2015-12-09 10:24:18', '2015-12-09 10:24:18');
 
 -- --------------------------------------------------------
 
@@ -240,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `address` (
   `cityid` int(11) NOT NULL,
   `townshipid` int(11) DEFAULT NULL,
   `neighborhoodid` int(11) NOT NULL,
-  `description` varchar(100) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
   `address` varchar(400) DEFAULT NULL,
   `createuser` varchar(45) NOT NULL,
   `modifyuser` varchar(45) NOT NULL,
@@ -252,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `address` (
   KEY `fk_address_township1_idx` (`townshipid`),
   KEY `fk_address_neighborhood1_idx` (`neighborhoodid`),
   KEY `fk_address_state1_idx` (`stateid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
 
 --
 -- Volcado de datos para la tabla `address`
@@ -282,7 +290,9 @@ INSERT INTO `address` (`id`, `countryid`, `stateid`, `cityid`, `townshipid`, `ne
 (22, 173, 1, 1, 1, 1, 'Panama,Panamá,Panamá,Juan Diaz,Chanis,testtt', 'testtt', 'admin', 'admin', '2015-12-04 11:29:15', '2015-12-04 11:29:15'),
 (23, 173, 1, 1, 1, 1, ' Colombia,Cundinamarca,Norte,Cedritos,test45', 'aereeerre', 'admin', 'admin', '2015-12-04 14:43:53', '2015-12-04 14:43:53'),
 (24, 49, 16, 2, 4, 3, 'Colombia,Cundinamarca,Bogotá,Norte,Cedritos,wewweew', 'wewweew', 'admin', 'admin', '2015-12-04 15:30:56', '2015-12-04 15:30:56'),
-(25, 49, 16, 2, 4, 3, 'Colombia,Cundinamarca,Bogotá,Norte,Cedritos,testtt', 'testtt', 'admin', 'admin', '2015-12-07 13:53:20', '2015-12-07 13:53:20');
+(25, 49, 16, 2, 4, 3, 'Colombia,Cundinamarca,Bogotá,Norte,Cedritos,testtt', 'testtt', 'admin', 'admin', '2015-12-07 13:53:20', '2015-12-07 13:53:20'),
+(26, 173, 4, 3, 10, 4, 'Panama,Coclé,Penonomé,Penonomé,Barrio Random,Entrando por Hotel Dos Continentes, por Banistmo, Harin', 'Entrando por Hotel Dos Continentes, por Banistmo, Harinos Mall, Local #4', 'admin', 'admin', '2015-12-09 11:30:00', '2015-12-09 11:30:00'),
+(27, 173, 1, 1, 1, 1, ' Panama,Coclé,Penonomé,Barrio Random,Entrando por Hotel Dos Continentes, por Banistmo, Harinos Mall, Local #4.', 'saasasa', 'admin', 'admin', '2015-12-09 12:54:44', '2015-12-09 12:54:44');
 
 -- --------------------------------------------------------
 
@@ -389,7 +399,7 @@ CREATE TABLE IF NOT EXISTS `city` (
   PRIMARY KEY (`id`),
   KEY `fk_city_country1_idx` (`countryid`),
   KEY `fk_city_state1_idx` (`stateid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `city`
@@ -397,7 +407,8 @@ CREATE TABLE IF NOT EXISTS `city` (
 
 INSERT INTO `city` (`id`, `stateid`, `countryid`, `city`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
 (1, 1, 173, 'Panamá', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(2, 16, 49, 'Bogotá', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01');
+(2, 16, 49, 'Bogotá', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(3, 4, 173, 'Penonomé', 'admin', 'admin', '2015-12-09 11:01:23', '2015-12-09 11:01:23');
 
 -- --------------------------------------------------------
 
@@ -755,7 +766,7 @@ CREATE TABLE IF NOT EXISTS `file` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `file`
@@ -764,7 +775,7 @@ CREATE TABLE IF NOT EXISTS `file` (
 INSERT INTO `file` (`id`, `name`, `type`, `path`, `size`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
 (1, 'Jellyfish.jpg', 'image/jpeg', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\images\\Jellyfish.jpg', '775702', 'admin', 'admin', '2015-11-13 08:43:55', '2015-11-13 08:43:55'),
 (2, 'Koala.jpg', 'image/jpeg', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\images\\Koala.jpg', '780831', 'admin', 'admin', '2015-11-13 08:51:35', '2015-11-13 08:51:35'),
-(4, 'Requerimientos_APP.docx', 'application/vnd.openxmlformats-officedocument', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\documents\\Requerimientos_APP.docx', '13198', 'admin', 'admin', '2015-11-23 09:57:17', '2015-11-23 09:57:17');
+(3, 'logo.png', 'image/png', 'C:\\xampp\\htdocs\\Phalcontest\\public\\files\\images\\logo.png', '14881', 'admin', 'admin', '2015-12-09 11:31:14', '2015-12-09 11:31:14');
 
 -- --------------------------------------------------------
 
@@ -936,7 +947,7 @@ INSERT INTO `language` (`code`, `language`, `flag`, `createuser`, `modifyuser`, 
 --
 
 CREATE TABLE IF NOT EXISTS `menu` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `restaurantid` int(11) NOT NULL,
   `name` varchar(60) DEFAULT NULL,
   `active` varchar(1) DEFAULT NULL,
@@ -946,7 +957,14 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_menu_restaurant1_idx` (`restaurantid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `menu`
+--
+
+INSERT INTO `menu` (`id`, `restaurantid`, `name`, `active`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(2, 7, 'Menu Principal', 'Y', 'admin', 'admin', '2015-12-09 13:59:10', '2015-12-09 13:59:10');
 
 -- --------------------------------------------------------
 
@@ -966,7 +984,7 @@ CREATE TABLE IF NOT EXISTS `neighborhood` (
   PRIMARY KEY (`id`),
   KEY `fk_neighborhood_township1_idx` (`townshipid`),
   KEY `fk_neighborhood_city1_idx` (`cityid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Volcado de datos para la tabla `neighborhood`
@@ -975,7 +993,8 @@ CREATE TABLE IF NOT EXISTS `neighborhood` (
 INSERT INTO `neighborhood` (`id`, `cityid`, `townshipid`, `neighborhood`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
 (1, 1, 1, 'Chanis', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
 (2, 1, 1, 'test', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(3, 2, 4, 'Cedritos', 'admin', 'admin', '2015-10-05 11:35:22', '2015-10-05 11:35:22');
+(3, 2, 4, 'Cedritos', 'admin', 'admin', '2015-10-05 11:35:22', '2015-10-05 11:35:22'),
+(4, 3, 10, 'Barrio Random', 'admin', 'admin', '2015-12-09 11:26:47', '2015-12-09 11:26:47');
 
 -- --------------------------------------------------------
 
@@ -1010,17 +1029,14 @@ CREATE TABLE IF NOT EXISTS `restaurant` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_restaurant_address1_idx` (`addressid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Volcado de datos para la tabla `restaurant`
 --
 
 INSERT INTO `restaurant` (`id`, `name`, `phone`, `email`, `logo_path`, `website`, `addressid`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
-(2, 'aassasa', '2332323', 'koloinotzente@gmail.com', NULL, 'www.google.com', 22, 'admin', 'admin', '2015-12-04 11:29:16', '2015-12-04 11:29:16'),
-(3, 'rest2323', '23232323', 'andresfranco7777@cableonda.net', NULL, 'www.google.com', 23, 'admin', 'admin', '2015-12-04 14:43:54', '2015-12-04 15:15:30'),
-(4, 'test', '232323', 'koloinotzente@gmail.com', NULL, 'www.google.com', 24, 'admin', 'admin', '2015-12-04 15:30:57', '2015-12-07 13:49:18'),
-(5, 'test33', '23232323', 'koloinotzente@gmail.com', 'Jellyfish.jpg', 'www.google.com', 25, 'admin', 'admin', '2015-12-07 13:53:21', '2015-12-07 13:58:11');
+(7, 'Gambrinus Penonomé', '908-5894', 'pedidos@gambrinus.net', 'logo.png', '', 27, 'admin', 'admin', '2015-12-09 12:54:45', '2015-12-09 13:11:03');
 
 -- --------------------------------------------------------
 
@@ -1168,7 +1184,7 @@ CREATE TABLE IF NOT EXISTS `township` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_township_city1_idx` (`cityid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- Volcado de datos para la tabla `township`
@@ -1180,7 +1196,8 @@ INSERT INTO `township` (`id`, `cityid`, `township`, `createuser`, `modifyuser`, 
 (5, 1, 'San Francisco2', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
 (7, 1, 'Tocumen', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
 (8, 2, 'Usaquen2', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
-(9, 1, 'sasasa', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01');
+(9, 1, 'sasasa', 'admin', 'admin', '2015-09-16 09:38:01', '2015-09-16 09:38:01'),
+(10, 3, 'Penonomé', 'admin', 'admin', '2015-12-09 11:18:43', '2015-12-09 11:18:43');
 
 -- --------------------------------------------------------
 
@@ -1212,7 +1229,7 @@ CREATE TABLE IF NOT EXISTS `translation` (
   `modifydate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_translation_language1_idx` (`languagecode`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=502 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=519 ;
 
 --
 -- Volcado de datos para la tabla `translation`
@@ -1715,7 +1732,24 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 (498, 'es', 'restaurant.email.required', 'Debe ingresar un email', 'admin', 'admin', '2015-12-07 15:26:38', '2015-12-07 15:26:38'),
 (499, 'en', 'restaurant.delete.question', 'Are you sure you want to delete this restaurant ?', 'admin', 'admin', '2015-12-07 15:27:03', '2015-12-07 15:27:03'),
 (500, 'es', 'restaurant.delete.question', '¿ Esta seguro que desea eliminar este restaurante ?', 'admin', 'admin', '2015-12-07 15:27:28', '2015-12-07 15:27:28'),
-(501, 'es', 'Address', 'Dirección', 'admin', 'admin', '2015-12-07 15:31:46', '2015-12-07 15:31:46');
+(501, 'es', 'Address', 'Dirección', 'admin', 'admin', '2015-12-07 15:31:46', '2015-12-07 15:31:46'),
+(502, 'en', 'files.notfound', 'Files not found', 'admin', 'admin', '2015-12-09 09:23:56', '2015-12-09 09:23:56'),
+(503, 'es', 'files.notfound', 'No se encontraron archivos', 'admin', 'admin', '2015-12-09 09:24:14', '2015-12-09 09:24:14'),
+(504, 'es', 'Restaurant', 'Restaurante', 'admin', 'admin', '2015-12-09 14:13:59', '2015-12-09 14:13:59'),
+(505, 'en', 'menu.list.title', 'Menus', 'admin', 'admin', '2015-12-09 14:15:53', '2015-12-09 14:21:23'),
+(506, 'es', 'menu.list.title', 'Menus', 'admin', 'admin', '2015-12-09 14:16:12', '2015-12-09 14:21:47'),
+(507, 'en', 'menu.title.new', 'New Menu', 'admin', 'admin', '2015-12-09 14:16:28', '2015-12-09 14:16:28'),
+(508, 'es', 'menu.title.new', 'Nuevo Menu', 'admin', 'admin', '2015-12-09 14:16:46', '2015-12-09 14:16:46'),
+(509, 'en', 'menu.title.edit', 'Edit Menu', 'admin', 'admin', '2015-12-09 14:17:29', '2015-12-09 14:17:29'),
+(510, 'es', 'menu.title.edit', 'Editar Menu', 'admin', 'admin', '2015-12-09 14:17:47', '2015-12-09 14:17:47'),
+(511, 'en', 'menu.restaurant.required', 'You must select a restaurant', 'admin', 'admin', '2015-12-09 14:18:14', '2015-12-09 14:18:14'),
+(512, 'es', 'menu.restaurant.required', 'Debe seleccionar un restaurante', 'admin', 'admin', '2015-12-09 14:18:32', '2015-12-09 14:18:32'),
+(513, 'en', 'menu.name.required', 'You must enter a name', 'admin', 'admin', '2015-12-09 14:18:55', '2015-12-09 14:18:55'),
+(514, 'es', 'menu.name.required', 'Debe ingresar un nombre', 'admin', 'admin', '2015-12-09 14:19:11', '2015-12-09 14:19:11'),
+(515, 'en', 'menu.delete.question', 'Are you sure you want to delete this menu ?', 'admin', 'admin', '2015-12-09 14:23:46', '2015-12-09 14:23:46'),
+(516, 'es', 'menu.delete.question', '¿ Esta seguro que desea eliminar este menu ?', 'admin', 'admin', '2015-12-09 14:24:41', '2015-12-09 14:24:41'),
+(517, 'en', 'menu.notfound', 'Menu not found', 'admin', 'admin', '2015-12-09 14:25:04', '2015-12-09 14:25:04'),
+(518, 'es', 'menu.notfound', 'No se encontraron menus', 'admin', 'admin', '2015-12-09 14:25:32', '2015-12-09 14:25:32');
 
 -- --------------------------------------------------------
 
