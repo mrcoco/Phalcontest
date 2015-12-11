@@ -1,6 +1,7 @@
 <?php
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Element\Text;
+use Phalcon\Forms\Element\TextArea;
 use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Element\Password;
 use Phalcon\Forms\Element\Submit;
@@ -13,14 +14,9 @@ use Phalcon\Mvc\Model\Query;
 
 class DishForm extends Form
 {
-  public function initialize($entity =null , $options=null,$restaurantid)
+  public function initialize($entity =null , $options=null)
 	{
 
-    $menu = new Select('menuid',Menu::findbyRestaurantid($restaurantid), array(
-    'using' => array('id','name')
-    ,'useEmpty' => TRUE,'emptyText' => 'Seleccione un Menú'));
-    $menu->setLabel('Menu');
-    $this->add($menu);
 
     $category = new Select('categoryid',DishCategory::find(), array(
     'using' => array('id','category')
@@ -31,18 +27,25 @@ class DishForm extends Form
     $gallery= new Select('galleryid',Gallery::find(), array(
     'using' => array('id','name')
     ,'useEmpty' => TRUE,'emptyText' => 'Seleccione una galeria'));
-    $country->setLabel('Galeria');
-    $this->add($country);
+    $gallery->setLabel('Galeria');
+    $this->add($gallery);
 
     $name= new Text('name');
-    $name->setLabel('Ciudad');
+    $name->setLabel('Name');
     $this->add($name);
 
+    $price= new Text('price');
+    $price->setLabel('Price');
+    $this->add($price);
 
 
-    $city = new Text('city');
-    $city->setLabel('Ciudad');
-    $this->add($city);
+    $image_path = new Text('image_path');
+    $image_path->setLabel('Image');
+    $this->add( $image_path);
+
+    $description = new TextArea('description');
+    $description->setLabel('Description');
+    $this->add( $description);
 
   }
 

@@ -1,7 +1,7 @@
 {% extends "layouts/masterpage.volt" %}
 {% block pagetitle %}
 	<h3 class="page-title" align ="left">
-	{{title|t}}
+	{{title|t}}{{' - '}}{{menu_name}}
 	</h3>
 	<hr/>
 {% endblock %}
@@ -34,7 +34,7 @@
 
 	{% if permissions['create']=='Y' %}
 	 <!-- NEW ITEM ICON-->
-	<div align="left">{{ link_to(newroute,'<i class="fa fa-plus"></i>','class':'btn btn-icon-only blue')}}</div>
+	<div align="left">{{ link_to(newroute~'/'~menuid,'<i class="fa fa-plus"></i>','class':'btn btn-icon-only blue')}}</div>
   {% endif %}
 	<br>
 	{% if noitems ==""%}
@@ -80,7 +80,6 @@
 	{% endfor %}
 	<th></th>
 	<th></th>
-	<th></th>
 	</tr>
 	</thead>
 	<!-- END HEADER-->
@@ -90,16 +89,11 @@
 		{% for entity in page.items %}
 			<tr>
 			{% for index,item in headercolumns %}
-				<td width ="40%">{{ entity.readAttribute(item['column_name'])}}</td>
+				<td width ="15%">{{ entity.readAttribute(item['column_name'])}}</td>
 			{% endfor %}
 			<td width ="2%">
 				{% if permissions['edit']=='Y' %}
-				{{link_to('dish/list/'~entity.id,'<i class="fa fa-list"></i>','class':'btn btn-icon-only yellow')}}
-				{% endif %}
-			</td>
-			<td width ="2%">
-				{% if permissions['edit']=='Y' %}
-				{{link_to(editroute~entity.id,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}
+				{{link_to(editroute~entity.id~'/'~menuid,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}
 				{% endif %}
 			</td>
 			<td width ="2%">

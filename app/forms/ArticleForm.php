@@ -5,6 +5,7 @@ use Phalcon\Forms\Element\TextArea;
 use Phalcon\Forms\Element\Select;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Query;
+use Phalcon\Forms\Element\Numeric;
 
 class ArticleForm extends Form
 {
