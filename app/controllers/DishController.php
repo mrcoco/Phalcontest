@@ -178,6 +178,7 @@ class DishController extends ControllerBase
     $this->set_grid_values($query,$grid_values);
     $this->check_all_permissions($this->session->get('userid'));
     $menu_data =$this->get_menudata_by_id($menuid);
+    $this->view->menuid = $menuid;
     $this->view->menu_name =$menu_data['name'];
 
   }
@@ -205,7 +206,8 @@ class DishController extends ControllerBase
     $this->view->form = new DishForm($entity,array("restaurantid"=>$restaurantid));
     $this->view->routelist =$routelist;
     $this->view->routeform =$routeform;
-    $this->view->title =$title.' ('.$menu_name.')';
+    $this->view->title =$title;
+    $this->view->menu_name = $menu_name;
     $this->view->formcolumns =$form_columns;
     $this->view->save_button_name =$save_button_name;
     $this->view->cancel_button_name =$cancel_button_name;
@@ -338,9 +340,9 @@ class DishController extends ControllerBase
   }
 
   /**
-  * @Route("/save/{id}", methods={"POST"}, name="dishsave")
+  * @Route("/save/{id}/{dishid}", methods={"POST"}, name="dishsave")
   */
-  public function saveAction($id)
+  public function saveAction($id,$dishid)
   {
     $entity =$this->set_entity(
     $id

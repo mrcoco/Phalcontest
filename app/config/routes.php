@@ -57,4 +57,6 @@ $router->addResource('Restaurant', '/restaurant');
 $router->addResource('FrontEnd', '/front_end');
 $router->addResource('Menu', '/menu');
 $router->addResource('Dish', '/dish');
+$router->addResource('DishCategory', '/dish_category');
+$router->addResource('DishTranslation', '/dish_translation');
 return $router;

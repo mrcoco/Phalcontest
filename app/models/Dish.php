@@ -421,7 +421,7 @@ class Dish extends \Phalcon\Mvc\Model
 
     public function validation()
     {
-      $this->validate( new PresenceOf(array('field'=> 'menuid')));
+
       $this->validate(new PresenceOf(array('field' => 'categoryid')));
       $this->validate(new PresenceOf(array('field' => 'name')));
       $this->validate(new PresenceOf(array('field' => 'price')));
@@ -436,10 +436,10 @@ class Dish extends \Phalcon\Mvc\Model
      $messages = array();
      $txtmessage ="";
      foreach (parent::getMessages() as $message) {
+
          switch ($message->getType()) {
              case 'PresenceOf':
-                 switch ($message->getField()) {
-                  case 'menuid':$txtmessage = $this->di->get('translate')->_('dish.menu.required');break;
+                 switch ($message->getField()) {  
                   case 'categoryid':$txtmessage = $this->di->get('translate')->_('dish.category.required');break;
                   case 'name':$txtmessage = $this->di->get('translate')->_('dish.name.required');break;
                   case 'price':$txtmessage = $this->di->get('translate')->_('dish.price.required');break;

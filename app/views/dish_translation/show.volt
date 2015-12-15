@@ -11,7 +11,7 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 	<div class="caption">
-	{{title|t}}{{' - '}}{{menu_name}}
+	{{title|t}}
 	</div>
 	</div>
 	<div class="portlet-body form">
@@ -28,21 +28,6 @@
 	{% endif %}
 		<!-- LOAD FORM CONTROLS-->
 	{% for index,item in formcolumns %}
-	{% if item['name']=='image_path' %}
-	<div class="form-group">
-		<label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
-		{{item['label']|t}}
-		</label>
-	<div class="col-md-2">
-	{{ form.render(item['name'],["class":"form-control",'disabled':'""']) }}
-	</div>
-	<div id ="logo_image" class="col-md-2">
-    {% if image_path %}
-		<img id="theImg" src="{{url('files/images/'~image_path)}}" width="50px" heigh="50px"/>
-		{% endif %}
-	</div>
-</div>
-	{% else %}
 		<div class="form-group">
 		<label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
 		{{item['label']|t}}
@@ -51,7 +36,6 @@
 		{{ form.render(item['name'],["class":"form-control",'disabled':'""']) }}
 		</div>
 		</div>
-  {% endif %}
 	{% endfor %}
 	</div>
 	<!-- FORM ACTION BUTTONS-->

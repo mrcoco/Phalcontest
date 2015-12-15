@@ -5,7 +5,10 @@
 {{assets.outputJs('validatejs')}}
 <script>
 var validatemessages = {
-action:'{{"action.required"|t}}'
+categoryid:'{{"dish.category.required"|t}}'
+,name:'{{"dish.name.required"}}'
+,price:'{{"dish.price.required"}}'
+,price_number:'{{"dish.price.number"}}'
 };
 </script>
 {% endblock %}
@@ -16,7 +19,7 @@ action:'{{"action.required"|t}}'
 <div class="portlet box blue">
 	<div class="portlet-title">
 	<div class="caption">
-	{{title|t}}
+	{{title|t}}{{' - '}}{{menu_name}}
 	</div>
 	</div>
 	<div class="portlet-body form">

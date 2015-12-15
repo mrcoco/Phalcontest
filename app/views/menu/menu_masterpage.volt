@@ -341,6 +341,11 @@
               <p align="left"><i class="fa fa-list-alt" ></i>{{'Menu'|t}}</p>
           </a>
       </li>
+      <li class="{% if 'dish_category' in router.getRewriteUri()%}active{% endif %}">
+          <a href="{{ url("dish_category/list") }}" >
+              <p align="left"><i class="fa fa-list-alt" ></i>{{'Category'|t}}</p>
+          </a>
+      </li>
       {% endif %}
   </ul>
   </li>

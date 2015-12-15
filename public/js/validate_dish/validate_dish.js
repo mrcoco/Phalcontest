@@ -1,3 +1,30 @@
+$(function() {
+
+    // Setup form validation on the #register-form element
+    $("#appform").validate({
+         errorClass:'has-error',
+        // Specify the validation rules
+        rules: {
+            categoryid:{required:true},
+            name:{required:true},
+            price:{required:true,number: true}
+
+        },
+        // Specify the validation error messages
+        messages: {
+          categoryid:{required:''},
+          name:{required:validatemessages.name},
+          price:{required:validatemessages.price,number:validatemessages.price_number}
+
+        },
+
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+
+  });
+
 function get_url_path()
 {
   var l = window.location;

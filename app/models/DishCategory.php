@@ -1,5 +1,6 @@
 <?php
-
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 class DishCategory extends \Phalcon\Mvc\Model
 {
 
@@ -234,5 +235,59 @@ class DishCategory extends \Phalcon\Mvc\Model
             'modifydate' => 'modifydate'
         );
     }
+
+    public function validation()
+    {
+      $this->validate(new PresenceOf(array('field' => 'category')));
+      $this->validate(new Uniqueness(array('field' => 'category' )));
+
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getMessages()
+   {
+     $messages = array();
+     $txtmessage ="";
+     foreach (parent::getMessages() as $message) {
+         switch ($message->getType()) {
+             case 'PresenceOf':
+                 switch ($message->getField()) {
+                  case 'category':
+                   $txtmessage = $this->di->get('translate')->_('category.required');
+                  break;
+                 }
+                  $messages[] =$txtmessage;
+                 break;
+
+            case 'Unique':
+
+                 if (is_array($message->getField()))
+                 {
+                   $field =implode("-", $message->getField());
+                 }
+                 else {
+                   $field =$message->getField();
+                 }
+
+                 switch ($field) {
+                  case 'category':
+                     $txtmessage =$this->di->get('translate')->_('category.exist');
+                break;
+              }
+              $messages[] =$txtmessage;
+             break;
+             case 'ConstraintViolation':
+            $txtmessage =$this->di->get('translate')->_('category.constraintviolation');
+             $messages[] =$txtmessage;
+             break;
+         }
+     }
+
+     return $messages;
+ }
 
 }

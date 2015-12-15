@@ -3,6 +3,11 @@
 {{super() }}
 {{assets.outputJs('validate_forms_js')}}
 {{assets.outputJs('validatejs')}}
+<script>
+var validatemessages = {
+category:'{{"category.required"|t}}'
+};
+</script>
 {% endblock %}
 {% block content %}
 <div class="row">
@@ -11,7 +16,7 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 	<div class="caption">
-	{{title|t}}{{' - '}}{{menu_name}}
+	{{title|t}}
 	</div>
 	</div>
 	<div class="portlet-body form">
@@ -23,43 +28,30 @@
 	{% if errorvar is not empty %}
 	<div class="alert alert-danger">
 	<button data-close="alert" class="close"></button>
-	{{ content() }}
+	{{ content()|t}}
 	</div>
 	{% endif %}
 		<!-- LOAD FORM CONTROLS-->
 	{% for index,item in formcolumns %}
-	{% if item['name']=='image_path' %}
-	<div class="form-group">
-		<label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
-		{{item['label']|t}}
-		</label>
-	<div class="col-md-2">
-	{{ form.render(item['name'],["class":"form-control",'disabled':'""']) }}
-	</div>
-	<div id ="logo_image" class="col-md-2">
-    {% if image_path %}
-		<img id="theImg" src="{{url('files/images/'~image_path)}}" width="50px" heigh="50px"/>
-		{% endif %}
-	</div>
-</div>
-	{% else %}
 		<div class="form-group">
 		<label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
 		{{item['label']|t}}
-		</label>
+		{{item['required']}}
+                </label>
 		<div class="col-md-4">
-		{{ form.render(item['name'],["class":"form-control",'disabled':'""']) }}
+		{{ form.render(item['name'],["class":"form-control"]) }}
+		<!-- LOAD CONTROL ERROR LABEL-->
+		{{item['label_error']|t}}
 		</div>
 		</div>
-  {% endif %}
 	{% endfor %}
 	</div>
 	<!-- FORM ACTION BUTTONS-->
 	<div class="form-actions">
 	<div class="row">
 	<div class="col-md-offset-2 col-md-4">
-    <button class="btn red">{{delete_button_name|t}}</button>
-		{{ link_to(routelist,cancel_button_name|t,"class":"btn grey-cascade") }}
+		<input type="submit" class="btn blue-madison" value="{{'Guardar'|t}}"></input>
+		{{ link_to(routelist~'/'~dishid,cancel_button_name|t,"class":"btn grey-cascade") }}
 	</div>
 	</div>
 	</div>
@@ -70,4 +62,5 @@
 <!-- END PORTLET-->
 </div>
 </div>
+
 {% endblock %}
