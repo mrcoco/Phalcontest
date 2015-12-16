@@ -5,7 +5,8 @@
 {{assets.outputJs('validatejs')}}
 <script>
 var validatemessages = {
-category:'{{"category.required"|t}}'
+	name:'{{"dish_translation.name.required"|t}}',
+	description:'{{"dish_translation.description.required"|t}}'
 };
 </script>
 {% endblock %}
