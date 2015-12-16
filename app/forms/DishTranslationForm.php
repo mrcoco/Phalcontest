@@ -5,6 +5,7 @@ use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Element\Password;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Hidden;
+use Phalcon\Forms\Element\TextArea;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\Identical;
@@ -23,11 +24,11 @@ class DishTranslationForm extends Form
      $this->add($language);
 
      $name= new Text('name');
-     $name->setLabel('Name');
+     $name->setLabel('Name translation');
      $this->add($name);
 
-     $description = new Text('description');
-     $description->setLabel('Description');
+     $description = new TextArea('description');
+     $description->setLabel('Description translation');
      $this->add($description);
 
 

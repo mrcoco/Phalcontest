@@ -102,13 +102,13 @@
     {% endfor %}">
     <a href="" style="padding-left:20px;">
     <span class="arrow "></span>
-    <p align="left"><b><i class="fa fa-home"></i>{{'Direcciones'|t}}</b></p>
+    <p align="left"><b><i class="fa fa-home"></i>{{' '}}{{'Direcciones'|t}}</b></p>
     </a>
     <ul class="sub-menu">
       {% if countries =='Y'%}
         <li class="{% if 'country' in router.getRewriteUri() %}active{% endif %}">
           <a href="{{ url("country/list") }}" ><p align="left"><i class="icon-flag" >
-          </i>{{'Paises'|t}}</p>
+          </i>{{' '}}{{'Paises'|t}}</p>
           </a>
         </li>
       {% endif %}
@@ -117,7 +117,7 @@
           <a href="{{ url("state/list") }}" >
             <p align="left">
             <i class="icon-flag" >
-            </i>{{'Estados'|t}}</p>
+            </i>{{' '}}{{'Estados'|t}}</p>
           </a>
         </li>
       {% endif %}
@@ -126,7 +126,7 @@
           <a href="{{ url("city/list") }}" >
             <p align="left">
               <i class="icon-flag" ></i>
-              {{'Ciudades'|t}}</p>
+              {{' '}}{{'Ciudades'|t}}</p>
           </a>
         </li>
       {% endif %}
@@ -134,7 +134,7 @@
         <li class="{% if 'township' in router.getRewriteUri()%}active{% endif %}">
           <a href="{{ url("township/list") }}" >
             <p align="left"><i class="icon-flag" ></i>
-              {{'Sectores'|t}}</p>
+              {{' '}}{{'Sectores'|t}}</p>
             </a>
           </li>
         {% endif %}
@@ -142,7 +142,7 @@
         <li class="{% if 'neighborhood' in router.getRewriteUri()%}active{% endif %}">
           <a href="{{ url("neighborhood/list") }}" >
             <p align="left"><i class="icon-flag"></i>
-               {{'Barrios'|t}}</p>
+               {{' '}}{{'Barrios'|t}}</p>
              </a>
            </li>
           {% endif %}
@@ -150,7 +150,7 @@
         <li class="{% if 'address' in router.getRewriteUri()%}active{% endif %}">
         <a href="{{ url("address/list") }}">
           <p align="left"><i class="icon-flag"></i>
-          {{'Direcciones'|t}}</p>
+          {{' '}}{{'Direcciones'|t}}</p>
         </a>
         </li>
         {% endif %}
@@ -167,27 +167,27 @@
     {% endfor %}">
     <a href="" style="padding-left:20px;">
     <span class="arrow "></span>
-    <p align="left"><b><i class="fa fa-lock"></i>{{'Seguridad'|t}}</b></p>
+    <p align="left"><b><i class="fa fa-lock"></i>{{' '}}{{'Seguridad'|t}}</b></p>
     </a>
     <ul class="sub-menu">
        {% if users =='Y'%}
        <li class="{% if 'user' in router.getRewriteUri() %}active{% endif %}">
          <a href="{{ url("user/list") }}" >
-         <p align="left"><i class="icon-user" ></i>{{'Usuarios'|t}}</p>
+         <p align="left"><i class="icon-user" ></i>{{' '}}{{'Usuarios'|t}}</p>
          </a>
        </li>
        {% endif %}
        {% if roles =='Y'%}
         <li class="{% if 'role' in router.getRewriteUri()%}active{% endif %}">
           <a href="{{ url("role/list") }}" >
-             <p align="left"><i class="icon-shield" ></i>{{'Roles'|t}}<p>
+             <p align="left"><i class="icon-shield" ></i>{{' '}}{{'Roles'|t}}<p>
           </a>
         </li>
        {% endif %}
        {% if action =='Y'%}
         <li class="{% if 'action' in router.getRewriteUri()%}active{% endif %}">
           <a href="{{ url("action/list") }}" >
-            <p align="left"><i class="icon-star" ></i>{{'Acciones'|t}}</p>
+            <p align="left"><i class="icon-star" ></i>{{' '}}{{'Acciones'|t}}</p>
           </a>
         </li>
       {% endif %}
@@ -204,20 +204,20 @@
    {% endfor %}">
    <a href="" style="padding-left:20px;">
    <span class="arrow "></span>
-   <p align="left"><b><i class="fa fa-language"></i>{{'Traducciones'|t}}</b></p>
+   <p align="left"><b><i class="fa fa-language"></i>{{' '}}{{'Traducciones'|t}}</b></p>
    </a>
    <ul class="sub-menu">
       {% if languages =='Y'%}
       <li class="{% if 'language' in router.getRewriteUri() %}active{% endif %}">
         <a href="{{ url("language/list") }}" >
-        <p align="left"><i class="fa fa-flag" ></i>{{'Idiomas'|t}}</p>
+        <p align="left"><i class="fa fa-flag" ></i>{{' '}}{{'Idiomas'|t}}</p>
         </a>
       </li>
       {% endif %}
       {% if translation =='Y'%}
        <li class="{% if 'translate' in router.getRewriteUri()%}active{% endif %}">
          <a href="{{ url("translation/list") }}" >
-            <p align="left"><i class="fa fa-language" ></i>{{'Traducciones'|t}}<p>
+            <p align="left"><i class="fa fa-language" ></i>{{' '}}{{'Traducciones'|t}}<p>
          </a>
        </li>
       {% endif %}
@@ -234,23 +234,23 @@
    {% endfor %}">
    <a href="" style="padding-left:20px;">
    <span class="arrow "></span>
-   <p align="left"><b><i class="fa fa-file-image-o"></i>{{'Manage Media'|t}}</b></p>
+   <p align="left"><b><i class="fa fa-file-image-o"></i>{{' '}}{{'Manage Media'|t}}</b></p>
    </a>
    <ul class="sub-menu">
       {% if files =='Y'%}
       <li class="{% if 'set_files' in router.getRewriteUri() %}active{% endif %}">
         <a href="{{ url("file/set_files") }}" >
-        <p align="left"><i class="fa fa-cloud-upload " ></i> {{'Upload Files'|t}}</p>
+        <p align="left"><i class="fa fa-cloud-upload " ></i>{{' '}} {{'Upload Files'|t}}</p>
         </a>
       </li>
       <li class="{% if ('file/index' in router.getRewriteUri()) or ('file/list' in router.getRewriteUri())  %}active{% endif %}">
           <a href="{{ url("files/list") }}" >
-              <p align="left"><i class="fa fa-file-archive-o  " ></i> {{'Manage Files'|t}}</p>
+              <p align="left"><i class="fa fa-file-archive-o  " ></i>{{' '}} {{'Manage Files'|t}}</p>
           </a>
       </li>
           <li class="{% if 'gallery' in router.getRewriteUri() %}active{% endif %}">
               <a href="{{ url("gallery/list") }}" >
-                  <p align="left"><i class="fa fa-file-archive-o  " ></i> {{'Manage Galleries'|t}}</p>
+                  <p align="left"><i class="fa fa-file-archive-o  " ></i>{{' '}} {{'Manage Galleries'|t}}</p>
               </a>
           </li>
       {% endif %}
@@ -267,18 +267,18 @@
   {% endfor %}">
   <a href="" style="padding-left:20px;">
   <span class="arrow "></span>
-  <p align="left"><b><i class="fa fa-gear"></i>{{'Parámetros del Sistema'|t}}</b></p>
+  <p align="left"><b><i class="fa fa-gear"></i>{{' '}}{{'Parámetros del Sistema'|t}}</b></p>
   </a>
   <ul class="sub-menu">
      {% if  system_parameter =='Y'%}
      <li class="{% if 'systemparameter' in router.getRewriteUri()%}active{% endif %}">
        <a href="{{ url("systemparameter/list") }}" >
-         <p align="left"><i class="fa fa-gear" ></i>{{'Parámetros Generales'|t}}</p>
+         <p align="left"><i class="fa fa-gear" ></i>{{' '}}{{'Parámetros Generales'|t}}</p>
        </a>
      </li>
      <li class="{% if 'fileformat' in router.getRewriteUri()%}active{% endif %}">
        <a href="{{ url("fileformat/list") }}" >
-         <p align="left"><i class="fa fa-file-text-o " ></i>{{'Formatos de Archivos'|t}}</p>
+         <p align="left"><i class="fa fa-file-text-o " ></i>{{' '}}{{'Formatos de Archivos'|t}}</p>
        </a>
      </li>
      {% endif %}
@@ -296,21 +296,20 @@
   {% endfor %}">
   <a href="" style="padding-left:20px;">
       <span class="arrow "></span>
-      <p align="left"><b><i class="fa fa-book"></i>{{'Artículos'|t}}</b></p>
+      <p align="left"><b><i class="fa fa-book"></i>{{' '}}{{'Artículos'|t}}</b></p>
   </a>
   <ul class="sub-menu">
       {% if  articles =='Y'%}
           <li class="{% if '/article/' in router.getRewriteUri()%}active{% endif %}">
               <a href="{{ url("article/list") }}" >
-                  <p align="left"><i class="fa fa-book" ></i>{{'Artículos'|t}}</p>
+                  <p align="left"><i class="fa fa-book" ></i>{{' '}}{{'Artículos'|t}}</p>
               </a>
           </li>
       {% endif %}
-      {{article_comments}}
       {% if  article_comments =='Y'%}
           <li class="{% if '/article_comment' in router.getRewriteUri()%}active{% endif %}">
               <a href="{{ url("article_comment/list") }}" >
-                  <p align="left"><i class="fa fa-comment-o " ></i>{{'Comentarios'|t}}</p>
+                  <p align="left"><i class="fa fa-comment-o " ></i>{{' '}}{{'Comentarios'|t}}</p>
               </a>
           </li>
       {% endif %}
@@ -327,23 +326,23 @@
   {% endfor %}">
   <a href="" style="padding-left:20px;">
       <span class="arrow "></span>
-      <p align="left"><b><i class="fa fa-cutlery"></i>{{'Restaurants'|t}}</b></p>
+      <p align="left"><b><i class="fa fa-cutlery"></i>{{' '}}{{'Restaurants'|t}}</b></p>
   </a>
   <ul class="sub-menu">
       <li class="{% if 'restaurant' in router.getRewriteUri()%}active{% endif %}">
           <a href="{{ url("restaurant/list") }}" >
-              <p align="left"><i class="fa fa-cutlery" ></i>{{'Restaurants'|t}}</p>
+              <p align="left"><i class="fa fa-cutlery" ></i>{{' '}}{{'Restaurants'|t}}</p>
           </a>
       </li>
       {% if  menu =='Y'%}
       <li class="{% if 'menu' in router.getRewriteUri()%}active{% endif %}">
           <a href="{{ url("menu/list") }}" >
-              <p align="left"><i class="fa fa-list-alt" ></i>{{'Menu'|t}}</p>
+              <p align="left"><i class="fa fa-list-alt" ></i>{{' '}}{{'Menu'|t}}</p>
           </a>
       </li>
       <li class="{% if 'dish_category' in router.getRewriteUri()%}active{% endif %}">
           <a href="{{ url("dish_category/list") }}" >
-              <p align="left"><i class="fa fa-list-alt" ></i>{{'Category'|t}}</p>
+              <p align="left"><i class="fa fa-list-alt" ></i>{{' '}}{{'Category'|t}}</p>
           </a>
       </li>
       {% endif %}

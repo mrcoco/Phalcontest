@@ -16,7 +16,7 @@ category:'{{"category.required"|t}}'
 <div class="portlet box blue">
 	<div class="portlet-title">
 	<div class="caption">
-	{{title|t}}
+	{{title|t}}{{' - '}}{{dish_name}}
 	</div>
 	</div>
 	<div class="portlet-body form">

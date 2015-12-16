@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-12-2015 a las 21:39:49
+-- Tiempo de generación: 16-12-2015 a las 21:25:04
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -759,8 +759,7 @@ CREATE TABLE `dish_category` (
 --
 
 INSERT INTO `dish_category` (`id`, `category`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
-(2, 'Entrance', 'admin', 'admin', '2015-12-15 15:31:38', '2015-12-15 15:31:38'),
-(4, 'test', 'admin', 'admin', '2015-12-15 15:34:13', '2015-12-15 15:34:13');
+(2, 'Entrance', 'admin', 'admin', '2015-12-15 15:31:38', '2015-12-16 19:01:29');
 
 -- --------------------------------------------------------
 
@@ -779,6 +778,13 @@ CREATE TABLE `dish_translation` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `dish_translation`
+--
+
+INSERT INTO `dish_translation` (`id`, `dishid`, `languagecode`, `name`, `description`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(2, 2, 'en', 'Gulash Soup', 'Tomato and meat soup', 'admin', 'admin', '2015-12-16 20:03:26', '2015-12-16 20:03:26');
 
 -- --------------------------------------------------------
 
@@ -1790,7 +1796,28 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 (548, 'es', 'dish.exist', 'Ya existe un plato con ese nombre', 'admin', 'admin', '2015-12-15 18:37:31', '2015-12-15 18:37:31'),
 (549, 'es', 'Gallery', 'Galeria', 'admin', 'admin', '2015-12-15 18:45:43', '2015-12-15 18:45:43'),
 (550, 'en', 'dish.notfound', 'Dish not found', 'admin', 'admin', '2015-12-15 21:24:29', '2015-12-15 21:24:29'),
-(551, 'es', 'dish.notfound', 'No se encontraron platos', 'admin', 'admin', '2015-12-15 21:24:52', '2015-12-15 21:24:52');
+(551, 'es', 'dish.notfound', 'No se encontraron platos', 'admin', 'admin', '2015-12-15 21:24:52', '2015-12-15 21:24:52'),
+(552, 'es', 'Dish', 'Plato', 'admin', 'admin', '2015-12-16 20:10:43', '2015-12-16 20:10:43'),
+(553, 'es', 'Language', 'Idioma', 'admin', 'admin', '2015-12-16 20:11:00', '2015-12-16 20:11:00'),
+(554, 'es', 'Dish Name', 'Nombre del Plato', 'admin', 'admin', '2015-12-16 20:12:11', '2015-12-16 20:12:11'),
+(555, 'es', 'Name translation', 'Traducción del nombre', 'admin', 'admin', '2015-12-16 20:12:28', '2015-12-16 20:12:28'),
+(556, 'es', 'Description translation', 'Traducción de la descripción', 'admin', 'admin', '2015-12-16 20:12:49', '2015-12-16 20:12:49'),
+(557, 'en', 'dish_translation.list.title', 'Dish Translations', 'admin', 'admin', '2015-12-16 20:15:41', '2015-12-16 20:15:41'),
+(558, 'es', 'dish_translation.list.title', 'Traducciones del plato', 'admin', 'admin', '2015-12-16 20:16:20', '2015-12-16 20:16:20'),
+(559, 'en', 'dish_translation.title.new', 'New Translation', 'admin', 'admin', '2015-12-16 20:17:29', '2015-12-16 20:17:29'),
+(560, 'es', 'dish_translation.title.new', 'Nueva traducción', 'admin', 'admin', '2015-12-16 20:17:43', '2015-12-16 20:17:43'),
+(561, 'en', 'dish_translation.title.edit', 'Edit Translation', 'admin', 'admin', '2015-12-16 20:18:25', '2015-12-16 20:18:25'),
+(562, 'es', 'dish_translation.title.edit', 'Editar Traducción', 'admin', 'admin', '2015-12-16 20:18:42', '2015-12-16 20:18:42'),
+(563, 'en', 'dish_translation.delete.question', 'Are you sure you want to delete this translation ?', 'admin', 'admin', '2015-12-16 20:21:27', '2015-12-16 20:21:27'),
+(564, 'es', 'dish_translation.delete.question', '¿ Esta seguro que desea eliminar esta traducción ?', 'admin', 'admin', '2015-12-16 20:22:32', '2015-12-16 20:22:32'),
+(565, 'en', 'dish_translation.language.required', 'You must select a language', 'admin', 'admin', '2015-12-16 20:23:09', '2015-12-16 20:23:09'),
+(566, 'es', 'dish_translation.language.required', 'Debe seleccionar un idioma', 'admin', 'admin', '2015-12-16 20:23:34', '2015-12-16 20:23:34'),
+(567, 'en', 'dish_translation.name.required', 'You must enter a translate name', 'admin', 'admin', '2015-12-16 20:23:59', '2015-12-16 20:23:59'),
+(568, 'es', 'dish_translation.name.required', 'Debe ingresar una traducción para el nombre', 'admin', 'admin', '2015-12-16 20:24:18', '2015-12-16 20:24:18'),
+(569, 'en', 'dish_translation.description.required', 'You must enter a description translation', 'admin', 'admin', '2015-12-16 20:24:44', '2015-12-16 20:48:06'),
+(570, 'es', 'dish_translation.description.required', 'Debe ingresar una traducción para la descripción', 'admin', 'admin', '2015-12-16 20:25:06', '2015-12-16 20:25:06'),
+(571, 'en', 'dish_translation.language.exist', 'Already exist a translation for this language', 'admin', 'admin', '2015-12-16 20:49:27', '2015-12-16 20:49:27'),
+(572, 'es', 'dish_translation.language.exist', 'Ya existe una traducción para ese idioma', 'admin', 'admin', '2015-12-16 20:49:49', '2015-12-16 20:49:49');
 
 -- --------------------------------------------------------
 
@@ -2146,7 +2173,7 @@ ALTER TABLE `dish_category`
 -- AUTO_INCREMENT de la tabla `dish_translation`
 --
 ALTER TABLE `dish_translation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `file`
 --
@@ -2221,7 +2248,7 @@ ALTER TABLE `township`
 -- AUTO_INCREMENT de la tabla `translation`
 --
 ALTER TABLE `translation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=552;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=573;
 --
 -- AUTO_INCREMENT de la tabla `user`
 --

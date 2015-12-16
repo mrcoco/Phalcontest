@@ -3,6 +3,11 @@
 {{super() }}
 {{assets.outputJs('validate_forms_js')}}
 {{assets.outputJs('validatejs')}}
+<script>
+var validatemessages = {
+category:'{{"category.required"|t}}'
+};
+</script>
 {% endblock %}
 {% block content %}
 <div class="row">
@@ -23,25 +28,20 @@
 	{% if errorvar is not empty %}
 	<div class="alert alert-danger">
 	<button data-close="alert" class="close"></button>
-	{{ content() }}
+	{{ content()|t}}
 	</div>
 	{% endif %}
-	<div class="form-group">
-	<label name="lbldishname" id="lbldishname" class="control-label col-md-3 formlabel">
-	{{'Dish Name'|t}} </span>
-	</label>
-	<div class="col-md-4">
-	{{ text_field("dish_name", "type" : "text","class":"form-control","value":dish_name,"readonly":"") }}
-	</div>
-	</div>
 		<!-- LOAD FORM CONTROLS-->
 	{% for index,item in formcolumns %}
 		<div class="form-group">
 		<label name="{{item['name']}}" id ="item['name']" class="control-label col-md-3 formlabel">
 		{{item['label']|t}}
-		</label>
+		{{item['required']}}
+                </label>
 		<div class="col-md-4">
-		{{ form.render(item['name'],["class":"form-control",'disabled':'""']) }}
+		{{ form.render(item['name'],["class":"form-control"]) }}
+		<!-- LOAD CONTROL ERROR LABEL-->
+		{{item['label_error']|t}}
 		</div>
 		</div>
 	{% endfor %}
@@ -50,7 +50,7 @@
 	<div class="form-actions">
 	<div class="row">
 	<div class="col-md-offset-2 col-md-4">
-    <button class="btn red">{{delete_button_name|t}}</button>
+		<input type="submit" class="btn blue-madison" value="{{'Guardar'|t}}"></input>
 		{{ link_to(routelist,cancel_button_name|t,"class":"btn grey-cascade") }}
 	</div>
 	</div>
@@ -62,4 +62,5 @@
 <!-- END PORTLET-->
 </div>
 </div>
+
 {% endblock %}

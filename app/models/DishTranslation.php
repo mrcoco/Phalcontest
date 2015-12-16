@@ -1,5 +1,6 @@
 <?php
-
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 class DishTranslation extends \Phalcon\Mvc\Model
 {
 
@@ -325,5 +326,64 @@ class DishTranslation extends \Phalcon\Mvc\Model
             'modifydate' => 'modifydate'
         );
     }
+
+    public function validation()
+    {
+      $this->validate(new PresenceOf(array('field' => 'languagecode')));
+      $this->validate(new PresenceOf(array('field' => 'name' )));
+      $this->validate(new PresenceOf(array('field' => 'description')));
+      $this->validate(new Uniqueness(array('field' => array('dishid','languagecode'))));
+
+
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getMessages()
+   {
+     $messages = array();
+     $txtmessage ="";
+     foreach (parent::getMessages() as $message) {
+         switch ($message->getType()) {
+             case 'PresenceOf':
+                 switch ($message->getField()) {
+                  case 'languagecode':
+                   $txtmessage = $this->di->get('translate')->_('dish_translation.language.required');
+                  break;
+                  case 'name':
+                   $txtmessage = $this->di->get('translate')->_('dish_translation.name.required');
+                  break;
+                  case 'description':
+                   $txtmessage = $this->di->get('translate')->_('dish_translation.description.required');
+                  break;
+                 }
+                  $messages[] =$txtmessage;
+                 break;
+
+            case 'Unique':
+
+                 if (is_array($message->getField()))
+                 {
+                   $field =implode("-", $message->getField());
+                 }
+                 else {
+                   $field =$message->getField();
+                 }
+
+                 switch ($field) {
+                  case 'dishid-languagecode':
+                     $txtmessage =$this->di->get('translate')->_('dish_translation.language.exist');
+                break;
+              }
+              $messages[] =$txtmessage;
+             break;
+         }
+     }
+
+     return $messages;
+ }
 
 }

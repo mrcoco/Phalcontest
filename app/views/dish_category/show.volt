@@ -26,14 +26,6 @@
 	{{ content() }}
 	</div>
 	{% endif %}
-	<div class="form-group">
-	<label name="lbldishname" id="lbldishname" class="control-label col-md-3 formlabel">
-	{{'Dish Name'|t}} </span>
-	</label>
-	<div class="col-md-4">
-	{{ text_field("dish_name", "type" : "text","class":"form-control","value":dish_name,"readonly":"") }}
-	</div>
-	</div>
 		<!-- LOAD FORM CONTROLS-->
 	{% for index,item in formcolumns %}
 		<div class="form-group">

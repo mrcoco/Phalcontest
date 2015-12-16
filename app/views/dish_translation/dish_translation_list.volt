@@ -1,7 +1,7 @@
 {% extends "layouts/masterpage.volt" %}
 {% block pagetitle %}
 	<h3 class="page-title" align ="left">
-	{{title|t}}
+	{{title|t}}{{' - '}}{{dish_name}}<div align="right"><a href ="{{url('dish/list/'~menu_id )}}" class="btn btn blue">{{'Dishes'|t}} <i class="fa fa-arrow-right "></i> </a></div>
 	</h3>
 	<hr/>
 {% endblock %}
@@ -98,7 +98,7 @@
 			</td>
 			<td width ="2%">
 				{% if permissions['delete']=='Y' %}
-				{{link_to(showroute~entity.id~'/' ~dishid,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}
+				{{link_to(showroute~entity.id,'<i class="fa fa-remove"></i>','class':'btn btn-icon-only red')}}
 				{% endif %}
 			</td>
 			</tr>

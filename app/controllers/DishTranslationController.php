@@ -32,10 +32,10 @@ class DishTranslationController extends ControllerBase
         array('name' => 'languagecode','label'=>'Language'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'label_error'=>'<span id ="dish_translationerror" name ="codeerror" class="has-error"></span>')
-        ,array('name' => 'name','label'=>'Name'
+        ,array('name' => 'name','label'=>'Name translation'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'label_error'=>'<span id ="dish_translationerror" name ="codeerror" class="has-error"></span>')
-        ,array('name' => 'description','label'=>'Description'
+        ,array('name' => 'description','label'=>'Description translation'
         ,'required'=>'<span class="required" aria-required="true">* </span>'
         ,'label_error'=>'<span id ="dish_translationerror" name ="codeerror" class="has-error"></span>')
 
@@ -81,11 +81,11 @@ class DishTranslationController extends ControllerBase
     ,'header_columns'=>array(
       array('column_name' => 'dish','title' => 'Dish','class'=>'')
       ,array('column_name' => 'language','title' => 'Language','class'=>'')
-      ,array('column_name' => 'name','title' => 'Name','class'=>''))
+      ,array('column_name' => 'name','title' => 'Name translation','class'=>''))
     ,'search_columns'=>array(
       array('name' => 'dish','title' => 'Dish','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
       ,array('name' => 'language','title' => 'Language','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
-      ,array('name' => 'name','title' => 'Name','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
+      ,array('name' => 'name','title' => 'Name translation','size'=>30,'div_class'=>"input-control full-size",'label_class'=>'search')
 
     )
   ];
@@ -114,7 +114,7 @@ class DishTranslationController extends ControllerBase
     $this->view->dishid = $dishid;
     $dish_data = $this->get_dishdata_by_id($dishid);
     $this->view->dish_name =$dish_data['name'];
-
+    $this->view->menu_id = $dish_data['menuid'];
   }
 
   public function check_all_permissions($userid)
@@ -149,7 +149,7 @@ class DishTranslationController extends ControllerBase
     $params_query =$this->set_search_grid_post_values($search_values);
 
     $query =$this->modelsManager->createBuilder()
-             ->columns(array('dt.id as id','dt.dishid as dishid','dt.languagecode as languagecode','l.language as language','d.name as dish','dt.name as dish_name'))
+             ->columns(array('dt.id as id','dt.dishid as dishid','dt.languagecode as languagecode','l.language as language','d.name as dish','dt.name'))
              ->from(array('dt' => 'DishTranslation'))
              ->join('Dish', 'd.id = dt.dishid', 'd')
              ->join('Language', 'l.code = dt.languagecode', 'l')
@@ -165,6 +165,7 @@ class DishTranslationController extends ControllerBase
     $this->view->dishid = $dishid;
     $dish_data = $this->get_dishdata_by_id($dishid);
     $this->view->dish_name =$dish_data['name'];
+    $this->view->menu_id = $dish_data['menuid'];
 
   }
 
@@ -185,18 +186,16 @@ class DishTranslationController extends ControllerBase
   {
 
     $dish_data = $this->get_dishdata_by_id($dishid);
-    $dishid = $dish_data['id'];
-    $dish_name =$dish_data['name'];
     $this->view->form = new DishTranslationForm($entity,array());
     $this->view->routelist =$routelist;
     $this->view->routeform =$routeform;
     $this->view->title =$title;
-    $this->view->dish_name = $dish_name;
     $this->view->formcolumns =$form_columns;
     $this->view->save_button_name =$save_button_name;
     $this->view->cancel_button_name =$cancel_button_name;
     $this->view->delete_button_name =$delete_button_name;
-    $this->view->dishid =$dishid;
+    $this->view->dishid =$dish_data['id'];
+    $this->view->dish_name =$dish_data['name'];
     $this->view->mode =$mode;
     $this->view->pick($view_name);
   }
@@ -309,9 +308,9 @@ class DishTranslationController extends ControllerBase
   }
 
   /**
-  * @Route("/save/{id}/{dishid}", methods={"POST"}, name="dishsave")
+  * @Route("/save/{id}", methods={"POST"}, name="dishsave")
   */
-  public function saveAction($id,$dishid)
+  public function saveAction($id)
   {
     $entity =$this->set_entity(
     $id

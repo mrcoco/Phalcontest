@@ -1,7 +1,7 @@
 {% extends "layouts/masterpage.volt" %}
 {% block pagetitle %}
 	<h3 class="page-title" align ="left">
-	{{title|t}}{{' - '}}{{menu_name}}<div align="right"><a href ="{{url('menu/list')}}" class="btn btn blue">{{'Menu'|t}} <i class="fa fa-arrow-right "></i> </a></div>
+	{{title|t}}
 	</h3>
 	<hr/>
 {% endblock %}
@@ -10,7 +10,7 @@
 {% block content %}
   <!-- GRID SEARCH -->
 	<div align="left" >
-	{{ form(searchroute~'/'~menuid, "method":"post", "autocomplete" : "off") }}
+	{{ form(searchroute, "method":"post", "autocomplete" : "off") }}
 	<div class="row">
 	<div class="form-group col-md-10" style="padding-left:0;">
 	{% for index,item in searchcolumns %}
@@ -34,7 +34,7 @@
 
 	{% if permissions['create']=='Y' %}
 	 <!-- NEW ITEM ICON-->
-	<div align="left">{{ link_to(newroute~'/'~menuid,'<i class="fa fa-plus"></i>','class':'btn btn-icon-only blue')}}</div>
+	<div align="left">{{ link_to(newroute,'<i class="fa fa-plus"></i>','class':'btn btn-icon-only blue')}}</div>
   {% endif %}
 	<br>
 	{% if noitems ==""%}
@@ -80,7 +80,6 @@
 	{% endfor %}
 	<th></th>
 	<th></th>
-	<th></th>
 	</tr>
 	</thead>
 	<!-- END HEADER-->
@@ -90,16 +89,11 @@
 		{% for entity in page.items %}
 			<tr>
 			{% for index,item in headercolumns %}
-				<td width ="15%">{{ entity.readAttribute(item['column_name'])}}</td>
+				<td width ="40%">{{ entity.readAttribute(item['column_name'])}}</td>
 			{% endfor %}
 			<td width ="2%">
 				{% if permissions['edit']=='Y' %}
-				{{link_to('dish_translation/list/'~entity.id,'<i class="fa fa-language"></i>','class':'btn btn-icon-only yellow')}}
-				{% endif %}
-			</td>
-			<td width ="2%">
-				{% if permissions['edit']=='Y' %}
-				{{link_to(editroute~entity.id~'/'~menuid,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}
+				{{link_to(editroute~entity.id,'<i class="fa fa-edit"></i>','class':'btn btn-icon-only green')}}
 				{% endif %}
 			</td>
 			<td width ="2%">
