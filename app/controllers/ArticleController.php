@@ -180,11 +180,6 @@ class ArticleController extends ControllerBase
             ->addJs('js/jqueryvalidate/additional-methods.min.js')
             ->addJs('js/validate_article/validate_article.js');
 
-        $this->assets
-            ->collection('editorjs')
-            ->addJs('js/jqueryvalidate/jquery.validate.js')
-            ->addJs('js/jqueryvalidate/additional-methods.min.js')
-            ->addJs('js/validate_article/validate_article.js');
     }
 
 

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-12-2015 a las 21:25:04
+-- Tiempo de generación: 17-12-2015 a las 21:27:11
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -129,7 +129,11 @@ INSERT INTO `action` (`id`, `action`, `description`, `createuser`, `modifyuser`,
 (78, 'Create Dish Category', '', 'admin', 'admin', '2015-12-15 15:16:14', '2015-12-15 15:16:14'),
 (79, 'Edit Dish Category', '', 'admin', 'admin', '2015-12-15 15:16:26', '2015-12-15 15:16:26'),
 (80, 'Manage Dish Category', '', 'admin', 'admin', '2015-12-15 15:16:35', '2015-12-15 15:16:35'),
-(81, 'Delete Dish Category', '', 'admin', 'admin', '2015-12-15 15:16:45', '2015-12-15 15:16:45');
+(81, 'Delete Dish Category', '', 'admin', 'admin', '2015-12-15 15:16:45', '2015-12-15 15:16:45'),
+(82, 'Create Article Translation', '', 'admin', 'admin', '2015-12-17 16:26:42', '2015-12-17 16:26:42'),
+(83, 'Edit Article Translation', '', 'admin', 'admin', '2015-12-17 16:26:50', '2015-12-17 16:26:50'),
+(84, 'Delete Article Translation', '', 'admin', 'admin', '2015-12-17 16:26:58', '2015-12-17 16:26:58'),
+(85, 'Manage Article Translation', '', 'admin', 'admin', '2015-12-17 16:27:06', '2015-12-17 16:27:06');
 
 -- --------------------------------------------------------
 
@@ -237,7 +241,11 @@ INSERT INTO `action_role` (`actionid`, `roleid`, `createuser`, `modifyuser`, `cr
 (78, 1, 'admin', 'admin', '2015-12-15 15:17:36', '2015-12-15 15:17:36'),
 (79, 1, 'admin', 'admin', '2015-12-15 15:17:48', '2015-12-15 15:17:48'),
 (80, 1, 'admin', 'admin', '2015-12-15 15:17:56', '2015-12-15 15:17:56'),
-(81, 1, 'admin', 'admin', '2015-12-15 15:18:02', '2015-12-15 15:18:02');
+(81, 1, 'admin', 'admin', '2015-12-15 15:18:02', '2015-12-15 15:18:02'),
+(82, 1, 'admin', 'admin', '2015-12-17 16:27:51', '2015-12-17 16:27:51'),
+(83, 1, 'admin', 'admin', '2015-12-17 16:27:58', '2015-12-17 16:27:58'),
+(84, 1, 'admin', 'admin', '2015-12-17 16:28:11', '2015-12-17 16:28:11'),
+(85, 1, 'admin', 'admin', '2015-12-17 16:28:18', '2015-12-17 16:28:18');
 
 -- --------------------------------------------------------
 
@@ -373,6 +381,31 @@ CREATE TABLE `article_comment` (
 
 INSERT INTO `article_comment` (`id`, `articleid`, `name`, `email`, `comment`, `active`) VALUES
 (4, 12, 'test', 'test@test.com', '<p>assasa<br></p>', 'Y');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `article_translation`
+--
+
+CREATE TABLE `article_translation` (
+  `id` int(11) NOT NULL,
+  `articleid` int(11) NOT NULL,
+  `languagecode` varchar(10) NOT NULL,
+  `title` varchar(60) DEFAULT NULL,
+  `content` text,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `article_translation`
+--
+
+INSERT INTO `article_translation` (`id`, `articleid`, `languagecode`, `title`, `content`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(3, 12, 'en', 'test', '<p>test<br></p>', 'admin', 'admin', '2015-12-17 17:34:46', '2015-12-17 17:34:46');
 
 -- --------------------------------------------------------
 
@@ -1817,7 +1850,25 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 (569, 'en', 'dish_translation.description.required', 'You must enter a description translation', 'admin', 'admin', '2015-12-16 20:24:44', '2015-12-16 20:48:06'),
 (570, 'es', 'dish_translation.description.required', 'Debe ingresar una traducción para la descripción', 'admin', 'admin', '2015-12-16 20:25:06', '2015-12-16 20:25:06'),
 (571, 'en', 'dish_translation.language.exist', 'Already exist a translation for this language', 'admin', 'admin', '2015-12-16 20:49:27', '2015-12-16 20:49:27'),
-(572, 'es', 'dish_translation.language.exist', 'Ya existe una traducción para ese idioma', 'admin', 'admin', '2015-12-16 20:49:49', '2015-12-16 20:49:49');
+(572, 'es', 'dish_translation.language.exist', 'Ya existe una traducción para ese idioma', 'admin', 'admin', '2015-12-16 20:49:49', '2015-12-16 20:49:49'),
+(573, 'en', 'article_translation.list.title', 'Article translations', 'admin', 'admin', '2015-12-17 19:37:30', '2015-12-17 19:37:30'),
+(574, 'es', 'article_translation.list.title', 'Traducciones del artículo', 'admin', 'admin', '2015-12-17 19:38:40', '2015-12-17 19:38:40'),
+(575, 'es', 'Article Name', 'Nombre del Artículo', 'admin', 'admin', '2015-12-17 19:38:57', '2015-12-17 19:38:57'),
+(576, 'es', 'Translate title', 'Traducción del título', 'admin', 'admin', '2015-12-17 19:39:20', '2015-12-17 19:39:20'),
+(577, 'en', 'article_translation.title.new', 'New Translation', 'admin', 'admin', '2015-12-17 19:39:41', '2015-12-17 19:39:41'),
+(578, 'es', 'article_translation.title.new', 'Nueva traducción', 'admin', 'admin', '2015-12-17 19:40:00', '2015-12-17 19:40:00'),
+(579, 'en', 'article_translation.title.edit', 'Edit Translation', 'admin', 'admin', '2015-12-17 19:41:10', '2015-12-17 19:41:10'),
+(580, 'es', 'article_translation.title.edit', 'Editar Traducción', 'admin', 'admin', '2015-12-17 19:41:24', '2015-12-17 19:41:24'),
+(581, 'en', 'article_translation.delete.question', 'Are you sure you want to delete this translation ?', 'admin', 'admin', '2015-12-17 19:41:50', '2015-12-17 19:41:50'),
+(582, 'es', 'article_translation.delete.question', '¿ Esta seguro que desea eliminar esta traducción ?', 'admin', 'admin', '2015-12-17 19:42:14', '2015-12-17 19:42:14'),
+(583, 'en', 'article_translation.language.required', 'You must select a language', 'admin', 'admin', '2015-12-17 19:42:36', '2015-12-17 19:42:36'),
+(584, 'es', 'article_translation.language.required', 'Debe seleccionar un idioma', 'admin', 'admin', '2015-12-17 19:44:29', '2015-12-17 19:44:29'),
+(585, 'en', 'article_translation.title.required', 'You must enter a translate title', 'admin', 'admin', '2015-12-17 19:45:15', '2015-12-17 19:45:15'),
+(586, 'es', 'article_translation.title.required', 'Debe ingresar un título traducido', 'admin', 'admin', '2015-12-17 19:47:00', '2015-12-17 19:47:00'),
+(587, 'en', 'article_translation.content.required', 'You must enter a translate content', 'admin', 'admin', '2015-12-17 19:47:44', '2015-12-17 19:47:44'),
+(588, 'es', 'article_translation.content.required', 'Debe ingresar la traducción del contenido', 'admin', 'admin', '2015-12-17 19:48:31', '2015-12-17 19:48:31'),
+(589, 'en', 'article_translation.language.exist', 'Already exist a translation for this language', 'admin', 'admin', '2015-12-17 19:51:15', '2015-12-17 19:51:15'),
+(590, 'es', 'article_translation.language.exist', 'Ya existe una traducción para ese idioma', 'admin', 'admin', '2015-12-17 19:51:36', '2015-12-17 19:51:36');
 
 -- --------------------------------------------------------
 
@@ -1945,6 +1996,14 @@ ALTER TABLE `article`
 ALTER TABLE `article_comment`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_comment_article1_idx` (`articleid`);
+
+--
+-- Indices de la tabla `article_translation`
+--
+ALTER TABLE `article_translation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_article_translation_article1_idx` (`articleid`),
+  ADD KEY `fk_article_translation_language1_idx` (`languagecode`);
 
 --
 -- Indices de la tabla `city`
@@ -2123,7 +2182,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT de la tabla `action`
 --
 ALTER TABLE `action`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 --
 -- AUTO_INCREMENT de la tabla `address`
 --
@@ -2138,12 +2197,17 @@ ALTER TABLE `apartment`
 -- AUTO_INCREMENT de la tabla `article`
 --
 ALTER TABLE `article`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT de la tabla `article_comment`
 --
 ALTER TABLE `article_comment`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT de la tabla `article_translation`
+--
+ALTER TABLE `article_translation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `city`
 --
@@ -2168,12 +2232,12 @@ ALTER TABLE `dish`
 -- AUTO_INCREMENT de la tabla `dish_category`
 --
 ALTER TABLE `dish_category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `dish_translation`
 --
 ALTER TABLE `dish_translation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `file`
 --
@@ -2248,7 +2312,7 @@ ALTER TABLE `township`
 -- AUTO_INCREMENT de la tabla `translation`
 --
 ALTER TABLE `translation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=573;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=591;
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
@@ -2287,6 +2351,13 @@ ALTER TABLE `apartment`
 --
 ALTER TABLE `article_comment`
   ADD CONSTRAINT `fk_comment_article1` FOREIGN KEY (`articleid`) REFERENCES `article` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `article_translation`
+--
+ALTER TABLE `article_translation`
+  ADD CONSTRAINT `fk_article_translation_article1` FOREIGN KEY (`articleid`) REFERENCES `article` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_article_translation_language1` FOREIGN KEY (`languagecode`) REFERENCES `language` (`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `city`

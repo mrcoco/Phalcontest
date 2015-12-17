@@ -117,18 +117,18 @@
 		<div align="left">{{ 'Página'|t~' '~ page.current ~' '~'de'|t ~' '~page.total_pages }}</div>
 		<div align ="left">
 		<ul class="pagination">
-		<li>{{ link_to(listroute,'<i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i>'~'Primero'|t) }}</li>
-		<li>{{ link_to(listroute~"?page="~page.before, '<i class="fa fa-angle-left"></i>'~'Anterior'|t) }}</li>
+		<li>{{ link_to(listroute~'/'~menuid,'<i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i>'~'Primero'|t) }}</li>
+		<li>{{ link_to(listroute~'/'~menuid~"?page="~page.before, '<i class="fa fa-angle-left"></i>'~'Anterior'|t) }}</li>
 		{% for i in 1..page.total_pages %}
 		{% if page.current == i %}
 		{% set classitem ='active' %}
 		{% else %}
 		{% set classitem ='' %}
 		{% endif %}
-		<li class="{{classitem}}">{{ link_to(listroute~"?page="~i, i) }}</li>
+		<li class="{{classitem}}">{{ link_to(listroute~'/'~menuid~"?page="~i, i) }}</li>
 		{% endfor %}
-		<li>{{ link_to(listroute~"?page="~page.next, 'Siguiente'|t~'<i class="fa fa-angle-right"></i>') }}</li>
-		<li>{{ link_to(listroute~"?page="~page.last, 'Ultimo'|t~'<i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i>') }}</li>
+		<li>{{ link_to(listroute~'/'~menuid~"?page="~page.next, 'Siguiente'|t~'<i class="fa fa-angle-right"></i>') }}</li>
+		<li>{{ link_to(listroute~'/'~menuid~"?page="~page.last, 'Ultimo'|t~'<i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i>') }}</li>
 		</ul>
 		</div>
     <!--END GRID PAGINATION -->

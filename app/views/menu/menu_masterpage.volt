@@ -195,7 +195,7 @@
   </li>
   {% endif %}
   {% if translation =='Y'%}
- <li class="{% for key,name in ['language','translation'] %}
+ <li class="{% for key,name in ['language','/translation'] %}
    {% if name  in router.getRewriteUri() %}
        active open
    {% else %}
@@ -225,7 +225,7 @@
  </li>
  {% endif %}
   {% if media =='Y'%}
- <li class="{% for key,name in ['media','file/','gallery'] %}
+ <li class="{% for key,name in ['media','set_files','files/','gallery'] %}
    {% if name  in router.getRewriteUri() %}
        active open
    {% else %}
@@ -243,7 +243,7 @@
         <p align="left"><i class="fa fa-cloud-upload " ></i>{{' '}} {{'Upload Files'|t}}</p>
         </a>
       </li>
-      <li class="{% if ('file/index' in router.getRewriteUri()) or ('file/list' in router.getRewriteUri())  %}active{% endif %}">
+      <li class="{% if ('files/' in router.getRewriteUri()) or ('file/list' in router.getRewriteUri())  %}active{% endif %}">
           <a href="{{ url("files/list") }}" >
               <p align="left"><i class="fa fa-file-archive-o  " ></i>{{' '}} {{'Manage Files'|t}}</p>
           </a>
@@ -287,7 +287,7 @@
 {% endif %}
 
     {% if articles =='Y'%}
-        <li class="{% for key,name in ['article','article_comment'] %}
+        <li class="{% for key,name in ['/article','/article_translation','article_comment'] %}
   {% if name  in router.getRewriteUri() %}
       active open
   {% else %}
@@ -300,7 +300,7 @@
   </a>
   <ul class="sub-menu">
       {% if  articles =='Y'%}
-          <li class="{% if '/article/' in router.getRewriteUri()%}active{% endif %}">
+          <li class="{% if '/article' in router.getRewriteUri()%}active{% endif %}">
               <a href="{{ url("article/list") }}" >
                   <p align="left"><i class="fa fa-book" ></i>{{' '}}{{'Artículos'|t}}</p>
               </a>
@@ -317,7 +317,7 @@
   </li>
     {% endif %}
     {% if restaurant =='Y'%}
-        <li class="{% for key,name in ['restaurant'] %}
+        <li class="{% for key,name in ['restaurant','menu','dish','dish_translation','dish_category'] %}
   {% if name  in router.getRewriteUri() %}
       active open
   {% else %}
@@ -335,7 +335,7 @@
           </a>
       </li>
       {% if  menu =='Y'%}
-      <li class="{% if 'menu' in router.getRewriteUri()%}active{% endif %}">
+      <li class="{% if ('menu' in router.getRewriteUri()) or ('dish' in router.getRewriteUri())%}active{% endif %}">
           <a href="{{ url("menu/list") }}" >
               <p align="left"><i class="fa fa-list-alt" ></i>{{' '}}{{'Menu'|t}}</p>
           </a>

@@ -1,5 +1,6 @@
 <?php
-
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 class ArticleTranslation extends \Phalcon\Mvc\Model
 {
 
@@ -325,5 +326,60 @@ class ArticleTranslation extends \Phalcon\Mvc\Model
             'modifydate' => 'modifydate'
         );
     }
+    public function validation()
+    {
+      $this->validate(new PresenceOf(array('field' => 'languagecode')));
+      $this->validate(new PresenceOf(array('field' => 'title' )));
+      $this->validate(new Uniqueness(array('field' => array('articleid','languagecode'))));
+
+
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getMessages()
+   {
+     $messages = array();
+     $txtmessage ="";
+     foreach (parent::getMessages() as $message) {
+         switch ($message->getType()) {
+             case 'PresenceOf':
+                 switch ($message->getField()) {
+                  case 'languagecode':
+                   $txtmessage = $this->di->get('translate')->_('article_translation.language.required');
+                  break;
+                  case 'title':
+                   $txtmessage = $this->di->get('translate')->_('article_translation.title.required');
+                  break;
+                 }
+                  $messages[] =$txtmessage;
+                 break;
+
+            case 'Unique':
+
+                 if (is_array($message->getField()))
+                 {
+                   $field =implode("-", $message->getField());
+                 }
+                 else {
+                   $field =$message->getField();
+                 }
+
+                 switch ($field) {
+                  case 'articleid-languagecode':
+                     $txtmessage =$this->di->get('translate')->_('article_translation.language.exist');
+                break;
+              }
+              $messages[] =$txtmessage;
+             break;
+         }
+     }
+
+     return $messages;
+ }
+
 
 }
