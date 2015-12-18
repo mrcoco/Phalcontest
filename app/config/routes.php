@@ -60,4 +60,5 @@ $router->addResource('Dish', '/dish');
 $router->addResource('DishCategory', '/dish_category');
 $router->addResource('DishTranslation', '/dish_translation');
 $router->addResource('ArticleTranslation', '/article_translation');
+$router->addResource('Event', '/event');
 return $router;

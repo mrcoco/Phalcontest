@@ -27,6 +27,7 @@
 {% set article_comments ='N' %}
 {% set restaurant ='N' %}
 {% set menu ='N' %}
+{% set event ='N' %}
 {# END MENU OPTIONS SECURITY#}
 {% for item in actions %}
 {#Chek menu options#}
@@ -89,6 +90,9 @@
 {% endif %}
 {% if item.action =='Manage Menu'%}
     {% set menu ='Y'%}
+{% endif %}
+{% if item.action =='Manage Event'%}
+    {% set event ='Y'%}
 {% endif %}
 {% endfor %}
 <ul class="page-sidebar-menu page-sidebar-menu-closed" data-slide-speed="200" data-auto-scroll="true" data-keep-expanded="false">
@@ -346,6 +350,28 @@
           </a>
       </li>
       {% endif %}
+  </ul>
+  </li>
+    {% endif %}
+
+    {% if event =='Y'%}
+        <li class="{% for key,name in ['event'] %}
+  {% if name  in router.getRewriteUri() %}
+      active open
+  {% else %}
+  start
+  {% endif%}
+  {% endfor %}">
+  <a href="" style="padding-left:20px;">
+      <span class="arrow "></span>
+      <p align="left"><b><i class="fa fa-calendar"></i>{{' '}}{{'Events'|t}}</b></p>
+  </a>
+  <ul class="sub-menu">
+      <li class="{% if 'event' in router.getRewriteUri()%}active{% endif %}">
+          <a href="{{ url("event/list") }}" >
+              <p align="left"><i class="fa fa-calendar" ></i>{{' '}}{{'Events'|t}}</p>
+          </a>
+      </li>
   </ul>
   </li>
     {% endif %}
