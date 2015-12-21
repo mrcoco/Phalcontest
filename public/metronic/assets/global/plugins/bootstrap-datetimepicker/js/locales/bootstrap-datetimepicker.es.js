@@ -12,6 +12,7 @@
 		today: "Hoy",
 		meridiem: ["am", "pm"],
 		suffix: ["st", "nd", "rd", "th"],
-		today: "Hoy"
+		today: "Hoy",
+		format: "yyyy-mm-dd hh:ii"
 	};
 }(jQuery));

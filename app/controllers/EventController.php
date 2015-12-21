@@ -63,7 +63,8 @@ class EventController extends ControllerBase
 
     public function set_post_values($entity)
     {
-      $entity->setName($this->request->getPost("event"));
+        
+      $entity->setName($this->request->getPost("name"));
       $entity->setLocation($this->request->getPost("location"));
       $entity->setStartDate($this->request->getPost("start_date"));
       $entity->setFinishDate($this->request->getPost("finish_date"));

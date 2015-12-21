@@ -1,5 +1,7 @@
 <?php
-
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
+use Phalcon\Mvc\Model\Message as Message;
 class Event extends \Phalcon\Mvc\Model
 {
 
@@ -354,5 +356,95 @@ class Event extends \Phalcon\Mvc\Model
             'modifydate' => 'modifydate'
         );
     }
+
+    public function validation()
+    {
+      $this->validate(new PresenceOf(array('field' => 'name' )));
+      $this->validate(new PresenceOf(array('field' => 'start_date' )));
+      $this->validate(new PresenceOf(array('field' => 'finish_date' )));
+      $this->validate(new Uniqueness(array( 'field' => 'name')));
+
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getMessages()
+   {
+     $messages = array();
+     $txtmessage ="";
+     foreach (parent::getMessages() as $message) {
+         switch ($message->getType()) {
+             case 'PresenceOf':
+                 switch ($message->getField()) {
+                  case 'name':
+                   $txtmessage = $this->di->get('translate')->_('event.name.required');
+                  break;
+                   case 'start_date':
+                   $txtmessage = $this->di->get('translate')->_('event.start_date.required');
+                  break;
+                   case 'finish_date':
+                   $txtmessage = $this->di->get('translate')->_('event.finish_date.required');
+                  break;
+                 }
+                  $messages[] =$txtmessage;
+                 break;
+
+            case 'Unique':
+
+                 if (is_array($message->getField()))
+                 {
+                   $field =implode("-", $message->getField());
+                 }
+                 else {
+                   $field =$message->getField();
+                 }
+
+                 switch ($field) {
+                  case 'name':
+                     $txtmessage =$this->di->get('translate')->_('event.exist');
+                break;
+              }
+              $messages[] =$txtmessage;
+             break;
+             case 'ConstraintViolation':
+            $txtmessage =$this->di->get('translate')->_('event.constraintviolation');
+             $messages[] =$txtmessage;
+             break;
+
+             case 'Invalid_Dates':
+             $txtmessage =$this->di->get('translate')->_('event.invalid_dates');
+             $messages[] =$txtmessage;
+             break;
+         }
+     }
+
+     return $messages;
+ }
+  
+
+   
+
+   
+  public function beforeValidation()
+ 
+ {
+
+    $start_date = $this->getStartDate();
+    $finish_date=$this->getFinishDate();
+
+    if ($start_date>$finish_date)
+      {  
+        $text = "Date Error";
+        $field = "start_date";
+        $type = "Invalid_Dates";
+        $message = new Message($text,$field,$type);
+        $this->appendMessage($message);
+        return false;
+      }
+        return true;  
+ }
 
 }

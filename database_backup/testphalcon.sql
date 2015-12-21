@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-12-2015 a las 21:27:11
+-- Tiempo de generación: 21-12-2015 a las 22:59:27
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -133,7 +133,11 @@ INSERT INTO `action` (`id`, `action`, `description`, `createuser`, `modifyuser`,
 (82, 'Create Article Translation', '', 'admin', 'admin', '2015-12-17 16:26:42', '2015-12-17 16:26:42'),
 (83, 'Edit Article Translation', '', 'admin', 'admin', '2015-12-17 16:26:50', '2015-12-17 16:26:50'),
 (84, 'Delete Article Translation', '', 'admin', 'admin', '2015-12-17 16:26:58', '2015-12-17 16:26:58'),
-(85, 'Manage Article Translation', '', 'admin', 'admin', '2015-12-17 16:27:06', '2015-12-17 16:27:06');
+(85, 'Manage Article Translation', '', 'admin', 'admin', '2015-12-17 16:27:06', '2015-12-17 16:27:06'),
+(86, 'Manage Event', '', 'admin', 'admin', '2015-12-18 16:17:11', '2015-12-18 16:17:11'),
+(87, 'Create Event', '', 'admin', 'admin', '2015-12-18 16:17:20', '2015-12-18 16:17:20'),
+(88, 'Edit Event', '', 'admin', 'admin', '2015-12-18 16:17:36', '2015-12-18 16:17:36'),
+(89, 'Delete Event', '', 'admin', 'admin', '2015-12-18 16:17:45', '2015-12-18 16:17:45');
 
 -- --------------------------------------------------------
 
@@ -245,7 +249,11 @@ INSERT INTO `action_role` (`actionid`, `roleid`, `createuser`, `modifyuser`, `cr
 (82, 1, 'admin', 'admin', '2015-12-17 16:27:51', '2015-12-17 16:27:51'),
 (83, 1, 'admin', 'admin', '2015-12-17 16:27:58', '2015-12-17 16:27:58'),
 (84, 1, 'admin', 'admin', '2015-12-17 16:28:11', '2015-12-17 16:28:11'),
-(85, 1, 'admin', 'admin', '2015-12-17 16:28:18', '2015-12-17 16:28:18');
+(85, 1, 'admin', 'admin', '2015-12-17 16:28:18', '2015-12-17 16:28:18'),
+(86, 1, 'admin', 'admin', '2015-12-18 16:18:50', '2015-12-18 16:18:50'),
+(87, 1, 'admin', 'admin', '2015-12-18 16:18:57', '2015-12-18 16:18:57'),
+(88, 1, 'admin', 'admin', '2015-12-18 16:19:03', '2015-12-18 16:19:03'),
+(89, 1, 'admin', 'admin', '2015-12-18 16:19:09', '2015-12-18 16:19:09');
 
 -- --------------------------------------------------------
 
@@ -818,6 +826,47 @@ CREATE TABLE `dish_translation` (
 
 INSERT INTO `dish_translation` (`id`, `dishid`, `languagecode`, `name`, `description`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
 (2, 2, 'en', 'Gulash Soup', 'Tomato and meat soup', 'admin', 'admin', '2015-12-16 20:03:26', '2015-12-16 20:03:26');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `event`
+--
+
+CREATE TABLE `event` (
+  `id` int(11) NOT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `location` varchar(1000) DEFAULT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `finish_date` datetime DEFAULT NULL,
+  `description` text,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `event`
+--
+
+INSERT INTO `event` (`id`, `name`, `location`, `start_date`, `finish_date`, `description`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(6, 'saassa', '', '2015-12-24 16:50:00', '2015-12-31 03:10:00', '', 'admin', 'admin', '2015-12-21 20:18:53', '2015-12-21 20:40:02');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `event_gallery`
+--
+
+CREATE TABLE `event_gallery` (
+  `eventid` int(11) NOT NULL,
+  `galleryid` int(11) NOT NULL,
+  `createuser` varchar(45) NOT NULL,
+  `modifyuser` varchar(45) NOT NULL,
+  `createdate` datetime NOT NULL,
+  `modifydate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1868,7 +1917,30 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 (587, 'en', 'article_translation.content.required', 'You must enter a translate content', 'admin', 'admin', '2015-12-17 19:47:44', '2015-12-17 19:47:44'),
 (588, 'es', 'article_translation.content.required', 'Debe ingresar la traducción del contenido', 'admin', 'admin', '2015-12-17 19:48:31', '2015-12-17 19:48:31'),
 (589, 'en', 'article_translation.language.exist', 'Already exist a translation for this language', 'admin', 'admin', '2015-12-17 19:51:15', '2015-12-17 19:51:15'),
-(590, 'es', 'article_translation.language.exist', 'Ya existe una traducción para ese idioma', 'admin', 'admin', '2015-12-17 19:51:36', '2015-12-17 19:51:36');
+(590, 'es', 'article_translation.language.exist', 'Ya existe una traducción para ese idioma', 'admin', 'admin', '2015-12-17 19:51:36', '2015-12-17 19:51:36'),
+(591, 'es', 'Location', 'Localización', 'admin', 'admin', '2015-12-21 20:53:52', '2015-12-21 20:53:52'),
+(592, 'es', 'Start Date', 'Fecha Inicial', 'admin', 'admin', '2015-12-21 20:54:08', '2015-12-21 20:54:08'),
+(593, 'es', 'Finish Date', 'Fecha Final', 'admin', 'admin', '2015-12-21 20:54:30', '2015-12-21 20:54:30'),
+(594, 'en', 'event.list.title', 'Events', 'admin', 'admin', '2015-12-21 20:55:22', '2015-12-21 20:55:22'),
+(595, 'es', 'event.list.title', 'Eventos', 'admin', 'admin', '2015-12-21 20:56:07', '2015-12-21 20:56:07'),
+(596, 'en', 'event.title.new', 'New Event', 'admin', 'admin', '2015-12-21 20:56:24', '2015-12-21 20:56:24'),
+(597, 'es', 'event.title.new', 'Nuevo Evento', 'admin', 'admin', '2015-12-21 20:56:35', '2015-12-21 20:56:35'),
+(598, 'en', 'event.title.edit', 'Edit Event', 'admin', 'admin', '2015-12-21 20:56:57', '2015-12-21 20:56:57'),
+(599, 'es', 'event.title.edit', 'Editar Evento', 'admin', 'admin', '2015-12-21 20:57:21', '2015-12-21 20:57:21'),
+(600, 'en', 'event.delete.question', 'Are you sure you want to delete this event ?', 'admin', 'admin', '2015-12-21 20:59:39', '2015-12-21 20:59:39'),
+(601, 'es', 'event.delete.question', '¿ Esta seguro que desea eliminar este evento ?', 'admin', 'admin', '2015-12-21 21:00:11', '2015-12-21 21:00:11'),
+(602, 'en', 'event.name.required', 'You must to enter a name', 'admin', 'admin', '2015-12-21 21:54:00', '2015-12-21 21:54:00'),
+(603, 'es', 'event.name.required', 'Debe ingresar un nombre', 'admin', 'admin', '2015-12-21 21:54:21', '2015-12-21 21:54:21'),
+(604, 'en', 'event.start_date.required', 'You must to enter a start date', 'admin', 'admin', '2015-12-21 21:54:48', '2015-12-21 21:54:48'),
+(605, 'es', 'event.start_date.required', 'Debe ingresar un fecha inicial', 'admin', 'admin', '2015-12-21 21:55:50', '2015-12-21 21:58:45'),
+(606, 'en', 'event.finish_date.required', 'You must enter a finish date', 'admin', 'admin', '2015-12-21 21:57:13', '2015-12-21 21:57:13'),
+(607, 'es', 'event.finish_date.required', 'Debe ingresar una fecha final', 'admin', 'admin', '2015-12-21 21:58:00', '2015-12-21 21:58:00'),
+(608, 'en', 'event.exist', 'Already exist a event with this name', 'admin', 'admin', '2015-12-21 22:00:07', '2015-12-21 22:00:07'),
+(609, 'es', 'event.exist', 'Ya existe un evento con ese nombre', 'admin', 'admin', '2015-12-21 22:00:28', '2015-12-21 22:00:28'),
+(610, 'en', 'event.constraintviolation', 'You can not delete this event, there are data associated', 'admin', 'admin', '2015-12-21 22:01:07', '2015-12-21 22:01:07'),
+(611, 'es', 'event.constraintviolation', 'No se puede eliminar este evento ya que tiene otros datos asociados', 'admin', 'admin', '2015-12-21 22:01:39', '2015-12-21 22:01:39'),
+(612, 'en', 'event.invalid_dates', 'Start date must be less than the end date', 'admin', 'admin', '2015-12-21 22:02:52', '2015-12-21 22:02:52'),
+(613, 'es', 'event.invalid_dates', 'La fecha inicial debe ser menor que la fecha final', 'admin', 'admin', '2015-12-21 22:32:37', '2015-12-21 22:32:37');
 
 -- --------------------------------------------------------
 
@@ -2055,6 +2127,20 @@ ALTER TABLE `dish_translation`
   ADD KEY `fk_dish_translation_language1_idx` (`languagecode`);
 
 --
+-- Indices de la tabla `event`
+--
+ALTER TABLE `event`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `event_gallery`
+--
+ALTER TABLE `event_gallery`
+  ADD PRIMARY KEY (`eventid`,`galleryid`),
+  ADD KEY `fk_event_gallery_event1_idx` (`eventid`),
+  ADD KEY `fk_event_gallery_gallery1_idx` (`galleryid`);
+
+--
 -- Indices de la tabla `file`
 --
 ALTER TABLE `file`
@@ -2182,7 +2268,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT de la tabla `action`
 --
 ALTER TABLE `action`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 --
 -- AUTO_INCREMENT de la tabla `address`
 --
@@ -2197,7 +2283,7 @@ ALTER TABLE `apartment`
 -- AUTO_INCREMENT de la tabla `article`
 --
 ALTER TABLE `article`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT de la tabla `article_comment`
 --
@@ -2207,7 +2293,7 @@ ALTER TABLE `article_comment`
 -- AUTO_INCREMENT de la tabla `article_translation`
 --
 ALTER TABLE `article_translation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `city`
 --
@@ -2238,6 +2324,11 @@ ALTER TABLE `dish_category`
 --
 ALTER TABLE `dish_translation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `event`
+--
+ALTER TABLE `event`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `file`
 --
@@ -2312,7 +2403,7 @@ ALTER TABLE `township`
 -- AUTO_INCREMENT de la tabla `translation`
 --
 ALTER TABLE `translation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=591;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=614;
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
@@ -2386,6 +2477,13 @@ ALTER TABLE `dish`
 ALTER TABLE `dish_translation`
   ADD CONSTRAINT `fk_dish_translation_dish1` FOREIGN KEY (`dishid`) REFERENCES `dish` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_dish_translation_language1` FOREIGN KEY (`languagecode`) REFERENCES `language` (`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `event_gallery`
+--
+ALTER TABLE `event_gallery`
+  ADD CONSTRAINT `fk_event_gallery_event1` FOREIGN KEY (`eventid`) REFERENCES `event` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_event_gallery_gallery1` FOREIGN KEY (`galleryid`) REFERENCES `gallery` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `gallery_image`

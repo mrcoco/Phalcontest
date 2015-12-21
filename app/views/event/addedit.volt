@@ -9,13 +9,13 @@
 {% endblock %}
 
 {% block javascripts %}
-{{super() }}
 {{assets.outputJs('validatejs')}}
 {{assets.outputJs('date_picker')}}
-
 <script>
 var validatemessages = {
-action:'{{"action.required"|t}}'
+name:'{{"event.name.required"|t}}'
+,start_date:'{{"event.start_date.required"|t}}'
+,finish_date:'{{"event.finish_date.required"|t}}'
 };
 </script>
 <script>
@@ -31,6 +31,17 @@ action:'{{"action.required"|t}}'
 {% if session.get('language')!= 'en' %} 
 <script type="text/javascript" src="{{static_url('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.'~session.get('language')~'.js')}}" charset="UTF-8"></script>
 {% endif %}
+<script >
+$(document).ready(function(){
+$('#datetimepicker').datetimepicker({
+    format: 'yyyy-mm-dd hh:ii'
+  
+});
+$('#datetimepicker2').datetimepicker({
+    format: 'yyyy-mm-dd hh:ii'  
+});
+});  
+</script>
 {% endblock %}
 {% block content %}
 <div class="row">
@@ -63,8 +74,8 @@ action:'{{"action.required"|t}}'
         </label>
      {% if item['name']=='start_date'  or  item['name']=='finish_date' %}
         <div class="col-md-4">
-        <div class="input-group date form_meridian_datetime" data-date="">	
-		{{ form.render(item['name'],["class":"form-control"]) }}
+        <div id ="{% if item['name']=='start_date' %}datetimepicker{%else%}datetimepicker2{%endif%}" class="input-group date"  data-date="">	
+		{{ form.render(item['name'],["class":"form-control" ,"readonly":""]) }}
 		<!-- LOAD CONTROL ERROR LABEL-->
 		<span class="input-group-btn">
 	    <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
