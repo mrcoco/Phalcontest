@@ -81,7 +81,7 @@ $('#datetimepicker2').datetimepicker({
 	    <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
 	    </span>
 		</div>
-		{{item['label_error']|t}}
+		<label class ="label_error" id ="{% if item['name']=='start_date'%}start_date_error{% else %}finish_date_error{% endif %}"></label>
 		</div>
 		<br><br><br>
      {% else %}

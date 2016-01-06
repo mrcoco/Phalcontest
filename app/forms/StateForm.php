@@ -16,12 +16,11 @@ class StateForm extends Form
   public function initialize($entity =null , $options=null)
 	{
 
-  $country = new Select('countryid',Country::find(), array(
+   $country = new Select('countryid',Country::find(), array(
     'using' => array('id','country')
-,'useEmpty' => TRUE,'emptyText' =>  $this->di->get('translate')->_('Seleccione un País'));
-   $country->setLabel('Pais');
-   $this->add($country);
-
+   ,'useEmpty' => TRUE,'emptyText' => $this->di->get('translate')->_('Seleccione un País')));
+     $country->setLabel('País');
+     $this->add($country);
 
   $state = new Text('state');
   $state->setLabel('Estado');
