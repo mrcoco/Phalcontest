@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-12-2015 a las 22:59:27
+-- Tiempo de generación: 08-01-2016 a las 22:25:23
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -137,7 +137,11 @@ INSERT INTO `action` (`id`, `action`, `description`, `createuser`, `modifyuser`,
 (86, 'Manage Event', '', 'admin', 'admin', '2015-12-18 16:17:11', '2015-12-18 16:17:11'),
 (87, 'Create Event', '', 'admin', 'admin', '2015-12-18 16:17:20', '2015-12-18 16:17:20'),
 (88, 'Edit Event', '', 'admin', 'admin', '2015-12-18 16:17:36', '2015-12-18 16:17:36'),
-(89, 'Delete Event', '', 'admin', 'admin', '2015-12-18 16:17:45', '2015-12-18 16:17:45');
+(89, 'Delete Event', '', 'admin', 'admin', '2015-12-18 16:17:45', '2015-12-18 16:17:45'),
+(90, 'Create EventGallery', '', 'admin', 'admin', '2016-01-08 15:52:48', '2016-01-08 15:52:48'),
+(91, 'Edit EventGallery', '', 'admin', 'admin', '2016-01-08 15:54:43', '2016-01-08 15:54:43'),
+(92, 'Manage EventGallery', '', 'admin', 'admin', '2016-01-08 15:54:58', '2016-01-08 15:54:58'),
+(93, 'Delete EventGallery', '', 'admin', 'admin', '2016-01-08 15:55:09', '2016-01-08 15:55:09');
 
 -- --------------------------------------------------------
 
@@ -253,7 +257,11 @@ INSERT INTO `action_role` (`actionid`, `roleid`, `createuser`, `modifyuser`, `cr
 (86, 1, 'admin', 'admin', '2015-12-18 16:18:50', '2015-12-18 16:18:50'),
 (87, 1, 'admin', 'admin', '2015-12-18 16:18:57', '2015-12-18 16:18:57'),
 (88, 1, 'admin', 'admin', '2015-12-18 16:19:03', '2015-12-18 16:19:03'),
-(89, 1, 'admin', 'admin', '2015-12-18 16:19:09', '2015-12-18 16:19:09');
+(89, 1, 'admin', 'admin', '2015-12-18 16:19:09', '2015-12-18 16:19:09'),
+(90, 1, 'admin', 'admin', '2016-01-08 15:55:24', '2016-01-08 15:55:24'),
+(91, 1, 'admin', 'admin', '2016-01-08 15:55:32', '2016-01-08 15:55:32'),
+(92, 1, 'admin', 'admin', '2016-01-08 15:55:45', '2016-01-08 15:55:45'),
+(93, 1, 'admin', 'admin', '2016-01-08 15:55:54', '2016-01-08 15:55:54');
 
 -- --------------------------------------------------------
 
@@ -851,7 +859,8 @@ CREATE TABLE `event` (
 --
 
 INSERT INTO `event` (`id`, `name`, `location`, `start_date`, `finish_date`, `description`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
-(6, 'saassa', '', '2015-12-24 16:50:00', '2015-12-31 03:10:00', '', 'admin', 'admin', '2015-12-21 20:18:53', '2015-12-21 20:40:02');
+(6, 'saassa', '', '2015-12-24 16:50:00', '2015-12-31 03:10:00', '', 'admin', 'admin', '2015-12-21 20:18:53', '2015-12-21 20:40:02'),
+(7, 'test', 'Gambrinus Penonomé', '2016-01-09 08:00:00', '2016-01-10 03:00:00', 'test', 'admin', 'admin', '2016-01-06 16:54:32', '2016-01-06 16:54:32');
 
 -- --------------------------------------------------------
 
@@ -867,6 +876,14 @@ CREATE TABLE `event_gallery` (
   `createdate` datetime NOT NULL,
   `modifydate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `event_gallery`
+--
+
+INSERT INTO `event_gallery` (`eventid`, `galleryid`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
+(6, 4, 'admin', 'admin', '2016-01-08 22:20:34', '2016-01-08 22:20:34'),
+(7, 4, 'admin', 'admin', '2016-01-08 22:01:00', '2016-01-08 22:01:00');
 
 -- --------------------------------------------------------
 
@@ -977,7 +994,8 @@ CREATE TABLE `gallery` (
 --
 
 INSERT INTO `gallery` (`id`, `name`, `title`, `type`, `description`, `createuser`, `modifyuser`, `createdate`, `modifydate`) VALUES
-(4, 'prueba', 'prueba', 'image', '', 'admin', 'admin', '2015-11-11 10:07:16', '2015-11-11 10:07:17');
+(4, 'prueba', 'prueba', 'image', '', 'admin', 'admin', '2015-11-11 10:07:16', '2015-11-11 10:07:17'),
+(5, 'test', 'dsds', 'image', 'sd', 'admin', 'admin', '2016-01-08 20:22:11', '2016-01-08 20:22:11');
 
 -- --------------------------------------------------------
 
@@ -1940,7 +1958,20 @@ INSERT INTO `translation` (`id`, `languagecode`, `translatekey`, `value`, `creat
 (610, 'en', 'event.constraintviolation', 'You can not delete this event, there are data associated', 'admin', 'admin', '2015-12-21 22:01:07', '2015-12-21 22:01:07'),
 (611, 'es', 'event.constraintviolation', 'No se puede eliminar este evento ya que tiene otros datos asociados', 'admin', 'admin', '2015-12-21 22:01:39', '2015-12-21 22:01:39'),
 (612, 'en', 'event.invalid_dates', 'Start date must be less than the end date', 'admin', 'admin', '2015-12-21 22:02:52', '2015-12-21 22:02:52'),
-(613, 'es', 'event.invalid_dates', 'La fecha inicial debe ser menor que la fecha final', 'admin', 'admin', '2015-12-21 22:32:37', '2015-12-21 22:32:37');
+(613, 'es', 'event.invalid_dates', 'La fecha inicial debe ser menor que la fecha final', 'admin', 'admin', '2015-12-21 22:32:37', '2015-12-21 22:32:37'),
+(614, 'en', 'Seleccione una galeria', 'Select a gallery', 'admin', 'admin', '2016-01-08 22:12:00', '2016-01-08 22:12:00'),
+(615, 'en', 'eventgallery.list.title', 'Galleries', 'admin', 'admin', '2016-01-08 22:12:40', '2016-01-08 22:13:18'),
+(616, 'es', 'eventgallery.list.title', 'Galerias', 'admin', 'admin', '2016-01-08 22:13:00', '2016-01-08 22:13:00'),
+(617, 'en', 'eventgallery.notfound', 'Gallery not found', 'admin', 'admin', '2016-01-08 22:13:42', '2016-01-08 22:13:42'),
+(618, 'es', 'eventgallery.notfound', 'No se encontraron galerias', 'admin', 'admin', '2016-01-08 22:13:59', '2016-01-08 22:14:18'),
+(619, 'en', 'eventgallery.title.new', 'Add Gallery', 'admin', 'admin', '2016-01-08 22:14:52', '2016-01-08 22:14:52'),
+(620, 'es', 'eventgallery.title.new', 'Agregar Galeria', 'admin', 'admin', '2016-01-08 22:15:05', '2016-01-08 22:15:05'),
+(621, 'en', 'eventgallery.delete.question', 'Are you sure you want to remove this gallery ?', 'admin', 'admin', '2016-01-08 22:15:49', '2016-01-08 22:15:49'),
+(622, 'es', 'eventgallery.delete.question', '¿ Esta seguro que desea quitar esta galeria ?', 'admin', 'admin', '2016-01-08 22:16:29', '2016-01-08 22:16:29'),
+(623, 'en', 'event.gallery.required', 'You must select a gallery', 'admin', 'admin', '2016-01-08 22:16:51', '2016-01-08 22:16:51'),
+(624, 'es', 'event.gallery.required', 'Debe seleccionar una galeria', 'admin', 'admin', '2016-01-08 22:17:06', '2016-01-08 22:17:06'),
+(625, 'en', 'eventgallery.gallery.exist', 'Already exists this gallery in the event', 'admin', 'admin', '2016-01-08 22:18:37', '2016-01-08 22:18:37'),
+(626, 'es', 'eventgallery.gallery.exist', 'Ya esta asociada esta galeria al evento', 'admin', 'admin', '2016-01-08 22:20:21', '2016-01-08 22:20:21');
 
 -- --------------------------------------------------------
 
@@ -2268,7 +2299,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT de la tabla `action`
 --
 ALTER TABLE `action`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 --
 -- AUTO_INCREMENT de la tabla `address`
 --
@@ -2328,7 +2359,7 @@ ALTER TABLE `dish_translation`
 -- AUTO_INCREMENT de la tabla `event`
 --
 ALTER TABLE `event`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `file`
 --
@@ -2343,7 +2374,7 @@ ALTER TABLE `file_format`
 -- AUTO_INCREMENT de la tabla `gallery`
 --
 ALTER TABLE `gallery`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `gallery_image`
 --
@@ -2403,7 +2434,7 @@ ALTER TABLE `township`
 -- AUTO_INCREMENT de la tabla `translation`
 --
 ALTER TABLE `translation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=614;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=627;
 --
 -- AUTO_INCREMENT de la tabla `user`
 --

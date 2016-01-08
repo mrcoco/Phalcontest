@@ -229,7 +229,7 @@
  </li>
  {% endif %}
   {% if media =='Y'%}
- <li class="{% for key,name in ['media','set_files','files/','gallery'] %}
+ <li class="{% for key,name in ['media','set_files','files/','/gallery'] %}
    {% if name  in router.getRewriteUri() %}
        active open
    {% else %}
@@ -355,7 +355,7 @@
     {% endif %}
 
     {% if event =='Y'%}
-        <li class="{% for key,name in ['event'] %}
+        <li class="{% for key,name in ['event','eventgallery'] %}
   {% if name  in router.getRewriteUri() %}
       active open
   {% else %}

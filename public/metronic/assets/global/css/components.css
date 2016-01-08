@@ -3595,18 +3595,19 @@ label {
 }
 
 .has-error .form-control {
-  border-color: #ebccd1;
+  border-color: #A94442;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
 input[type='text'].has-error ,textarea.has-error,input[type='password'].has-error {
-  border-color: #ebccd1 ;
+  border-color: #A94442 ;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
 select.has-error
 {
-  border-color: #ebccd1 ;
+  border-color: #A94442 !important ;
+  color:#A94442;
 }
 select.has-error:focus
 {
